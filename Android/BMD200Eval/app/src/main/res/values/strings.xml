@@ -1,0 +1,39 @@
+<resources>
+    <!-- GENERAL -->
+    <string name="app_name">BMD200 Eval</string>
+
+    <string name="title_section1">Status</string>
+    <string name="title_section2">Color Wheel</string>
+    <string name="title_section3">Update</string>
+    <string name="title_section4">About</string>
+
+    <string name="label_searching">Searching</string>
+    <string name="txt_yes">Yes</string>
+    <string name="txt_no">No</string>
+    <string name="txt_ok">OK</string>
+
+    <!-- SCREEN 1-->
+    <string name="label_ambient_light">Ambient Light:</string>
+    <string name="label_user_one">User 1</string>
+    <string name="label_user_two">User 2</string>
+
+    <!-- SCREEN 3 -->
+    <string name="label_default_device_name">Unknown Device</string>
+    <string name="label_default_mfg_name">Unknown Mfg</string>
+    <string name="label_btn_deploy">Begin Deployment</string>
+    <string name="label_tv_status_idle">Idle</string>
+    <string name="message_blinky">The Blinky demo is currently programmed.\nWould you like to revert to the main demo firmware?</string>
+    <string name="title_blinky_dialog">Blinky Connected</string>
+    <string name="message_bmdware">BMDWare is installed to this evaluation board.\nIf you would like to use its features, download the Rigado Toolbox app from the Google Play store.\nWould you like to program the Evaluation demo firmware?</string>
+    <string name="title_bmdware">BMDware Installed</string>
+
+
+    <!-- SCREEN 4 -->
+    <string name="label_paragraph_one">We provide custom electrical,\nsoftware, and mechanical\ndesign solutions.\nOur team of dynamic engineers\nwill take your concepts to\nprototype and production.</string>
+    <string name="label_paragraph_two">We turn your\nideas into reality.</string>
+    <string name="link_phone_number"><a href="tel:9712089870">971.208.9870</a></string>
+    <string name="link_email"><a href="mailto:contact@rigado.com">contact@rigado.com</a></string>
+    <string name="link_website"><a href="http://www.rigado.com">www.rigado.com</a></string>
+    <string name="label_paragraph_three">Check out Rigado\'s Bluetooth Smart Modules\nwith Secure Firmware Update</string>
+    <string name="link_website_modules"><a href="http://www.rigado.com/modules">www.rigado.com/modules</a></string>
+</resources>

@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ActivityMain$PlaceholderFragment"
+    android:id="@+id/background_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <!-- LOGO -->
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo3_white"
+        android:layout_marginTop="10dp"/>
+
+    <!-- read-only selection -->
+    <NumberPicker
+        android:id="@+id/id_picker_firmware"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:textColor="@android:color/white"
+        android:descendantFocusability="blocksDescendants"/>
+
+    <Button
+        android:id="@+id/id_btn_begin_deploy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_btn_deploy"
+        android:layout_below="@+id/id_picker_firmware"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:id="@+id/id_progress_deployment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_btn_begin_deploy"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
+
+    <TextView
+        android:id="@+id/id_tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/label_tv_status_idle"
+        android:layout_below="@+id/id_progress_deployment"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="20dp"/>
+
+    <!-- Indeterminate Progress Bar -->
+    <RelativeLayout
+        android:id="@+id/layout_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/shape_background_white_stroked"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textview_searching"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_searching"
+            android:textSize="12pt"
+            android:textColor="@android:color/black"
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/textview_searching"
+            android:indeterminate="true"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

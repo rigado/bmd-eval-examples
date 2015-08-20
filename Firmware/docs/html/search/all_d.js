@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['p_5flist',['p_list',['../structble__dis__reg__cert__data__list__t.html#a831226e914e2d07f1224fe2348f62e5c',1,'ble_dis_reg_cert_data_list_t']]],
+  ['p_5fpnp_5fid',['p_pnp_id',['../structble__dis__init__t.html#a5b5d4c8fc2a17cfa2e94e1c0b55f3672',1,'ble_dis_init_t']]],
+  ['p_5freg_5fcert_5fdata_5flist',['p_reg_cert_data_list',['../structble__dis__init__t.html#a69ba763dc9d6010e87359a1002c48551',1,'ble_dis_init_t']]],
+  ['p_5fsys_5fid',['p_sys_id',['../structble__dis__init__t.html#a853998bc0e7852a4eb9ac0fa812b95fc',1,'ble_dis_init_t']]],
+  ['percent_5fto_5fpwm',['PERCENT_TO_PWM',['../group__rgb__pwm.html#ga9907feb305e77aec82f20dd745c759ee',1,'pwm_rgb.c']]],
+  ['pins_5fhigh_5fto_5flow_5fmask',['pins_high_to_low_mask',['../structgpiote__user__t.html#a07942ba2125fca0605b08cc84d3354df',1,'gpiote_user_t']]],
+  ['pins_5flow_5fto_5fhigh_5fmask',['pins_low_to_high_mask',['../structgpiote__user__t.html#acb5da8c93bc0f2a9cb44ac6bb5a37ba3',1,'gpiote_user_t']]],
+  ['pins_5fmask',['pins_mask',['../structgpiote__user__t.html#a99a42666d440f6d2c039fc3eb526f375',1,'gpiote_user_t']]],
+  ['product_5fid',['product_id',['../structble__dis__pnp__id__t.html#a215e5feaef08c77d8e9f17ab421e8a66',1,'ble_dis_pnp_id_t']]],
+  ['product_5fversion',['product_version',['../structble__dis__pnp__id__t.html#add66cd1e2fe782e92652f5f53cef73c8',1,'ble_dis_pnp_id_t']]],
+  ['ptr_5faccel_5fdata',['ptr_accel_data',['../bmd__i2c_8c.html#ae0742c6f87d91697148df420f4f98d6f',1,'bmd_i2c.c']]],
+  ['pwm_5fmax_5fvalue',['PWM_MAX_VALUE',['../group__rgb__pwm.html#gaafe0521fa22763b7afc50e12d31b450d',1,'pwm_rgb.c']]],
+  ['pwm_5fmin_5fvalue',['PWM_MIN_VALUE',['../group__rgb__pwm.html#ga4ab834485f2181fccbd72da454536f35',1,'pwm_rgb.c']]],
+  ['pwm_5foff_5ftimeout_5fhandler',['pwm_off_timeout_handler',['../pwm__rgb_8c.html#a1d1b5b4629aa0e087b76fb187dace9b0',1,'pwm_rgb.c']]],
+  ['pwm_5foutput_5fpin_5fnumber_5f1',['PWM_OUTPUT_PIN_NUMBER_1',['../group__rgb__pwm.html#gaed95845313dc8e0c4e671ffd468cc900',1,'pwm_rgb.c']]],
+  ['pwm_5foutput_5fpin_5fnumber_5f2',['PWM_OUTPUT_PIN_NUMBER_2',['../group__rgb__pwm.html#gaae10685958629a6d191f9b2bb9b27e1f',1,'pwm_rgb.c']]],
+  ['pwm_5foutput_5fpin_5fnumber_5f3',['PWM_OUTPUT_PIN_NUMBER_3',['../group__rgb__pwm.html#ga087d5254920b62ed2f2ed2767109f834',1,'pwm_rgb.c']]],
+  ['pwm_5frgb_2ec',['pwm_rgb.c',['../pwm__rgb_8c.html',1,'']]],
+  ['pwm_5frgb_2eh',['pwm_rgb.h',['../pwm__rgb_8h.html',1,'']]],
+  ['pwm_5frgb_5finit',['PWM_RGB_Init',['../group__rgb__pwm.html#gac31e58b24c28e571582a8f0cb7e7e793',1,'PWM_RGB_Init(void):&#160;pwm_rgb.c'],['../group__rgb__pwm.html#gac31e58b24c28e571582a8f0cb7e7e793',1,'PWM_RGB_Init(void):&#160;pwm_rgb.c']]],
+  ['pwm_5frgb_5fstart',['PWM_RGB_Start',['../pwm__rgb_8c.html#ada55aa912cd82c08a99b6ff34b8c346d',1,'PWM_RGB_Start(ble_bmdeval_rgb_t *rgb_data):&#160;pwm_rgb.c'],['../group__rgb__pwm.html#gada55aa912cd82c08a99b6ff34b8c346d',1,'PWM_RGB_Start(ble_bmdeval_rgb_t *rgb_data):&#160;pwm_rgb.c']]],
+  ['pwm_5frgb_5fstop',['PWM_RGB_Stop',['../pwm__rgb_8c.html#a25d24469346ea0dbd9cda9ad2e722163',1,'PWM_RGB_Stop(void):&#160;pwm_rgb.c'],['../group__rgb__pwm.html#ga25d24469346ea0dbd9cda9ad2e722163',1,'PWM_RGB_Stop(void):&#160;pwm_rgb.c']]],
+  ['pwm_5ftimer',['PWM_TIMER',['../group__rgb__pwm.html#gaa5696c49e88a24e3144fd1433c7d20e5',1,'pwm_rgb.c']]],
+  ['pwm_5ftimer_5fprescaler',['PWM_TIMER_PRESCALER',['../group__rgb__pwm.html#gafaa30b13d785bd666323e7b0b14b69a7',1,'pwm_rgb.c']]]
+];

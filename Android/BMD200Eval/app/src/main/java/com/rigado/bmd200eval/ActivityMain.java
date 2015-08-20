@@ -1,0 +1,170 @@
+package com.rigado.bmd200eval;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+
+import com.rigado.bmd200eval.customviews.ControllableViewPager;
+import com.rigado.bmd200eval.fragments.FragmentScreen1;
+import com.rigado.bmd200eval.fragments.FragmentScreen2;
+import com.rigado.bmd200eval.fragments.FragmentScreen3;
+import com.rigado.bmd200eval.fragments.FragmentScreen4;
+import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+
+public class ActivityMain extends ActionBarActivity implements ActionBar.TabListener {
+
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * fragments for each of the sections. We use a
+     * {@link FragmentPagerAdapter} derivative, which will keep every
+     * loaded fragment in memory. If this becomes too memory intensive, it
+     * may be best to switch to a
+     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    SectionsPagerAdapter mSectionsPagerAdapter;
+    ActionBar mActionBar;
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    public ControllableViewPager mViewPager;
+    private boolean mAllowTabsClicking = true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Set up the action bar.
+        mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);//hide app title
+        mActionBar.setDisplayShowHomeEnabled(false);//hide app title
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ControllableViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(3);// set to 3 to keep all 4 pages alive
+
+        // When swiping between different sections, select the corresponding
+        // tab. We can also use ActionBar.Tab#select() to do this if we have
+        // a reference to the Tab.
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            private int oldPosition = 0;//by default the first tab
+
+            @Override
+            public void onPageSelected(int position) {
+                mActionBar.setSelectedNavigationItem(position);
+
+                // NOTE: onPauseFragment must always be called before onResumeFragment
+                InterfaceFragmentLifecycle fragmentToHide = (InterfaceFragmentLifecycle)mSectionsPagerAdapter.getItem(oldPosition);
+                fragmentToHide.onPauseFragment();
+
+                InterfaceFragmentLifecycle fragmentToShow = (InterfaceFragmentLifecycle)mSectionsPagerAdapter.getItem(position);
+                fragmentToShow.onResumeFragment();
+
+                oldPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+        });
+
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+            // Create a tab with text corresponding to the page title defined by
+            // the adapter. Also specify this Activity object, which implements
+            // the TabListener interface, as the callback (listener) for when
+            // this tab is selected.
+            mActionBar.addTab(
+                    mActionBar.newTab()
+                            .setText(mSectionsPagerAdapter.getPageTitle(i))
+                            .setTabListener(this));
+        }
+    }
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+        if (mAllowTabsClicking) {
+            mViewPager.setCurrentItem(tab.getPosition());
+        }
+    }
+
+    @Override
+    public void onTabUnselected(final ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    public void setAllowTabsAndViewpagerSwitching(boolean toggle)
+    {
+        mViewPager.setPagingEnabled(toggle);
+        mAllowTabsClicking = toggle;
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> mFragmentList;
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+            mFragmentList = new ArrayList<Fragment>();
+            mFragmentList.add(new FragmentScreen1());
+            mFragmentList.add(new FragmentScreen2());
+            mFragmentList.add(new FragmentScreen3());
+            mFragmentList.add(new FragmentScreen4());
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Locale l = Locale.getDefault();
+            switch (position) {
+                case 0:
+                    return getString(R.string.title_section1).toUpperCase(l);
+                case 1:
+                    return getString(R.string.title_section2).toUpperCase(l);
+                case 2:
+                    return getString(R.string.title_section3).toUpperCase(l);
+                case 3:
+                    return getString(R.string.title_section4).toUpperCase(l);
+            }
+            return null;
+        }
+    }
+
+
+}

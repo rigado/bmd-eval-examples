@@ -9,6 +9,7 @@ JLink*
 /pca10028/s130/arm5/_build/
 JLinkLog.txt
 *.apk
+_build
 #########################
 # .gitignore file for Xcode4 and Xcode5 Source projects
 #

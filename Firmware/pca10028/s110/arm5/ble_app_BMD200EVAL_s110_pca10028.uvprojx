@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>nRF51422_xxAC</Device>
           <Vendor>Nordic Semiconductor</Vendor>
-          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.7.1.0</PackID>
+          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.0.3</PackID>
           <PackURL>http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/</PackURL>
           <Cpu>IROM(0x00000000,0x40000) IRAM(0x20000000,0x8000) CPUTYPE("Cortex-M0") CLOCK(16000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -79,7 +79,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>1</RunUserProg2>
+            <RunUserProg2>0</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name>..\..\..\build-tools\make_binaries.bat $P @L $P..\..\..\</UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -554,7 +554,7 @@
         <TargetCommonOption>
           <Device>nRF51422_xxAC</Device>
           <Vendor>Nordic Semiconductor</Vendor>
-          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.7.1.0</PackID>
+          <PackID>NordicSemiconductor.nRF_DeviceFamilyPack.8.0.3</PackID>
           <PackURL>http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/</PackURL>
           <Cpu>IROM(0x00000000,0x40000) IRAM(0x20000000,0x8000) CPUTYPE("Cortex-M0") CLOCK(16000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -2101,10 +2101,10 @@
           <targetInfo name="nrf51422_xxac_s110"/>
         </targetInfos>
       </file>
-      <file attr="config" category="other" name="hex\s110_softdevice.hex" version="8.0.0">
+      <file attr="config" category="other" name="hex\s110_softdevice.hex" version="8.0.2">
         <instance index="0">RTE\nRF_SoftDevice\nRF51422_xxAC\s110_softdevice.hex</instance>
-        <component Cclass="nRF_SoftDevice" Cgroup="s110_hex" Cvendor="NordicSemiconductor" Cversion="8.0.0" condition="s110_hex"/>
-        <package name="nRF_SoftDevice_S110" schemaVersion="1.2" supportContact="http://www.nordicsemi.com/About-us/Contact-us" url="http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_SoftDevice_S110/" vendor="NordicSemiconductor" version="8.0.0"/>
+        <component Cclass="nRF_SoftDevice" Cgroup="s110_hex" Cvendor="NordicSemiconductor" Cversion="8.0.2" condition="s110_hex"/>
+        <package name="nRF_SoftDevice_S110" schemaVersion="1.2" supportContact="http://www.nordicsemi.com/About-us/Contact-us" url="http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_SoftDevice_S110/" vendor="NordicSemiconductor" version="8.0.2"/>
         <targetInfos>
           <targetInfo excluded="1" name="flash_softdevice"/>
           <targetInfo excluded="1" name="nrf51422_xxac_s110"/>

@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['red',['red',['../structrgb__color__s.html#a04e1a4b40ef0b2d4039ca78fb4be9b55',1,'rgb_color_s']]],
+  ['red_5fvalue',['red_value',['../structble__bmdeval__rgb__t.html#a4f03fff7a3f53191cc7ba3ada6ebc0cb',1,'ble_bmdeval_rgb_t']]],
+  ['retarget_2ed',['retarget.d',['../retarget_8d.html',1,'']]],
+  ['rgb_5fcolor_5fs',['rgb_color_s',['../structrgb__color__s.html',1,'']]],
+  ['rng_5fenabled',['RNG_ENABLED',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#a9f9405f1908ed1ce827dd072b8e1c547',1,'RNG_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#a9f9405f1908ed1ce827dd072b8e1c547',1,'RNG_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#a9f9405f1908ed1ce827dd072b8e1c547',1,'RNG_ENABLED():&#160;nrf_drv_config.h']]],
+  ['rtc0_5fenabled',['RTC0_ENABLED',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#a6ee5a5b23ef5c8e0d28681401509b63b',1,'RTC0_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#a6ee5a5b23ef5c8e0d28681401509b63b',1,'RTC0_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#a6ee5a5b23ef5c8e0d28681401509b63b',1,'RTC0_ENABLED():&#160;nrf_drv_config.h']]],
+  ['rtc1_5fconfig_5ffrequency',['RTC1_CONFIG_FREQUENCY',['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#addc73eccc0c4d9b9e2579e89b68238aa',1,'nrf_drv_config.h']]],
+  ['rtc1_5fconfig_5firq_5fpriority',['RTC1_CONFIG_IRQ_PRIORITY',['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#a7eac1270b396b21fa423ea59d763b6fa',1,'nrf_drv_config.h']]],
+  ['rtc1_5fconfig_5freliable',['RTC1_CONFIG_RELIABLE',['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#a81f39d20adce25fb57501e20a24fc97a',1,'nrf_drv_config.h']]],
+  ['rtc1_5fenabled',['RTC1_ENABLED',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#aa3b77f15f1c93e76d9f83c96d33979a4',1,'RTC1_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#aa3b77f15f1c93e76d9f83c96d33979a4',1,'RTC1_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#aa3b77f15f1c93e76d9f83c96d33979a4',1,'RTC1_ENABLED():&#160;nrf_drv_config.h']]],
+  ['rtc1_5finstance_5findex',['RTC1_INSTANCE_INDEX',['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#ab529e8b79ed027816300ec6f0d36b4ab',1,'nrf_drv_config.h']]],
+  ['rtc2_5fenabled',['RTC2_ENABLED',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#ada1c0ff3a67a379f9f227f7d1d530a84',1,'RTC2_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#ada1c0ff3a67a379f9f227f7d1d530a84',1,'RTC2_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#ada1c0ff3a67a379f9f227f7d1d530a84',1,'RTC2_ENABLED():&#160;nrf_drv_config.h']]],
+  ['rtc_5fcount',['RTC_COUNT',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#af40108e80c461d98dc5c5efe79b6a4aa',1,'RTC_COUNT():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#af40108e80c461d98dc5c5efe79b6a4aa',1,'RTC_COUNT():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#af40108e80c461d98dc5c5efe79b6a4aa',1,'RTC_COUNT():&#160;nrf_drv_config.h']]],
+  ['rte_5fcomponents_2eh',['RTE_Components.h',['../_r_t_e_2_r_t_e___components_8h.html',1,'']]],
+  ['rte_5fcomponents_2eh',['RTE_Components.h',['../bmd-300-eval_2s132_2arm5__no__packs_2_r_t_e_2_r_t_e___components_8h.html',1,'']]],
+  ['rtt_5fsyscalls_5fkeil_2ed',['rtt_syscalls_keil.d',['../rtt__syscalls__keil_8d.html',1,'']]],
+  ['run_5ftest_5fsuite',['run_test_suite',['../all__tests_8c.html#a7d22f19ef7991a6f9bf00a881d43bae5',1,'all_tests.c']]]
+];

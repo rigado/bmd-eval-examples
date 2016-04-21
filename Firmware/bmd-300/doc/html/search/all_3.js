@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['central_5flink_5fcount',['CENTRAL_LINK_COUNT',['../group__ble__sdk__app__template__main.html#ga71aed7be14554d85f4fbc37179c61627',1,'main.c']]],
+  ['clock_5fenabled',['CLOCK_ENABLED',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#a038af6d7eed3f30cc2068286913c58b6',1,'CLOCK_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#a038af6d7eed3f30cc2068286913c58b6',1,'CLOCK_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#a038af6d7eed3f30cc2068286913c58b6',1,'CLOCK_ENABLED():&#160;nrf_drv_config.h']]],
+  ['cmsis_5fdevice_5fheader',['CMSIS_device_header',['../bmd-300-eval_2s132_2arm5__no__packs_2_r_t_e_2_r_t_e___components_8h.html#ad6db6908b5ef4d6a4f5423a39f1a4392',1,'CMSIS_device_header():&#160;RTE_Components.h'],['../_r_t_e_2_r_t_e___components_8h.html#ad6db6908b5ef4d6a4f5423a39f1a4392',1,'CMSIS_device_header():&#160;RTE_Components.h']]],
+  ['comp_5fenabled',['COMP_ENABLED',['../ble__app__template__s130__pca10028_2nrf__drv__config_8h.html#a3edde2a43074e3429ee065440f72b851',1,'COMP_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10036_2nrf__drv__config_8h.html#a3edde2a43074e3429ee065440f72b851',1,'COMP_ENABLED():&#160;nrf_drv_config.h'],['../ble__app__template__s132__pca10040_2nrf__drv__config_8h.html#a3edde2a43074e3429ee065440f72b851',1,'COMP_ENABLED():&#160;nrf_drv_config.h']]],
+  ['config1_5fbutton_5fmotion_5fdbnc_5fval',['CONFIG1_BUTTON_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#a46b1586c908d630b903dd555e14da4b7',1,'MMA8652.c']]],
+  ['config1_5fbutton_5fmotion_5fthsx_5fval',['CONFIG1_BUTTON_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a3dd87f3ab404f3b17fc281de0144974f',1,'MMA8652.c']]],
+  ['config1_5fvib_5fmotion_5fdbnc_5fval',['CONFIG1_VIB_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#a70907545a7cf32208a5f73ef13ea2593',1,'MMA8652.c']]],
+  ['config1_5fvib_5fmotion_5fthsx_5fval',['CONFIG1_VIB_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a7481ae3224b599b28d327ab001e64caf',1,'MMA8652.c']]],
+  ['config2_5fbutton_5fmotion_5fdbnc_5fval',['CONFIG2_BUTTON_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#a7f4896a9561eede3e687c7840fa44598',1,'MMA8652.c']]],
+  ['config2_5fbutton_5fmotion_5fthsx_5fval',['CONFIG2_BUTTON_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a28dab0a3833499d7e749db998f936505',1,'MMA8652.c']]],
+  ['config2_5fvib_5fmotion_5fdbnc_5fval',['CONFIG2_VIB_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#a49c8538c278377e8f259320c151cf73c',1,'MMA8652.c']]],
+  ['config2_5fvib_5fmotion_5fthsx_5fval',['CONFIG2_VIB_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a30642597da6e42b4f28772ce23556b1d',1,'MMA8652.c']]],
+  ['config3_5fbutton_5fmotion_5fdbnc_5fval',['CONFIG3_BUTTON_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#ae5364e52442578faacbc733f0cc77184',1,'MMA8652.c']]],
+  ['config3_5fbutton_5fmotion_5fthsx_5fval',['CONFIG3_BUTTON_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a978e6d3d11c1f2071386f5817349ad65',1,'MMA8652.c']]],
+  ['config3_5fvib_5fmotion_5fdbnc_5fval',['CONFIG3_VIB_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#a3844529a179fc3d905d7d71e6c65be68',1,'MMA8652.c']]],
+  ['config3_5fvib_5fmotion_5fthsx_5fval',['CONFIG3_VIB_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a76b015d3212034fde4c4a5e6b5cdf37b',1,'MMA8652.c']]],
+  ['config4_5fbutton_5fmotion_5fdbnc_5fval',['CONFIG4_BUTTON_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#ad357ee8748e5a2513369dd5ea41a3574',1,'MMA8652.c']]],
+  ['config4_5fbutton_5fmotion_5fthsx_5fval',['CONFIG4_BUTTON_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a73dd9b262e4c6a0cd351d98e623565e3',1,'MMA8652.c']]],
+  ['config4_5fvib_5fmotion_5fdbnc_5fval',['CONFIG4_VIB_MOTION_DBNC_VAL',['../_m_m_a8652_8c.html#a5ddc444544f9584c2b47816e5c7651ad',1,'MMA8652.c']]],
+  ['config4_5fvib_5fmotion_5fthsx_5fval',['CONFIG4_VIB_MOTION_THSX_VAL',['../_m_m_a8652_8c.html#a7a7db127966772d68be165893cfa6498',1,'MMA8652.c']]],
+  ['conn_5fhandle',['conn_handle',['../structble__bmdeval__s.html#a18300b4711706b69059351995ff07573',1,'ble_bmdeval_s']]],
+  ['conn_5fsup_5ftimeout',['CONN_SUP_TIMEOUT',['../group__ble__sdk__app__template__main.html#ga799412c2b531ca347e13611e6e7523b9',1,'main.c']]],
+  ['control_20point_20commands',['Control Point Commands',['../group___control___point___commands.html',1,'']]],
+  ['ctrl_5fchar_5fhandles',['ctrl_char_handles',['../structble__bmdeval__s.html#a72e79fbff1489c49746b26888426fd2a',1,'ble_bmdeval_s']]],
+  ['ctrl_5fwrite_5fhandler',['ctrl_write_handler',['../structble__bmdeval__init__t.html#a542ab712ac004560c2be07c23da52cc1',1,'ble_bmdeval_init_t::ctrl_write_handler()'],['../structble__bmdeval__s.html#afd078ad9a0d641460021ba102872e1c0',1,'ble_bmdeval_s::ctrl_write_handler()']]]
+];

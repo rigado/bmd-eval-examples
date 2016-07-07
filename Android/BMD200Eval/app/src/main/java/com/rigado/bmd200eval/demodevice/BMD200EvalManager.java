@@ -50,7 +50,6 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
 
         };
 
-        RigLeConnectionManager.setContext(mContext);
         final RigLeConnectionManager rigLeConnectionManager = RigLeConnectionManager.getInstance();
         rigLeConnectionManager.setObserver(this);
 

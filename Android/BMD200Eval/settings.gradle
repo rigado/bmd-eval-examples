@@ -1,2 +1,2 @@
-include ':app'
-include ':rigablue'
+include ':app', ':rigablue'
+project(':rigablue').projectDir = new File('libs/rigablue')

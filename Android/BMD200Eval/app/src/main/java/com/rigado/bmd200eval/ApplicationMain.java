@@ -6,6 +6,7 @@ import android.util.Log;
 import com.rigado.bmd200eval.demodevice.BMD200EvalDemoDevice;
 import com.rigado.bmd200eval.demodevice.BMD200EvalManager;
 import com.rigado.bmd200eval.demodevice.BMD200EvalManagerObserver;
+import com.rigado.rigablue.RigCoreBluetooth;
 
 /**
  * This class handles the long-term BMD200EvalDemoDevice state since it's always available for the duration of the app
@@ -34,6 +35,9 @@ public class ApplicationMain extends Application implements BMD200EvalManagerObs
     public void onCreate()
     {
         super.onCreate();
+
+        // Required initialization
+        RigCoreBluetooth.initialize(this);
 
         mBMD200EvalManager = BMD200EvalManager.getInstance();
         mBMD200EvalManager.setContext(this);

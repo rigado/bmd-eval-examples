@@ -56,20 +56,53 @@ static int discoveredServicesCount = 0;
     return _serviceList;
 }
 
+- (CBService*)getServiceWithUuid:(CBUUID*)uuid
+{
+    if (uuid == nil) {
+        return nil;
+    }
+    for (CBService *service in _serviceList) {
+        if ([service.UUID isEqual:uuid]) {
+            return service;
+        }
+    }
+    
+    return nil;
+}
+
+- (CBCharacteristic*)getCharacteristicWithUuid:(CBUUID*)uuid forService:(CBService*)service
+{
+    if (uuid == nil || service == nil) {
+        return nil;
+    }
+    
+    for (CBCharacteristic *characteristic in service.characteristics) {
+        if ([characteristic.UUID isEqual:uuid]) {
+            return characteristic;
+        }
+    }
+    
+    return nil;
+}
+
 - (void)runDiscoveryForServices:(NSArray*)serviceList
 {
     [_peripheral discoverServices:serviceList];
 }
 
-- (void)enableNotificationsForCharacteristic:(CBCharacteristic *)characteristic
+- (BOOL)enableNotificationsForCharacteristic:(CBCharacteristic *)characteristic
 {
     if (characteristic == nil) {
-        return;
+        return NO;
     }
     
     if((characteristic.properties & CBCharacteristicPropertyNotify) == CBCharacteristicPropertyNotify) {
         [_peripheral setNotifyValue:YES forCharacteristic:characteristic];
+    } else {
+        return NO;
     }
+    
+    return YES;
 }
 
 - (void)setAdvertisementData:(NSDictionary *)advData

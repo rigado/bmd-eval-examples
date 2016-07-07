@@ -13,11 +13,12 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "RigLeBaseDevice.h"
 #import "RigDfuError.h"
+#import "RigFirmwareUpdateRequest.h"
 
 @protocol RigFirmwareUpdateManagerDelegate <NSObject>
 /**
  *  NOTE: The methods in this delegate are NOT called on the App's main thread.  The programmer must invoke
- *  any view updates by using perfrom selector on main thread.  See RigTestDeviceViewController.h for an
+ *  any view updates on the application's main thread.  See RigTestDeviceViewController.h for an
  *  example.
  */
 /**
@@ -42,6 +43,10 @@
 - (void)didFinishUpdate;
 
 @optional
+/**
+ *  This method is called if an update fails for any given reason.
+ *
+ */
 - (void)updateFailed:(NSString*)status errorCode:(RigDfuError_t)error;
 
 @end
@@ -67,6 +72,7 @@
  *  already in the bootloader, this characteristic parameter may be nil.
  *
  *  @param device            The device for which to perform the firmware update
+ *  @param isPatch			 Set to true if the image is a patch image, otherwise set false
  *  @param firmwareImage     The firmware image to send to the device
  *  @param firmwareImageSize The size of the firmware image
  *  @param characteristic    The command characteristic
@@ -75,7 +81,8 @@
  *
  *  @return YES if successful, NO otherwise
  */
-- (BOOL)updateFirmware:(RigLeBaseDevice*)device Image:(NSData*)firmwareImage ImageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device isPatch:(BOOL)isPatch image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
        activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
+- (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request;
 @end

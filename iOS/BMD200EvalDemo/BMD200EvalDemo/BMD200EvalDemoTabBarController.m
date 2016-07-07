@@ -145,7 +145,7 @@
     [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
     
     NSDictionary *advData = [device advertisementData];
-    NSArray *mfgData = [advData objectForKey:CBAdvertisementDataManufacturerDataKey];
+//    NSArray *mfgData = [advData objectForKey:CBAdvertisementDataManufacturerDataKey];
     NSString *advName = [advData objectForKey:CBAdvertisementDataLocalNameKey];
     
     if ([advName isEqualToString:@"BMD200-Blinky"]) {

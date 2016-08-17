@@ -100,6 +100,8 @@ uint32_t bmd_pwm_rgb_led_start(const bmd_pwm_rgb_color_t * starting_color)
         .end_delay           = 0
     };
 
+    bmd_pwm_rgb_led_set_color(starting_color);
+    
     nrf_drv_pwm_simple_playback(&m_pwm_inst, &seq, 1, NRF_DRV_PWM_FLAG_LOOP);
     
     return NRF_SUCCESS;
@@ -110,6 +112,10 @@ uint32_t bmd_pwm_rgb_led_set_color(const bmd_pwm_rgb_color_t * rgb_data)
     if(!m_initialized)
     {
         return NRF_ERROR_INVALID_STATE;
+    }
+    if (!rgb_data)
+    {
+    	return NRF_ERROR_INVALID_PARAM;
     }
     
     m_seq_values.channel_0 = rgb_data->red;

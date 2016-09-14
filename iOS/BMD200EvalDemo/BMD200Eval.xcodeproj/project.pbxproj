@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C65CA781D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */; };
+		4C65CA791D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */; };
+		4C65CA7A1D822EEF00C760BE /* bmdware_rel_nrf51_s110_3_1_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA761D822EEF00C760BE /* bmdware_rel_nrf51_s110_3_1_1_ota.bin */; };
+		4C65CA7B1D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */; };
 		5E028C7D1B580E5F001F9778 /* logo3-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E028C7C1B580E5F001F9778 /* logo3-white.png */; };
 		5E028C811B581838001F9778 /* logo3-white-600px.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E028C801B581838001F9778 /* logo3-white-600px.png */; };
 		5E028C841B581958001F9778 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E028C831B581958001F9778 /* AboutViewController.m */; };
@@ -76,11 +80,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin; path = Firmware/bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin; sourceTree = "<group>"; };
+		4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "bmd-300-demo-shield-rel_1_0_4_ota.bin"; path = "Firmware/bmd-300-demo-shield-rel_1_0_4_ota.bin"; sourceTree = "<group>"; };
+		4C65CA761D822EEF00C760BE /* bmdware_rel_nrf51_s110_3_1_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmdware_rel_nrf51_s110_3_1_1_ota.bin; path = Firmware/bmdware_rel_nrf51_s110_3_1_1_ota.bin; sourceTree = "<group>"; };
+		4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmdware_rel_nrf52_s132_3_1_1_ota.bin; path = Firmware/bmdware_rel_nrf52_s132_3_1_1_ota.bin; sourceTree = "<group>"; };
 		5E028C7C1B580E5F001F9778 /* logo3-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo3-white.png"; path = "Images/logo3-white.png"; sourceTree = "<group>"; };
 		5E028C801B581838001F9778 /* logo3-white-600px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo3-white-600px.png"; path = "Images/logo3-white-600px.png"; sourceTree = "<group>"; };
 		5E028C821B581958001F9778 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		5E028C831B581958001F9778 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
-		5E25EFE91B5F0528009CB880 /* bmdware_eval_rel_2_0_5_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmdware_eval_rel_2_0_5_ota.bin; path = Firmware/bmdware_eval_rel_2_0_5_ota.bin; sourceTree = "<group>"; };
 		5E25EFF51B63236D009CB880 /*   IOS Bar Icon 4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "  IOS Bar Icon 4@2x.png"; path = "Images/  IOS Bar Icon 4@2x.png"; sourceTree = "<group>"; };
 		5E25EFF61B63236D009CB880 /*   IOS Bar Icon 4@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "  IOS Bar Icon 4@3x.png"; path = "Images/  IOS Bar Icon 4@3x.png"; sourceTree = "<group>"; };
 		5E25EFF91B632432009CB880 /*  IOS Bar Icon 1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = " IOS Bar Icon 1@2x.png"; path = "Images/ IOS Bar Icon 1@2x.png"; sourceTree = "<group>"; };
@@ -235,6 +242,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4C65CA7C1D822F0500C760BE /* 300 */ = {
+			isa = PBXGroup;
+			children = (
+				4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */,
+				4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */,
+				4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */,
+			);
+			name = 300;
+			sourceTree = "<group>";
+		};
+		4C65CA7D1D822F0F00C760BE /* 200 */ = {
+			isa = PBXGroup;
+			children = (
+				4C65CA761D822EEF00C760BE /* bmdware_rel_nrf51_s110_3_1_1_ota.bin */,
+				5E862B7D1B59840B007CE463 /* bmd200_blinky_demo_ota.bin */,
+				5E5BC5361B570F130095A8AF /* eval_demo_1_0_0_ota.bin */,
+			);
+			name = 200;
+			sourceTree = "<group>";
+		};
 		5E35985A1B4AEAE400416112 = {
 			isa = PBXGroup;
 			children = (
@@ -357,9 +384,8 @@
 		5E88DC041B545CA90091F93B /* Firmware */ = {
 			isa = PBXGroup;
 			children = (
-				5E25EFE91B5F0528009CB880 /* bmdware_eval_rel_2_0_5_ota.bin */,
-				5E862B7D1B59840B007CE463 /* bmd200_blinky_demo_ota.bin */,
-				5E5BC5361B570F130095A8AF /* eval_demo_1_0_0_ota.bin */,
+				4C65CA7C1D822F0500C760BE /* 300 */,
+				4C65CA7D1D822F0F00C760BE /* 200 */,
 			);
 			name = Firmware;
 			sourceTree = "<group>";
@@ -567,6 +593,9 @@
 				5E25F0021B632432009CB880 /*   IOS Bar Icon 3@3x.png in Resources */,
 				5E028C7D1B580E5F001F9778 /* logo3-white.png in Resources */,
 				5E25F0011B632432009CB880 /*   IOS Bar Icon 2@2x.png in Resources */,
+				4C65CA7B1D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin in Resources */,
+				4C65CA781D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin in Resources */,
+				4C65CA7A1D822EEF00C760BE /* bmdware_rel_nrf51_s110_3_1_1_ota.bin in Resources */,
 				5E3598751B4AEAE500416112 /* Main.storyboard in Resources */,
 				5E35987A1B4AEAE500416112 /* LaunchScreen.xib in Resources */,
 				5E25F0031B632432009CB880 /*   IOS Bar Icon 2@3x.png in Resources */,
@@ -576,6 +605,7 @@
 				5E25EFF81B63236D009CB880 /*   IOS Bar Icon 4@3x.png in Resources */,
 				5E25EFFF1B632432009CB880 /*  IOS Bar Icon 1@2x.png in Resources */,
 				5E3598771B4AEAE500416112 /* Images.xcassets in Resources */,
+				4C65CA791D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin in Resources */,
 				5E25F0001B632432009CB880 /*   IOS Bar Icon 3@2x.png in Resources */,
 				5E88DC011B542A770091F93B /* SVProgressHUD.bundle in Resources */,
 			);

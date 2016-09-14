@@ -56,6 +56,8 @@
 /* Device Packet size */
 #define BYTES_IN_ONE_PACKET                     20
 
+NSUInteger kFirmwareKeyLength = 16;
+
 typedef enum FirmwareManagerState_enum
 {
     /* Initial state of update manager */
@@ -95,8 +97,8 @@ typedef enum FirmwareManagerState_enum
     BOOL shouldWaitForErasedSize;
     BOOL didDisconnectToErase;
     BOOL didForceEraseAfterStmUpdateImageRan;
-    bool isPatchUpdate;
-    bool isPatchInitPacketSent;
+    BOOL isPatchUpdate;
+    BOOL isPatchInitPacketSent;
     
     uint32_t totalPackets;
     uint32_t packetNumber;
@@ -122,11 +124,17 @@ typedef enum FirmwareManagerState_enum
 - (void)initStateVariables
 {
     isFileSizeWritten = NO;
+    isInitPacketSent = NO;
+    
     isPacketNotificationEnabled = NO;
     isReceivingFirmwareImage = NO;
     isLastPacket = NO;
     shouldStopSendingPackets = NO;
     didForceEraseAfterStmUpdateImageRan = NO;
+    shouldWaitForErasedSize = NO;
+    didDisconnectToErase = NO;
+    isPatchUpdate = NO;
+    isPatchInitPacketSent = NO;    
     
     delegate = nil;
     state = State_Init;
@@ -134,13 +142,39 @@ typedef enum FirmwareManagerState_enum
     image = nil;
 }
 
-- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device isPatch:(BOOL)isPatch image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
-       activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen
+- (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage {
+    if (firmwareImage.length < kFirmwareKeyLength) {
+        return NO;
+    }
+    
+    // create data object with first 16 bytes of firmware image
+    NSData *key = [firmwareImage subdataWithRange:NSMakeRange(0, kFirmwareKeyLength)];
+    
+    //convert patchKey to NSData and compare
+    uint8_t patch_key[] = {
+        0xac, 0xb3, 0x37, 0xe8, 0xd0, 0xeb, 0x40, 0x90,
+        0xa4, 0xf3, 0xbb, 0x85, 0x7a, 0x5b, 0x2a, 0xf6
+    };
+    NSData *keyPatchData = [NSData dataWithBytes:patch_key length:kFirmwareKeyLength];
+    
+    return [keyPatchData isEqualToData:key];
+}
+
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device image:(NSData*)firmwareImage activateChar:(CBCharacteristic*)characteristic
+                activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen
 {
     RigDfuError_t result = DfuError_None;
     NSLog(@"__updateFirmware__");
 
-    isPatchUpdate = isPatch; 
+    isPatchUpdate = NO;
+    imageSize = (UInt32)firmwareImage.length;
+    image = firmwareImage;
+    
+    if ([self firmwareImageIsPatch:firmwareImage]) {
+        isPatchUpdate = YES;
+        imageSize = imageSize - (UInt32)kFirmwareKeyLength;
+        image = [firmwareImage subdataWithRange:NSMakeRange(kFirmwareKeyLength, imageSize)];
+    }
     
     // Create the firmware update service object and assigned this object as the delegate
     firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
@@ -150,19 +184,18 @@ typedef enum FirmwareManagerState_enum
         return result;
     }
     
-    //Intialize firmware image variables
-    imageSize = firmwareImageSize;
-    image = firmwareImage;
-    
     //Set to automatically reconnect.  This will force iOS to connect again immediately after receving an advertisement packet from the peripheral after
     //activating the bootloader.
     firmwareUpdateService.shouldReconnectToPeripheral = YES;
-    state = State_Init;
+    state = State_DiscoverFirmwareServiceCharacteristics;
     
     //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
-    state = State_DiscoverFirmwareServiceCharacteristics;
-    //TODO: iOS does strange things with the advertised name, it is probably better to check on discovered services to see if they match the DFU
-    if ([device.name isEqualToString:@"RigDfu"]) {
+
+    CBService *dfuService;
+    if (firmwareUpdateService.updateDFUServiceUuidString) {
+        dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:firmwareUpdateService.updateDFUServiceUuidString]];
+    }
+    if (dfuService != nil) {
         if (device.peripheral.state == CBPeripheralStateConnected) {
             if (!device.isDiscoveryComplete) {
                 result = [firmwareUpdateService triggerServiceDiscovery];
@@ -192,9 +225,10 @@ typedef enum FirmwareManagerState_enum
         RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
         
         firmwareUpdateService.shouldReconnectToPeripheral = NO;
-        CBUUID *dfuServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-        NSArray *uuidList = [NSArray arrayWithObject:dfuServiceUuid];
-        RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:NO];
+        CBUUID *dfuServiceUuid200 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
+        CBUUID *dfuServiceUuid300 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
+        NSArray *uuidList = @[dfuServiceUuid200, dfuServiceUuid300];
+        RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:YES];
         [dm discoverDevices:dr];
         [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
     }
@@ -204,72 +238,11 @@ typedef enum FirmwareManagerState_enum
 
 - (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request
 {
-    RigDfuError_t result = DfuError_None;
-    RigLeBaseDevice *device;
-    NSLog(@"__performUpdate__");
-    
-    isPatchUpdate = request.isPatch;
-    device = request.updateDevice;
-    
-    // Create the firmware update service object and assigned this object as the delegate
-    firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
-    firmwareUpdateService.delegate = self;
-    result = [firmwareUpdateService setDevice:request.updateDevice];
-    if (result != DfuError_None) {
-        return result;
-    }
-    
-    //Intialize firmware image variables
-    imageSize = (uint32_t)request.image.length;
-    image = request.image;
-    
-    //Set to automatically reconnect.  This will force iOS to connect again immediately after receving an advertisement packet from the peripheral after
-    //activating the bootloader.
-    firmwareUpdateService.shouldReconnectToPeripheral = YES;
-    state = State_Init;
-    
-    //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
-    state = State_DiscoverFirmwareServiceCharacteristics;
-    //TODO: iOS does strange things with the advertised name, it is probably better to check on discovered services to see if they match the DFU
-    CBService *dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString]];
-    if (dfuService != nil) {
-        if (device.peripheral.state == CBPeripheralStateConnected) {
-            if (!device.isDiscoveryComplete) {
-                result = [firmwareUpdateService triggerServiceDiscovery];
-                if (result != DfuError_None) {
-                    return result;
-                }
-            } else {
-                [firmwareUpdateService determineSecureDfuStatus];
-                result = [firmwareUpdateService enableControlPointNotifications];
-                if (result != DfuError_None) {
-                    return result;
-                }
-            }
-        } else {
-            result = [firmwareUpdateService connectPeripheral];
-            if (result != DfuError_None) {
-                return result;
-            }
-        }
-    } else {
-        if (request.activationCharacteristic == nil || device == nil || device.peripheral == nil || request.activationCommand == nil) {
-            NSLog(@"Invalid parameter provided!");
-            return DfuError_InvalidParameter;
-        }
-        [device.peripheral writeValue:request.activationCommand forCharacteristic:request.activationCharacteristic type:CBCharacteristicWriteWithoutResponse];
-        
-        RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
-        
-        firmwareUpdateService.shouldReconnectToPeripheral = NO;
-        CBUUID *dfuServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-        NSArray *uuidList = [NSArray arrayWithObject:dfuServiceUuid];
-        RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:NO];
-        [dm discoverDevices:dr];
-        [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
-    }
-    
-    return result;
+    return [self updateFirmware:request.updateDevice
+                          image:request.image
+                   activateChar:request.activationCharacteristic
+                activateCommand:(uint8_t *)[request.activationCommand bytes]
+             activateCommandLen:request.activationCommand.length];
 
 }
 
@@ -287,6 +260,8 @@ typedef enum FirmwareManagerState_enum
     }
     
     [self initStateVariables];
+    firmwareUpdateService.alwaysReconnectOnDisconnect = NO;
+    firmwareUpdateService.shouldReconnectToPeripheral = NO;
 }
 
 - (uint32_t)getImageSize
@@ -583,7 +558,7 @@ typedef enum FirmwareManagerState_enum
 /**
  *  This method is sent from the delegate protocol once device service and characteristic discovery is complete.
  */
-- (void)didDiscoverCharacteristicsForDFUSerivce
+- (void)didDiscoverCharacteristicsForDFUService
 {
     if (state == State_TransferringRadioImage) {
         state = State_Init;
@@ -591,6 +566,7 @@ typedef enum FirmwareManagerState_enum
         isPacketNotificationEnabled = NO;
         isReceivingFirmwareImage = NO;
         isInitPacketSent = NO;
+        isPatchInitPacketSent = NO;
         [delegate updateProgress:0.0f];
         packetNumber = 0;
     }
@@ -877,7 +853,7 @@ typedef enum FirmwareManagerState_enum
 #pragma mark - RigLeDiscoveryManagerDelegate methods
 - (void)didDiscoverDevice:(RigAvailableDeviceData *)device
 {
-    if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65) {
+    if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65 && device.rssi.integerValue < 0) {
         
         [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
         oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
@@ -895,7 +871,7 @@ typedef enum FirmwareManagerState_enum
 - (void)discoveryDidTimeout
 {
     NSLog(@"Did not find DFU Device!!");
-    
+    [self didFailToConnectToBootloader];
 }
 
 #pragma mark -
@@ -914,12 +890,12 @@ typedef enum FirmwareManagerState_enum
 
 - (void)deviceConnectionDidFail:(RigAvailableDeviceData *)device
 {
-    
+    [self didFailToConnectToBootloader];
 }
 
 - (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device
 {
-    
+    [self didFailToConnectToBootloader];
 }
 
 #pragma mark -

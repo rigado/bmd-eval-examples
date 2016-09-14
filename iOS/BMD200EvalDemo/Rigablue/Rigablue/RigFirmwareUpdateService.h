@@ -14,7 +14,8 @@
 #import "RigLeBaseDevice.h"
 #import "RigDfuError.h"
 
-extern NSString *kupdateDFUServiceUuidString;
+extern NSString *kupdateDFUServiceUuidString200;
+extern NSString *kupdateDFUServiceUuidString300;
 
 @protocol RigFirmwareUpdateServiceDelegate <NSObject>
 
@@ -47,7 +48,7 @@ extern NSString *kupdateDFUServiceUuidString;
 /**
  *  This method is called after discovery has been performed on the DFU service.
  */
-- (void)didDiscoverCharacteristicsForDFUSerivce;
+- (void)didDiscoverCharacteristicsForDFUService;
 
 /**
  *  This method is called when a connection to RigDFU could not be obtained.
@@ -73,6 +74,12 @@ extern NSString *kupdateDFUServiceUuidString;
  *  If this is set to YES, then anytime a disconnect occurs for the update device, a reconnect will be issued.
  */
 @property (nonatomic) BOOL alwaysReconnectOnDisconnect;
+
+/**
+ *  This is the Firmware Update Service UUID for the connected device.
+ */
+@property (strong, nonatomic)NSString *updateDFUServiceUuidString;
+
 
 /**
  *  Initializes the update service object.

@@ -29,7 +29,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 
 @implementation RigLeDiscoveryManager
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -42,7 +42,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     return self;
 }
 
-+ (id)sharedInstance
++ (instancetype)sharedInstance
 {
     if (instance == nil) {
         instance = [[RigLeDiscoveryManager alloc] init];
@@ -143,10 +143,6 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 - (void)didDiscoverDevice:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi
 {
     BOOL found = NO;
-    if (rssi.intValue >= 0) {
-        /* Sometimes an invalid RSSI is provided by the OS.  Connecting to devices reported in this state will generally result in an unknown connection error. */
-        return;
-    }
     
     RigAvailableDeviceData *availableDevice = nil;
     

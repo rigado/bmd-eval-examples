@@ -195,7 +195,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     if (isAlreadyBootloader) {
         /* This path is for when only the bootloader is present on the device. */
         /* Invoke bootloader here with pointer to binary image of firmware. */
-        [updateManager updateFirmware:updateDevice isPatch:NO image:firmwareImageData imageSize:(uint32_t)firmwareImageData.length activateChar:nil activateCommand:nil activateCommandLen:0];
+        [updateManager updateFirmware:updateDevice image:firmwareImageData activateChar:nil activateCommand:nil activateCommandLen:0];
         isUpdateInProgress = YES;
         return;
     }
@@ -221,7 +221,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         boot_command = bootloader_command;
     }
     
-    for (CBService *svc in [updateDevice getSerivceList]) {
+    for (CBService *svc in [updateDevice getServiceList]) {
         if ([svc.UUID isEqual:serviceUuid]) {
             service = svc;
             break;
@@ -239,7 +239,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     
     if (controlPoint != nil) {
         /* Invoke bootloader here with pointer to binary image of firmware. */
-        [updateManager updateFirmware:updateDevice isPatch:NO image:firmwareImageData imageSize:(uint32_t)firmwareImageData.length activateChar:controlPoint activateCommand:boot_command activateCommandLen:BOOTLOADER_COMMAND_LEN];
+        [updateManager updateFirmware:updateDevice image:firmwareImageData activateChar:controlPoint activateCommand:boot_command activateCommandLen:BOOTLOADER_COMMAND_LEN];
         isUpdateInProgress = YES;
     } else {
         _updateStatusLabel.text = @"Characteristic for Reset not found!";

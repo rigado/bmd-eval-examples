@@ -169,7 +169,7 @@ typedef enum FirmwareManagerState_enum
     isPatchUpdate = NO;
     imageSize = (UInt32)firmwareImage.length;
     image = firmwareImage;
-    
+
     if ([self firmwareImageIsPatch:firmwareImage]) {
         isPatchUpdate = YES;
         imageSize = imageSize - (UInt32)kFirmwareKeyLength;

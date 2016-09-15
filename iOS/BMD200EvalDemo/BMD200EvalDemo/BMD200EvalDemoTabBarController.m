@@ -22,6 +22,8 @@
     NSMutableArray *delegateList;
     BOOL isBlinkyDemo;
     BOOL isBmdWare;
+    BOOL is200;
+    BOOL is300;
 }
 @end
 
@@ -48,7 +50,7 @@
     CBUUID *blinkyServiceUuid = [CBUUID UUIDWithString:@"180F"];
     CBUUID *bmdWareServiceUuid = [CBUUID UUIDWithString:@"2413b33f-707f-90bd-0245-2ab8807571b7"];
     CBUUID *bmdWareServiceUuid2 = [CBUUID UUIDWithString:@"6e400001-b5a3-f393-e0a9-e50e24dcca9e"];
-    RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:[NSArray arrayWithObjects:demoServiceUuid, blinkyServiceUuid, bmdWareServiceUuid, bmdWareServiceUuid2, nil] timeout:0.0f delegate:self allowDuplicates:YES];
+    RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:[NSArray arrayWithObjects:demoServiceUuid, blinkyServiceUuid, nil] timeout:0.0f delegate:self allowDuplicates:YES];// bmdWareServiceUuid, bmdWareServiceUuid2, nil] timeout:0.0f delegate:self allowDuplicates:YES];
     
     [RigLeConnectionManager sharedInstance].delegate = self;
     [[RigLeDiscoveryManager sharedInstance] discoverDevices:dr];
@@ -56,7 +58,7 @@
 
 - (BOOL)isConnected
 {
-    return isConnected;
+    return baseDevice.peripheral.state == CBPeripheralStateConnected;
 }
 
 - (BOOL)isConnectedToBlinkyDemo
@@ -67,6 +69,18 @@
 - (BOOL)isConnectedToBmdWare
 {
     return isBmdWare;
+}
+
+- (BOOL)isConnectedTo200
+{
+    NSLog(@"It's a 200? %d", demoDevice.is200);
+    return demoDevice.is200;
+}
+
+- (BOOL)isConnectedTo300
+{
+    NSLog(@"It's a 300? %d", demoDevice.is300);
+    return demoDevice.is300;
 }
 
 - (BMD200EvalDemoDevice*)getDevice
@@ -137,23 +151,28 @@
 #pragma mark RigLeDiscoveryManagerDelegate methods
 - (void)didDiscoverDevice:(RigAvailableDeviceData *)device
 {
-    NSLog(@"Discovered device");
+    NSLog(@"Discovered device: %@", device.peripheral.name);
     if (device.rssi.intValue < -60) {
-        NSLog(@"RSSI Not low enough");
+        NSLog(@"RSSI Not low enough: %@", device.peripheral.name);
         return;
     }
-    [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
+    
     
     NSDictionary *advData = [device advertisementData];
 //    NSArray *mfgData = [advData objectForKey:CBAdvertisementDataManufacturerDataKey];
     NSString *advName = [advData objectForKey:CBAdvertisementDataLocalNameKey];
     
-    if ([advName isEqualToString:@"BMD200-Blinky"]) {
+    if ([advName isEqualToString:@"BMD Blinky"] || [advName isEqualToString:@"BMD200-Blinky"]) {
         isBlinkyDemo = YES;
+        
     } else if([advName isEqualToString:@"RigCom"]) {
         isBmdWare = YES;
     }
-    [[RigLeConnectionManager sharedInstance] connectDevice:device connectionTimeout:10.0f];
+    
+    if (isBmdWare || isBlinkyDemo || [advName isEqualToString:@"EvalDemo"]) {
+        [[RigLeConnectionManager sharedInstance] connectDevice:device connectionTimeout:10.0f];
+        [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
+    }
 }
 
 - (void)discoveryDidTimeout
@@ -184,6 +203,8 @@
     baseDevice = nil;
     isBlinkyDemo = NO;
     isBmdWare = NO;
+    is200 = NO;
+    is300 = NO;
     for (id<BMD200EvalDemoTabBarDelegate> delegate in delegateList) {
         [delegate didDisconnectFromDevice];
     }
@@ -204,23 +225,17 @@
 - (void)discoveryDidCompleteForDevice:(RigLeBaseDevice *)device
 {
     NSLog(@"Discovery complete");
-    if (isBlinkyDemo || isBmdWare) {
-        //switch to update tab and show alert view
-        void (^update)(void) = ^void(void) {
-            for (id<BMD200EvalDemoTabBarDelegate> delegate in delegateList) {
-                [delegate didConnectToDevice:demoDevice];
-            }
-            [self setSelectedIndex:2];
-            [SVProgressHUD dismiss];
-        };
-        if (![NSThread isMainThread]) dispatch_sync(dispatch_get_main_queue(), update);
-        else update();
-    } else {
-        demoDevice = [[BMD200EvalDemoDevice alloc] initWithDevice:device];
-        for (id<BMD200EvalDemoTabBarDelegate> delegate in delegateList) {
-            [delegate didConnectToDevice:demoDevice];
-        }
+    demoDevice = [[BMD200EvalDemoDevice alloc] initWithDevice:device];
+    for (id<BMD200EvalDemoTabBarDelegate> delegate in delegateList) {
+        [delegate didConnectToDevice:demoDevice];
     }
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        if (isBlinkyDemo || isBmdWare) {
+            //switch to update tab and show alert view
+            [self setSelectedIndex:2];
+        }
+        [SVProgressHUD dismiss];
+    });
 }
 
 - (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device {}

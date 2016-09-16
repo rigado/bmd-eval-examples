@@ -50,7 +50,7 @@
     CBUUID *blinkyServiceUuid = [CBUUID UUIDWithString:@"180F"];
     CBUUID *bmdWareServiceUuid = [CBUUID UUIDWithString:@"2413b33f-707f-90bd-0245-2ab8807571b7"];
     CBUUID *bmdWareServiceUuid2 = [CBUUID UUIDWithString:@"6e400001-b5a3-f393-e0a9-e50e24dcca9e"];
-    RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:[NSArray arrayWithObjects:demoServiceUuid, blinkyServiceUuid, nil] timeout:0.0f delegate:self allowDuplicates:YES];// bmdWareServiceUuid, bmdWareServiceUuid2, nil] timeout:0.0f delegate:self allowDuplicates:YES];
+    RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:[NSArray arrayWithObjects:demoServiceUuid, blinkyServiceUuid, nil] timeout:0.0f delegate:self allowDuplicates:YES];//bmdWareServiceUuid, bmdWareServiceUuid2, nil] timeout:0.0f delegate:self allowDuplicates:YES];
     
     [RigLeConnectionManager sharedInstance].delegate = self;
     [[RigLeDiscoveryManager sharedInstance] discoverDevices:dr];

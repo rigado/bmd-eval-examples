@@ -224,13 +224,17 @@
         characteristic = demoCtrlChar;
     } else if (blinkyCtrlChar) {
         characteristic = blinkyCtrlChar;
-    } else if (bmdwareCtrlChar) {
+    }
+    if (bmdwareCtrlChar) {
+        uint8_t cmd = 0x60;
+        data = [NSData dataWithBytes:&cmd length: 1];
         characteristic = bmdwareCtrlChar;
     }
     if (characteristic) {
         [baseDevice.peripheral setNotifyValue:YES forCharacteristic:characteristic];
         [baseDevice.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
     }
+
 }
 
 - (void)startAmbientLightSensing
@@ -313,7 +317,7 @@
             accelData.z = data[2];
             [_delegate didUpdateAccelData:accelData];
         }
-    } else if (characteristic == demoCtrlChar || characteristic == blinkyCtrlChar || characteristic == bmdwareCtrlChar) {
+    } else if (characteristic == demoCtrlChar || characteristic == blinkyCtrlChar) {
         uint8_t * data = (uint8_t*)characteristic.value.bytes;
         // check the 9th value of the data,
         // this is the hardware version number, if it equals 2, then it's a 300
@@ -331,7 +335,26 @@
         }
         NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);
         [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
+    } else if (characteristic == bmdwareCtrlChar) {
+        uint8_t * data = (uint8_t*)characteristic.value.bytes;
+        // check the 9th value of the data,
+        // this is the hardware version number, if it equals 2, then it's a 300
+        // is this check enough? would there be a time where the 9th number is 2 just by chance?
+        // 1 in 16
+        if (data[10] == 02) {
+            self.is300 = YES;
+            self.is200 = NO;
+        } else {
+            self.is300 = NO;
+            self.is200 = YES;
+        }
+        if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
+            [_delegate didDiscoverHardwareVersion];
+        }
+        NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);
+        [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
     }
+    
 }
 
 @end

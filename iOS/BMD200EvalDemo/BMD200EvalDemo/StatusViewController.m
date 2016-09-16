@@ -42,7 +42,7 @@
     
     accelDataList = [[NSMutableArray alloc] init];
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
-    _userButtonOne.layer.cornerRadius = 2;
+    _userButtonOne.layer.cornerRadius = 5;
     _userButtonTwo.layer.cornerRadius = 5;
 }
 
@@ -70,7 +70,6 @@
     [self deconfigureDevice];
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
-
 }
 
 - (void)viewDidLayoutSubviews
@@ -123,6 +122,7 @@
 - (void)updateView
 {
     _ambientLightLevelImageView.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f];
+    _ambientLightLevelImageView.layer.cornerRadius = 2;
 }
 
 #pragma mark -

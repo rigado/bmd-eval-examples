@@ -71,6 +71,7 @@
     CGRect initFrame = _hostView.bounds;
     graph = [[CPTXYGraph alloc] initWithFrame:initFrame];
     [graph applyTheme:[CPTTheme themeNamed:kCPTPlainWhiteTheme]];
+    
     _hostView.hostedGraph = graph;
     [graph setPaddingLeft:0.0f];
     [graph setPaddingBottom:0.0f];
@@ -103,13 +104,13 @@
     NSMutableArray *plotList = [[NSMutableArray alloc] init];
     CPTPlot *plot = nil;
     
-    plot = [self setupAccelPlot:@"AccelX" withLineColor:[CPTColor redColor]];
+    plot = [self setupAccelPlot:@"AccelX" withLineColor:[CPTColor colorWithComponentRed: 0.7333 green: 0.0078 blue: 0.1882 alpha: 1.0]];
     [plotList addObject:plot];
     
-    plot = [self setupAccelPlot:@"AccelY" withLineColor:[CPTColor blueColor]];
+    plot = [self setupAccelPlot:@"AccelY" withLineColor:[CPTColor colorWithComponentRed: 0.0039 green: 0.5294 blue: 0.7451 alpha: 1.0]];
     [plotList addObject:plot];
     
-    plot = [self setupAccelPlot:@"AccelZ" withLineColor:[CPTColor greenColor]];
+    plot = [self setupAccelPlot:@"AccelZ" withLineColor:[CPTColor colorWithComponentRed: 0.0078 green: 0.6118 blue: 0.3882 alpha: 1.0]];
     [plotList addObject:plot];
     
     // 3 - Set up plot space

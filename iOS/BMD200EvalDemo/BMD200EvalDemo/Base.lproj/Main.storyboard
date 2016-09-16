@@ -215,8 +215,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bse-uk-jN2">
-                                <rect key="frame" x="16" y="94" width="568" height="130"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bse-uk-jN2">
+                                <rect key="frame" x="20" y="94" width="560" height="130"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="130" id="hxO-MI-h21"/>
                                 </constraints>
@@ -230,8 +230,8 @@ prototype and production.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6r-Ig-klI">
-                                <rect key="frame" x="16" y="232" width="568" height="66"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6r-Ig-klI">
+                                <rect key="frame" x="20" y="232" width="560" height="66"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="66" id="xjC-Ix-Zm7"/>
                                 </constraints>
@@ -241,8 +241,8 @@ ideas into reality.</string>
                                 <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BNo-1a-eHi">
-                                <rect key="frame" x="16" y="306" width="568" height="149"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BNo-1a-eHi">
+                                <rect key="frame" x="20" y="306" width="560" height="149"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="149" id="hu0-95-WkR"/>
                                 </constraints>
@@ -257,8 +257,8 @@ www.rigado.com/modules</string>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
                             </textView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="logo3-white-600px.png" translatesAutoresizingMaskIntoConstraints="NO" id="1Xo-tv-jYG">
-                                <rect key="frame" x="16" y="25" width="568" height="60"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="1Xo-tv-jYG">
+                                <rect key="frame" x="20" y="25" width="560" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="xDO-Ik-eld"/>
                                 </constraints>
@@ -401,6 +401,5 @@ www.rigado.com/modules</string>
         <image name="  IOS Bar Icon 4.png" width="25" height="25"/>
         <image name=" IOS Bar Icon 1.png" width="25" height="25"/>
         <image name="logo" width="200" height="36"/>
-        <image name="logo3-white-600px.png" width="600" height="119"/>
     </resources>
 </document>

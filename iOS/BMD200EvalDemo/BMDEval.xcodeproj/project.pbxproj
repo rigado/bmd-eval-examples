@@ -100,7 +100,7 @@
 		5E25EFFC1B632432009CB880 /*   IOS Bar Icon 3@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "  IOS Bar Icon 3@3x.png"; path = "Images/  IOS Bar Icon 3@3x.png"; sourceTree = "<group>"; };
 		5E25EFFD1B632432009CB880 /*   IOS Bar Icon 2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "  IOS Bar Icon 2@3x.png"; path = "Images/  IOS Bar Icon 2@3x.png"; sourceTree = "<group>"; };
 		5E25EFFE1B632432009CB880 /*  IOS Bar Icon 1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = " IOS Bar Icon 1@3x.png"; path = "Images/ IOS Bar Icon 1@3x.png"; sourceTree = "<group>"; };
-		5E3598631B4AEAE500416112 /* BMD200Eval.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMD200Eval.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E3598631B4AEAE500416112 /* BMDEval.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMDEval.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E3598671B4AEAE500416112 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E3598681B4AEAE500416112 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5E35986A1B4AEAE500416112 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 		5E3598741B4AEAE500416112 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5E3598761B4AEAE500416112 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		5E3598791B4AEAE500416112 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		5E35987F1B4AEAE500416112 /* BMD200EvalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BMD200EvalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E35987F1B4AEAE500416112 /* BMDEval.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BMDEval.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E3598841B4AEAE500416112 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E3598851B4AEAE500416112 /* BMD200EvalDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMD200EvalDemoTests.m; sourceTree = "<group>"; };
 		5E35989C1B4AF84A00416112 /* BMD200EvalDemoDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMD200EvalDemoDevice.h; sourceTree = "<group>"; };
@@ -259,8 +259,8 @@
 		5E3598641B4AEAE500416112 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5E3598631B4AEAE500416112 /* BMD200Eval.app */,
-				5E35987F1B4AEAE500416112 /* BMD200EvalTests.xctest */,
+				5E3598631B4AEAE500416112 /* BMDEval.app */,
+				5E35987F1B4AEAE500416112 /* BMDEval.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -473,9 +473,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		5E3598621B4AEAE400416112 /* BMD200Eval */ = {
+		5E3598621B4AEAE400416112 /* BMDEval */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5E3598891B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMD200Eval" */;
+			buildConfigurationList = 5E3598891B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMDEval" */;
 			buildPhases = (
 				5E35985F1B4AEAE400416112 /* Sources */,
 				5E3598601B4AEAE400416112 /* Frameworks */,
@@ -486,14 +486,14 @@
 			dependencies = (
 				5E3598A91B4B011100416112 /* PBXTargetDependency */,
 			);
-			name = BMD200Eval;
+			name = BMDEval;
 			productName = BMD200EvalDemo;
-			productReference = 5E3598631B4AEAE500416112 /* BMD200Eval.app */;
+			productReference = 5E3598631B4AEAE500416112 /* BMDEval.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5E35987E1B4AEAE500416112 /* BMD200EvalTests */ = {
+		5E35987E1B4AEAE500416112 /* BMDEvalTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5E35988C1B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMD200EvalTests" */;
+			buildConfigurationList = 5E35988C1B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMDEvalTests" */;
 			buildPhases = (
 				5E35987B1B4AEAE500416112 /* Sources */,
 				5E35987C1B4AEAE500416112 /* Frameworks */,
@@ -504,9 +504,9 @@
 			dependencies = (
 				5E3598811B4AEAE500416112 /* PBXTargetDependency */,
 			);
-			name = BMD200EvalTests;
+			name = BMDEvalTests;
 			productName = BMD200EvalDemoTests;
-			productReference = 5E35987F1B4AEAE500416112 /* BMD200EvalTests.xctest */;
+			productReference = 5E35987F1B4AEAE500416112 /* BMDEval.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -528,7 +528,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5E35985E1B4AEAE400416112 /* Build configuration list for PBXProject "BMD200Eval" */;
+			buildConfigurationList = 5E35985E1B4AEAE400416112 /* Build configuration list for PBXProject "BMDEval" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -547,8 +547,8 @@
 			);
 			projectRoot = "";
 			targets = (
-				5E3598621B4AEAE400416112 /* BMD200Eval */,
-				5E35987E1B4AEAE500416112 /* BMD200EvalTests */,
+				5E3598621B4AEAE400416112 /* BMDEval */,
+				5E35987E1B4AEAE500416112 /* BMDEvalTests */,
 			);
 		};
 /* End PBXProject section */
@@ -644,7 +644,7 @@
 /* Begin PBXTargetDependency section */
 		5E3598811B4AEAE500416112 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 5E3598621B4AEAE400416112 /* BMD200Eval */;
+			target = 5E3598621B4AEAE400416112 /* BMDEval */;
 			targetProxy = 5E3598801B4AEAE500416112 /* PBXContainerItemProxy */;
 		};
 		5E3598A91B4B011100416112 /* PBXTargetDependency */ = {
@@ -777,7 +777,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PRODUCT_NAME = BMD200Eval;
+				PRODUCT_NAME = BMDEval;
 			};
 			name = Debug;
 		};
@@ -804,7 +804,7 @@
 					"-ObjC",
 					"-all_load",
 				);
-				PRODUCT_NAME = BMD200Eval;
+				PRODUCT_NAME = BMDEval;
 			};
 			name = Release;
 		};
@@ -822,8 +822,8 @@
 				);
 				INFOPLIST_FILE = BMD200EvalDemoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = BMD200EvalTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BMD200EvalDemo.app/BMD200EvalDemo";
+				PRODUCT_NAME = BMDEval;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BMDEvalDemo.app/BMDEvalDemo";
 			};
 			name = Debug;
 		};
@@ -837,15 +837,15 @@
 				);
 				INFOPLIST_FILE = BMD200EvalDemoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = BMD200EvalTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BMD200EvalDemo.app/BMD200EvalDemo";
+				PRODUCT_NAME = BMDEval;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BMDEvalDemo.app/BMDEvalDemo";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		5E35985E1B4AEAE400416112 /* Build configuration list for PBXProject "BMD200Eval" */ = {
+		5E35985E1B4AEAE400416112 /* Build configuration list for PBXProject "BMDEval" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5E3598871B4AEAE500416112 /* Debug */,
@@ -854,7 +854,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5E3598891B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMD200Eval" */ = {
+		5E3598891B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMDEval" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5E35988A1B4AEAE500416112 /* Debug */,
@@ -863,7 +863,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5E35988C1B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMD200EvalTests" */ = {
+		5E35988C1B4AEAE500416112 /* Build configuration list for PBXNativeTarget "BMDEvalTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5E35988D1B4AEAE500416112 /* Debug */,

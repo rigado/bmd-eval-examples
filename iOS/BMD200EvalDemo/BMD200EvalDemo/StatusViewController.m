@@ -42,6 +42,8 @@
     
     accelDataList = [[NSMutableArray alloc] init];
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
+    _userButtonOne.layer.cornerRadius = 2;
+    _userButtonTwo.layer.cornerRadius = 5;
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,19 +165,21 @@
      */
     void (^update)(void) = ^void(void) {
         if ((data & USER_BUTTON_2_MASK) == USER_BUTTON_2_MASK) {
-            _userButtonTwo.highlighted = YES;
-            [_userButtonTwo setNeedsDisplay];
+            _userButtonTwo.alpha = 0.5;
+            _userButtonTwo.backgroundColor = [UIColor colorWithWhite:100 alpha:.5];
+//            [_userButtonTwo setNeedsDisplay];
         } else {
-            _userButtonTwo.highlighted = NO;
-            [_userButtonTwo setNeedsDisplay];
+            _userButtonTwo.alpha = 1;
+            _userButtonTwo.backgroundColor = [UIColor clearColor];
+//            [_userButtonTwo setNeedsDisplay];
         }
         
         if ((data & USER_BUTTON_1_MASK) == USER_BUTTON_1_MASK) {
-            _userButtonOne.highlighted = YES;
-            [_userButtonOne setNeedsDisplay];
+            _userButtonOne.alpha = 0.5;
+            _userButtonOne.backgroundColor = [UIColor colorWithWhite:100 alpha:.5];
         } else {
-            _userButtonOne.highlighted = NO;
-            [_userButtonOne setNeedsDisplay];
+            _userButtonOne.alpha = 1;
+            _userButtonOne.backgroundColor = [UIColor clearColor];
         }
     };
     if (![NSThread isMainThread]) dispatch_sync(dispatch_get_main_queue(), update);

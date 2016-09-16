@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/stutzenbergere/git/modules/bmd-200-eval-board-demo/iOS/BMD200EvalDemo/BMD200Eval.xcodeproj">
+      location = "self:/Users/momokosaunders/projects/bmd-eval-examples/iOS/BMD200EvalDemo/BMD200Eval.xcodeproj">
    </FileRef>
 </Workspace>

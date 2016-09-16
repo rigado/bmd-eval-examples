@@ -17,8 +17,8 @@
 @interface StatusViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIImageView *ambientLightLevelImageView;
-@property (weak, nonatomic) IBOutlet HardwareButton *userButtonTwo;
-@property (weak, nonatomic) IBOutlet HardwareButton *userButtonOne;
+@property (weak, nonatomic) IBOutlet UIButton *userButtonTwo;
+@property (weak, nonatomic) IBOutlet UIButton *userButtonOne;
 
 @property (weak, nonatomic) IBOutlet UILabel *ambientLightLevelLabel;
 @property (weak, nonatomic) IBOutlet UILabel *accelXLabel;

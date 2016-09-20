@@ -1,6 +1,7 @@
 package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothDevice;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;

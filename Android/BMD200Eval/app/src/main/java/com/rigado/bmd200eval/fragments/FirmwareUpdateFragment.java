@@ -19,11 +19,11 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.rigado.bmd200eval.ActivityMain;
-import com.rigado.bmd200eval.ApplicationMain;
+import com.rigado.bmd200eval.BmdApplication;
+import com.rigado.bmd200eval.MainActivity;
 import com.rigado.bmd200eval.R;
-import com.rigado.bmd200eval.demodevice.BMD200EvalBootloaderInfo;
-import com.rigado.bmd200eval.demodevice.BMD200EvalDemoDevice;
+import com.rigado.bmd200eval.demodevice.BmdEvalBootloaderInfo;
+import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
 import com.rigado.bmd200eval.utilities.JsonFirmwareReader;
 import com.rigado.bmd200eval.utilities.JsonFirmwareType;
@@ -35,7 +35,11 @@ import com.rigado.rigablue.RigLeBaseDevice;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecycle, View.OnClickListener, ApplicationMain.ConnectionNotification, IRigFirmwareUpdateManagerObserver {
+public class FirmwareUpdateFragment extends Fragment implements
+        InterfaceFragmentLifecycle,
+        View.OnClickListener,
+        BmdApplication.ConnectionNotification,
+        IRigFirmwareUpdateManagerObserver {
 
     // Constants
     private static final String TAG = "BMD200Eval";
@@ -51,7 +55,7 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
     private TextView mTextViewStatus;
 
     // General Member Variables
-    private ApplicationMain mApplicationMain;
+    private BmdApplication mBmdApplication;
     private Utilities mUtilities;
     private boolean mIsUpdateInProgress;
     private JsonFirmwareReader mJsonFirmwareReader;
@@ -63,15 +67,15 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
     private AlertDialog alertDialog1;
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public FragmentScreen3(){}
+    public FirmwareUpdateFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mApplicationMain = (ApplicationMain) getActivity().getApplication();
+        mBmdApplication = (BmdApplication) getActivity().getApplication();
 
         //inflate the necessary layout
-        View rootView = inflater.inflate(R.layout.fragment_screen3, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_firmware_update, container, false);
 
         // UI references
         mFirmwarePicker = (NumberPicker) rootView.findViewById(R.id.id_picker_firmware);
@@ -123,29 +127,29 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
     // ************
     @Override
     public void onPauseFragment() {
-        mApplicationMain.setConnectionNotificationListener(null);
+        mBmdApplication.setConnectionNotificationListener(null);
     }
 
     @Override
     public void onResumeFragment() {
 
         // callback so we know when it's connected / disconnected
-        mApplicationMain.setConnectionNotificationListener(this);
+        mBmdApplication.setConnectionNotificationListener(this);
 
-        if (mApplicationMain.isConnected())
+        if (mBmdApplication.isConnected())
         {
             // if the device is already connected, enable Deploy button
             mButtonDeploy.setEnabled(true);
-            checkFirmwareInstalled(mApplicationMain.getBMD200EvalDemoDevice());
+            checkFirmwareInstalled(mBmdApplication.getBMD200EvalDemoDevice());
             mLayoutProgressBar.setVisibility(View.INVISIBLE);
         }
-        else if (mApplicationMain.isSearching() == false)
+        else if (mBmdApplication.isSearching() == false)
         {
             // if device is not connected, and not searching, let's search !
-            mApplicationMain.searchForDemoDevices();
+            mBmdApplication.searchForDemoDevices();
             mLayoutProgressBar.setVisibility(View.VISIBLE);
         }
-        else if (mApplicationMain.isSearching() == true)
+        else if (mBmdApplication.isSearching() == true)
         {
             // if device is still searching, simply show searching animation
             mLayoutProgressBar.setVisibility(View.VISIBLE);
@@ -171,28 +175,28 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
 
     private void programFirmware(JsonFirmwareType firmwareRecord) {
         mButtonDeploy.setEnabled(false);
-        ((ActivityMain) getActivity()).setAllowTabsAndViewpagerSwitching(false);
+        ((MainActivity) getActivity()).setAllowTabsAndViewpagerSwitching(false);
 
         powerKeepScreenOn();
 
-        BMD200EvalBootloaderInfo bmd200EvalBootloaderInfo = mApplicationMain.getBMD200EvalDemoDevice().getBootloaderInfo();
+        BmdEvalBootloaderInfo bmdEvalBootloaderInfo = mBmdApplication.getBMD200EvalDemoDevice().getBootloaderInfo();
 
-        BluetoothGattCharacteristic resetChar = bmd200EvalBootloaderInfo.getBootloaderCharacteristic();
-        RigLeBaseDevice rigLeBaseDevice = mApplicationMain.getBMD200EvalDemoDevice().getBaseDevice();
+        BluetoothGattCharacteristic resetChar = bmdEvalBootloaderInfo.getBootloaderCharacteristic();
+        RigLeBaseDevice rigLeBaseDevice = mBmdApplication.getBMD200EvalDemoDevice().getBaseDevice();
 
         // initialize FW Manager
         mRigFirmwareUpdateManager = new RigFirmwareUpdateManager();
         mRigFirmwareUpdateManager.setObserver(this);
 
-        mUtilities.startFirmwareUpdate(getActivity(), mRigFirmwareUpdateManager, rigLeBaseDevice, firmwareRecord, resetChar, bmd200EvalBootloaderInfo.getBootloaderCommand());
+        mUtilities.startFirmwareUpdate(getActivity(), mRigFirmwareUpdateManager, rigLeBaseDevice, firmwareRecord, resetChar, bmdEvalBootloaderInfo.getBootloaderCommand());
         mIsUpdateInProgress = true;
     }
 
     // ************
-    //  Concrete Implementation of ApplicationMain.ConnectionNotification
+    //  Concrete Implementation of BmdApplication.ConnectionNotification
     // ************
     @Override
-    public void isNowConnected(BMD200EvalDemoDevice device) {
+    public void isNowConnected(BmdEvalDemoDevice device) {
 
         if (mIsUpdateInProgress == false) {
 
@@ -219,7 +223,7 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
                 public void run() {
                     mButtonDeploy.setEnabled(false);
                     //mLayoutProgressBar.setVisibility(View.VISIBLE);
-                    //mApplicationMain.searchForDemoDevices();
+                    //mBmdApplication.searchForDemoDevices();
                 }
             });
         }
@@ -257,7 +261,7 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
             public void run() {
                 mButtonDeploy.setEnabled(true);
                 powerScreenNormal();
-                ((ActivityMain) getActivity()).setAllowTabsAndViewpagerSwitching(true);
+                ((MainActivity) getActivity()).setAllowTabsAndViewpagerSwitching(true);
             }
         });
 
@@ -272,15 +276,15 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
             }
         });
 
-        mApplicationMain.disconnectDevice(); //Note: this will cause the searching to begin fresh
+        mBmdApplication.disconnectDevice(); //Note: this will cause the searching to begin fresh
 
         // if the Main Demo Firmware was programmed just now, switch to Fragment 1
         if (mSelectedFirmwareName.contains(BMD_EVAL_DEMO_NAME_SUBSET)) {
 
-            ((ActivityMain)getActivity()).mViewPager.post(new Runnable() {
+            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((ActivityMain) getActivity()).mViewPager.setCurrentItem(0);
+                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(0);
                 }
             });
 
@@ -358,7 +362,7 @@ public class FragmentScreen3 extends Fragment implements InterfaceFragmentLifecy
      * Utility function to check currently installed fw and show dialog if necessary
      * Requires connected device
      */
-    private void checkFirmwareInstalled(BMD200EvalDemoDevice device)
+    private void checkFirmwareInstalled(BmdEvalDemoDevice device)
     {
         // if the Blinky Demo fw is programmed, show message to the user
         if (device.getBaseDevice().getName().contains(BLINKY_DEMO_NAME_SUBSET))

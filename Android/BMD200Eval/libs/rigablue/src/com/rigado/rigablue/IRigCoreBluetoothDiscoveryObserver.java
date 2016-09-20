@@ -29,7 +29,7 @@ public interface IRigCoreBluetoothDiscoveryObserver extends IRigCoreBluetoothCom
      * @param rssi The RSSI of the discovered device
      * @param scanRecord The scan response data, will be NULL if no scan response is avaialble
      */
-    void didDiscoverDevice(BluetoothDevice btDevice, int rssi, byte [] scanRecord);
+    void didDiscoverDevice(BluetoothDevice btDevice, int rssi, byte[] scanRecord);
 
     /**
      * This method is called when a discovery session finishes after the specified timeout.

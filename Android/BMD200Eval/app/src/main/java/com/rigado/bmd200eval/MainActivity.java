@@ -10,10 +10,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
-import com.rigado.bmd200eval.fragments.FragmentScreen1;
-import com.rigado.bmd200eval.fragments.FragmentScreen2;
-import com.rigado.bmd200eval.fragments.FragmentScreen3;
-import com.rigado.bmd200eval.fragments.FragmentScreen4;
+import com.rigado.bmd200eval.fragments.DemoFragment;
+import com.rigado.bmd200eval.fragments.ColorPickerFragment;
+import com.rigado.bmd200eval.fragments.FirmwareUpdateFragment;
+import com.rigado.bmd200eval.fragments.AboutFragment;
 import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ActivityMain extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -133,10 +133,10 @@ public class ActivityMain extends ActionBarActivity implements ActionBar.TabList
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             mFragmentList = new ArrayList<Fragment>();
-            mFragmentList.add(new FragmentScreen1());
-            mFragmentList.add(new FragmentScreen2());
-            mFragmentList.add(new FragmentScreen3());
-            mFragmentList.add(new FragmentScreen4());
+            mFragmentList.add(new DemoFragment());
+            mFragmentList.add(new ColorPickerFragment());
+            mFragmentList.add(new FirmwareUpdateFragment());
+            mFragmentList.add(new AboutFragment());
         }
 
         @Override

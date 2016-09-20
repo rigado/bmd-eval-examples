@@ -29,7 +29,7 @@ public interface IRigFirmwareUpdateServiceObserver {
      *
      * @param value The updated control point value
      */
-    void didUpdateValueForControlPoint(byte [] value);
+    void didUpdateValueForControlPoint(byte[] value);
 
     /**
      * This method is called when the value for the control point has been written.

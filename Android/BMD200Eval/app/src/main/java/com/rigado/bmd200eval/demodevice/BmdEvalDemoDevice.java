@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 
 
-public class BMD200EvalDemoDevice implements IRigLeBaseDeviceObserver {
+public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
     private static final String BMDWARE_DEVICE_NAME = "RigCom";
     private static final String BLINKY_DEMO_DEVICE_NAME = "BMD200-Blinky";
 
@@ -46,9 +46,9 @@ public class BMD200EvalDemoDevice implements IRigLeBaseDeviceObserver {
 
     RigLeBaseDevice baseDevice;
     DemoDeviceType type;
-    BMD200EvalDemoDeviceObserver observer;
+    IBmdEvalDemoDeviceListener observer;
 
-    public BMD200EvalDemoDevice(RigLeBaseDevice device) {
+    public BmdEvalDemoDevice(RigLeBaseDevice device) {
         baseDevice = device;
         type = DemoDeviceType.MainEvalDemo;
 
@@ -90,12 +90,12 @@ public class BMD200EvalDemoDevice implements IRigLeBaseDeviceObserver {
         return baseDevice;
     }
 
-    public BMD200EvalBootloaderInfo getBootloaderInfo() {
-        BMD200EvalBootloaderInfo bi = new BMD200EvalBootloaderInfo(this);
+    public BmdEvalBootloaderInfo getBootloaderInfo() {
+        BmdEvalBootloaderInfo bi = new BmdEvalBootloaderInfo(this);
         return bi;
     }
 
-    public void setObserver(BMD200EvalDemoDeviceObserver o) {
+    public void setObserver(IBmdEvalDemoDeviceListener o) {
         observer = o;
     }
 

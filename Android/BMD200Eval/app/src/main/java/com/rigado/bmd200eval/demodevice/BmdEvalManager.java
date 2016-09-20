@@ -16,25 +16,25 @@ import com.rigado.rigablue.RigLeDiscoveryManager;
 /**
  * Created by stutzenbergere on 7/23/15.
  */
-public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectionManagerObserver, IRigLeDiscoveryManagerObserver {
+public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectionManagerObserver, IRigLeDiscoveryManagerObserver {
     private static final String TAG = "BMD200Eval";
-
-    BMD200EvalDemoDevice demoDevice;
+    private static final int CONNECTION_TIMEOUT = 10000;
+    BmdEvalDemoDevice demoDevice;
     boolean is_connected;
-    BMD200EvalManagerObserver observer;
+    IBmdEvalManagerListener observer;
     Context mContext;
 
-    static BMD200EvalManager instance;
+    static BmdEvalManager instance;
 
-    private BMD200EvalManager() {
+    private BmdEvalManager() {
         is_connected = false;
         demoDevice = null;
         observer = null;
     }
 
-    public static BMD200EvalManager getInstance() {
+    public static BmdEvalManager getInstance() {
         if(instance == null) {
-            instance = new BMD200EvalManager();
+            instance = new BmdEvalManager();
         }
 
         return instance;
@@ -65,7 +65,7 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
         return is_connected;
     }
 
-    public BMD200EvalDemoDevice getDemoDevice() { return demoDevice; }
+    public BmdEvalDemoDevice getDemoDevice() { return demoDevice; }
 
     public void disconnectDevice() {
         if(!is_connected) {
@@ -75,7 +75,7 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
         RigLeConnectionManager.getInstance().disconnectDevice(demoDevice.getBaseDevice());
     }
 
-    public void setObserver(BMD200EvalManagerObserver o) {
+    public void setObserver(IBmdEvalManagerListener o) {
         observer = o;
     }
 
@@ -96,7 +96,7 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
 
     @Override
     public void discoveryDidComplete(RigLeBaseDevice device) {
-        demoDevice = new BMD200EvalDemoDevice(device);
+        demoDevice = new BmdEvalDemoDevice(device);
         if(observer != null) {
             observer.didConnectDevice(demoDevice);
         }
@@ -131,9 +131,9 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
     @Override
     public void didDiscoverDevice(RigAvailableDeviceData device) {
         int rssi = device.getRssi();
-        if(rssi > -60) {
+        if(rssi > -100) {
             RigLeDiscoveryManager.getInstance().stopDiscoveringDevices();
-            RigLeConnectionManager.getInstance().connectDevice(device, 10000);
+            RigLeConnectionManager.getInstance().connectDevice(device, CONNECTION_TIMEOUT);
         } else {
             Log.d(TAG, "Skipping connection. RSSI: " + rssi);
         }

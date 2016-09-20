@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothProfile;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  *  RigBluetoothGattCallback.java
@@ -41,10 +42,9 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
 	private boolean refreshDeviceCache(BluetoothGatt gatt){
         RigLog.d("refreshDeviceCache");
         try {
-            Method localMethod = gatt.getClass().getMethod("refresh", new Class[0]);
+            Method localMethod = gatt.getClass().getMethod("refresh");
             if (localMethod != null) {
-                boolean bool = ((Boolean) localMethod.invoke(gatt, new Object[0])).booleanValue();
-                return bool;
+                return (boolean) localMethod.invoke(gatt);
             }
         }
         catch (Exception localException) {
@@ -63,7 +63,9 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
 
     @Override
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-        RigLog.d("onConnectionStateChange - " + newState);
+        RigLog.d(String.format(Locale.US, "onConnectionStateChange : status  %d newState %d address %s",
+                status, newState, gatt.getDevice().getAddress()));
+
         if (newState == BluetoothProfile.STATE_CONNECTED) {
             if (!mBluetoothGattHashMap.containsKey(gatt.getDevice().getAddress())) {
                 mBluetoothGattHashMap.put(gatt.getDevice().getAddress(), gatt);
@@ -127,7 +129,7 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         RigLog.d("onCharacteristicChanged");
         if (mRigCoreListener != null) {
-            mRigCoreListener.onActionGattDataAvailable(characteristic, gatt.getDevice());
+            mRigCoreListener.onActionGattDataNotification(characteristic, gatt.getDevice());
         }
     }
 

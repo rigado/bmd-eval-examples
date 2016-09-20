@@ -14,23 +14,26 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.rigado.bmd200eval.ActivityMain;
-import com.rigado.bmd200eval.ApplicationMain;
+import com.rigado.bmd200eval.BmdApplication;
+import com.rigado.bmd200eval.MainActivity;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.demodevice.AccelData;
 import com.rigado.bmd200eval.demodevice.AmbientLight;
-import com.rigado.bmd200eval.demodevice.BMD200EvalDemoDevice;
-import com.rigado.bmd200eval.demodevice.BMD200EvalDemoDeviceObserver;
+import com.rigado.bmd200eval.demodevice.IBmdEvalDemoDeviceListener;
+import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmd200eval.demodevice.ButtonStatus;
 import com.rigado.bmd200eval.demodevice.RgbColor;
 import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
 
-public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObserver, ApplicationMain.ConnectionNotification, InterfaceFragmentLifecycle {
+public class DemoFragment extends Fragment implements
+        IBmdEvalDemoDeviceListener,
+        BmdApplication.ConnectionNotification,
+        InterfaceFragmentLifecycle {
 
     private final int MAX_ARRAY_SIZE = 30;
     private final String TAG = getClass().getSimpleName();
 
-    private ApplicationMain mApplicationMain;
+    private BmdApplication mBmdApplication;
 
     private LineGraphSeries<DataPoint> mSeriesX;
     private LineGraphSeries<DataPoint> mSeriesY;
@@ -49,15 +52,15 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
     private TextView mTextViewAmbientLight;
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public FragmentScreen1(){}
+    public DemoFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mApplicationMain = (ApplicationMain) getActivity().getApplication();
+        mBmdApplication = (BmdApplication) getActivity().getApplication();
 
         //inflate the necessary layout
-        View rootView = inflater.inflate(R.layout.fragment_screen1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_demo, container, false);
 
         //get references to all of the views
         mGraph = (GraphView) rootView.findViewById(R.id.graph);
@@ -116,7 +119,7 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
     }
 
     // ************
-    //  Concrete Implementation of BMD200EvalDemoDeviceObserver
+    //  Concrete Implementation of IBmdEvalDemoDeviceListener
     // ************
     @Override
     public void didUpdateButtonData(final ButtonStatus status) {
@@ -222,22 +225,22 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
     }
 
     private void configureDevice() {
-        mApplicationMain.getBMD200EvalDemoDevice().setObserver(this);
+        mBmdApplication.getBMD200EvalDemoDevice().setObserver(this);
 
         //Uncomment to enable accel streaming
-        mApplicationMain.getBMD200EvalDemoDevice().startAccelerometerStream();
+        mBmdApplication.getBMD200EvalDemoDevice().startAccelerometerStream();
 
         //Uncomment to enable ambient light data sensing
-        mApplicationMain.getBMD200EvalDemoDevice().startAmbientLightSensing();
+        mBmdApplication.getBMD200EvalDemoDevice().startAmbientLightSensing();
 
         mIsConfigured = true;
     }
 
     // ************
-    //  Concrete Implementation of ApplicationMain.ConnectionNotification
+    //  Concrete Implementation of BmdApplication.ConnectionNotification
     // ************
     @Override
-    public void isNowConnected(BMD200EvalDemoDevice device) {
+    public void isNowConnected(BmdEvalDemoDevice device) {
 
         // hide the SEARCHING UI
         mLayoutProgressBar.post(new Runnable() {
@@ -249,13 +252,13 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
 
         // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
         final String fwname = device.getBaseDevice().getName();
-        if ((fwname.contains(FragmentScreen3.BLINKY_DEMO_NAME_SUBSET)) ||
-                (fwname.contains(FragmentScreen3.BMDWARE_NAME_SUBSET)))
+        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)) ||
+                (fwname.contains(FirmwareUpdateFragment.BMDWARE_NAME_SUBSET)))
         {
-            ((ActivityMain)getActivity()).mViewPager.post(new Runnable() {
+            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((ActivityMain) getActivity()).mViewPager.setCurrentItem(2);
+                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(2);
                 }
             });
         }
@@ -268,7 +271,7 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
     @Override
     public void isNowDisconnected() {
 
-        // show the SEARCHING UI - note: ApplicationMain.didDisconnectDevice() will have started searching already
+        // show the SEARCHING UI - note: BmdApplication.didDisconnectDevice() will have started searching already
         if(this.getUserVisibleHint() == true) {
             mLayoutProgressBar.post(new Runnable() {
                 @Override
@@ -276,7 +279,7 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
                     mLayoutProgressBar.setVisibility(View.VISIBLE);
                 }
             });
-            mApplicationMain.searchForDemoDevices();
+            mBmdApplication.searchForDemoDevices();
         }
     }
 
@@ -286,13 +289,13 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
     @Override
     public void onPauseFragment() {
 
-        mApplicationMain.setConnectionNotificationListener(null);
+        mBmdApplication.setConnectionNotificationListener(null);
         mLayoutProgressBar.setVisibility(View.GONE);
         if (mIsConfigured) {
             mIsConfigured = false;
-            mApplicationMain.getBMD200EvalDemoDevice().setObserver(null);
-            mApplicationMain.getBMD200EvalDemoDevice().stopAccelerometerStream();
-            mApplicationMain.getBMD200EvalDemoDevice().stopAmbientLightSensing();
+            mBmdApplication.getBMD200EvalDemoDevice().setObserver(null);
+            mBmdApplication.getBMD200EvalDemoDevice().stopAccelerometerStream();
+            mBmdApplication.getBMD200EvalDemoDevice().stopAmbientLightSensing();
         }
     }
 
@@ -300,21 +303,21 @@ public class FragmentScreen1 extends Fragment implements BMD200EvalDemoDeviceObs
     public void onResumeFragment() {
 
         // callback so we know when it's connected / disconnected
-        mApplicationMain.setConnectionNotificationListener(this);
+        mBmdApplication.setConnectionNotificationListener(this);
 
-        if (mApplicationMain.isConnected())
+        if (mBmdApplication.isConnected())
         {
             // if the device is already connected, configure to stream data
             configureDevice();
             mLayoutProgressBar.setVisibility(View.INVISIBLE);
         }
-        else if (mApplicationMain.isSearching() == false)
+        else if (mBmdApplication.isSearching() == false)
         {
             // if device is not connected, and not searching, let's search !
-            mApplicationMain.searchForDemoDevices();
+            mBmdApplication.searchForDemoDevices();
             mLayoutProgressBar.setVisibility(View.VISIBLE);
         }
-        else if (mApplicationMain.isSearching() == true)
+        else if (mBmdApplication.isSearching() == true)
         {
             // if device is still searching, simply show searching animation
             mLayoutProgressBar.setVisibility(View.VISIBLE);

@@ -3,30 +3,30 @@ package com.rigado.bmd200eval;
 import android.app.Application;
 import android.util.Log;
 
-import com.rigado.bmd200eval.demodevice.BMD200EvalDemoDevice;
-import com.rigado.bmd200eval.demodevice.BMD200EvalManager;
-import com.rigado.bmd200eval.demodevice.BMD200EvalManagerObserver;
+import com.rigado.bmd200eval.demodevice.BmdEvalManager;
+import com.rigado.bmd200eval.demodevice.IBmdEvalManagerListener;
+import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.rigablue.RigCoreBluetooth;
 
 /**
- * This class handles the long-term BMD200EvalDemoDevice state since it's always available for the duration of the app
+ * This class handles the long-term BmdEvalDemoDevice state since it's always available for the duration of the app
  * Fragments can query the state here and show whatever is necessary on the UI
  */
-public class ApplicationMain extends Application implements BMD200EvalManagerObserver
+public class BmdApplication extends Application implements IBmdEvalManagerListener
 {
     // Constants
     final private String TAG = getClass().getSimpleName();
 
     // Member Variables
-    private BMD200EvalManager mBMD200EvalManager;
-    private BMD200EvalDemoDevice mBMD200EvalDemoDevice;//provides an interface to all of the functionality of the demo firmware
+    private BmdEvalManager mBmdEvalManager;
+    private BmdEvalDemoDevice mBmdEvalDemoDevice;//provides an interface to all of the functionality of the demo firmware
     private boolean mSearchingForDemoDevice;
     private ConnectionNotification mConnectionNotification;
 
     // interface for fragments to use to be notified of a connection
     public interface ConnectionNotification
     {
-        void isNowConnected(BMD200EvalDemoDevice device);
+        void isNowConnected(BmdEvalDemoDevice device);
         void isNowDisconnected();
     }
 
@@ -39,26 +39,26 @@ public class ApplicationMain extends Application implements BMD200EvalManagerObs
         // Required initialization
         RigCoreBluetooth.initialize(this);
 
-        mBMD200EvalManager = BMD200EvalManager.getInstance();
-        mBMD200EvalManager.setContext(this);
-        mBMD200EvalManager.setObserver(this);
+        mBmdEvalManager = BmdEvalManager.getInstance();
+        mBmdEvalManager.setContext(this);
+        mBmdEvalManager.setObserver(this);
 
     }
 
     /**
      * searchForDemoDevices() can result in a connection
-     * and trigger BMD200EvalManagerObserver.didConnectDevice()
+     * and trigger IBmdEvalManagerListener.didConnectDevice()
      */
     public void searchForDemoDevices()
     {
         Log.d(TAG, "searchForDemoDevices");
-        mBMD200EvalManager.searchForDemoDevices();
+        mBmdEvalManager.searchForDemoDevices();
         mSearchingForDemoDevice = true;
     }
 
     public boolean isConnected()
     {
-        return mBMD200EvalManager.isConnected();
+        return mBmdEvalManager.isConnected();
     }
 
     public boolean isSearching()
@@ -68,12 +68,12 @@ public class ApplicationMain extends Application implements BMD200EvalManagerObs
 
     public void disconnectDevice()
     {
-        mBMD200EvalManager.disconnectDevice();
+        mBmdEvalManager.disconnectDevice();
     }
 
-    public BMD200EvalDemoDevice getBMD200EvalDemoDevice()
+    public BmdEvalDemoDevice getBMD200EvalDemoDevice()
     {
-        return mBMD200EvalDemoDevice;
+        return mBmdEvalDemoDevice;
     }
 
     public void setConnectionNotificationListener(ConnectionNotification listener)
@@ -83,11 +83,11 @@ public class ApplicationMain extends Application implements BMD200EvalManagerObs
 
 
     // ************
-    //  Concrete Implementation of BMD200EvalManagerObserver
+    //  Concrete Implementation of IBmdEvalManagerListener
     // ************
-    public void didConnectDevice(BMD200EvalDemoDevice device)
+    public void didConnectDevice(BmdEvalDemoDevice device)
     {
-        mBMD200EvalDemoDevice = device;
+        mBmdEvalDemoDevice = device;
         mSearchingForDemoDevice = false;
 
         Log.d(TAG, "didConnectDevice "+device.getBaseDevice().getName());
@@ -101,7 +101,7 @@ public class ApplicationMain extends Application implements BMD200EvalManagerObs
 
     public void didDisconnectDevice()
     {
-        mBMD200EvalDemoDevice = null;
+        mBmdEvalDemoDevice = null;
         mSearchingForDemoDevice = false;
 
         Log.d(TAG, "didDisconnectDevice");

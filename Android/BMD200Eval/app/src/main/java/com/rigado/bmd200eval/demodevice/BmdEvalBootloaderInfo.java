@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Created by stutzenbergere on 7/23/15.
  */
-public class BMD200EvalBootloaderInfo {
+public class BmdEvalBootloaderInfo {
 
     private static final String RESET_SERVICE_UUID = "50db1523-418d-4690-9589-ab7be9e22684";
     private static final String RESET_CHAR_UUID = "50db1527-418d-4690-9589-ab7be9e22684";
@@ -36,18 +36,18 @@ public class BMD200EvalBootloaderInfo {
     BluetoothGattCharacteristic bootloader_char;
     byte [] bootloader_command;
 
-    public BMD200EvalBootloaderInfo(BMD200EvalDemoDevice device) {
+    public BmdEvalBootloaderInfo(BmdEvalDemoDevice device) {
 
         UUID serviceUuid;
         UUID charUuid;
 
         baseDevice = device.getBaseDevice();
         bootloader_command = new byte[4];
-        if(device.getType() == BMD200EvalDemoDevice.DemoDeviceType.BlinkyDemo) {
+        if(device.getType() == com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice.DemoDeviceType.BlinkyDemo) {
             serviceUuid = UUID.fromString(BLINKY_RESET_SERVICE_UUID);
             charUuid = UUID.fromString(BLINKY_RESET_CHAR_UUID);
             System.arraycopy(blinky_bootloader_command, 0, bootloader_command, 0, 4);
-        } else if(device.getType() == BMD200EvalDemoDevice.DemoDeviceType.BMDware) {
+        } else if(device.getType() == com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice.DemoDeviceType.BMDware) {
             serviceUuid = UUID.fromString(BMDWARE_RESET_SERVICE_UUID);
             charUuid = UUID.fromString(BMDWARE_RESET_CHAR_UUID);
             System.arraycopy(bmdware_bootloader_command, 0, bootloader_command, 0, 4);

@@ -9,16 +9,16 @@ import android.view.ViewGroup;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
 
-public class FragmentScreen4 extends Fragment implements InterfaceFragmentLifecycle {
+public class AboutFragment extends Fragment implements InterfaceFragmentLifecycle {
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public FragmentScreen4(){}
+    public AboutFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         //inflate the necessary layout
-        View rootView = inflater.inflate(R.layout.fragment_screen4, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 
         return rootView;
     }

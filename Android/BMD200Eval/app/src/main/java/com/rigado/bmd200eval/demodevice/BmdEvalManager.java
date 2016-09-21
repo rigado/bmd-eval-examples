@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.util.Log;
 
+import com.rigado.bmd200eval.BmdApplication;
 import com.rigado.bmd200eval.interfaces.IPermissionsRequestListener;
 import com.rigado.bmd200eval.utilities.Utilities;
 import com.rigado.rigablue.IRigLeBaseDeviceObserver;
@@ -47,12 +48,16 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
         mContext = context;
     }
 
-    public void maybeBeginScanning() {
+    public boolean maybeBeginScanning() {
+        boolean isScanning = false;
         if(Utilities.hasLocationPermission(mContext)) {
+            isScanning = true;
             searchForDemoDevices();
         } else {
             permssionsListener.onPermissionsRequested();
         }
+
+        return isScanning;
     }
 
     public void searchForDemoDevices() {
@@ -61,9 +66,8 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
                 "6e400001-b5a3-f393-e0a9-e50e24dcca9e",
                 "50db1523-418d-4690-9589-ab7be9e22684",
                 "0000180f-0000-1000-8000-00805f9b34fb" // Blinky
-
         };
-
+        BmdApplication.getInstance().setSearching(true);
         final RigLeConnectionManager rigLeConnectionManager = RigLeConnectionManager.getInstance();
         rigLeConnectionManager.setObserver(this);
 
@@ -111,8 +115,10 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
 
     @Override
     public void discoveryDidComplete(RigLeBaseDevice device) {
+        Log.i(TAG, "discoveryDidComplete");
         demoDevice = new BmdEvalDemoDevice(device);
         if(managerListener != null) {
+            Log.i(TAG, "managerListener != null");
             managerListener.didConnectDevice(demoDevice);
         }
     }

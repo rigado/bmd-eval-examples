@@ -2,6 +2,7 @@ package com.rigado.bmd200eval.demodevice;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.util.Log;
 
 import com.rigado.rigablue.*;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
     private static final String BMDWARE_DEVICE_NAME = "RigCom";
-    private static final String BLINKY_DEMO_DEVICE_NAME = "BMD200-Blinky";
+    private static final String BLINKY_DEMO_DEVICE_NAME = "Blinky";
 
     private static final String BMDEVAL_UUID_SERVICE = "50db1523-418d-4690-9589-ab7be9e22684";
     private static final String BMDEVAL_UUID_BUTTON_CHAR = "50db1524-418d-4690-9589-ab7be9e22684";
@@ -33,6 +34,8 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
     private static final byte EVAL_CMD_ADC_STREAM_STOP = 0x02;
     private static final byte EVAL_CMD_ACCEL_STREAM_START = 0x06;
     private static final byte EVAL_CMD_ACCEL_STREAM_STOP = 0x09;
+
+    private static final String TAG = BmdEvalDemoDevice.class.getSimpleName();
 
     BluetoothGattService bmdEvalService;
     BluetoothGattService disService;
@@ -55,15 +58,19 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
         String name = device.getName();
         baseDevice.setObserver(this);
 
-        if(name.equals(BMDWARE_DEVICE_NAME)) {
+        if(name.contains(BMDWARE_DEVICE_NAME)) {
+            Log.i(TAG, "Type Bmdware");
             type = DemoDeviceType.BMDware;
-        } else if(name.equals(BLINKY_DEMO_DEVICE_NAME)) {
+        } else if(name.contains(BLINKY_DEMO_DEVICE_NAME)) {
+            Log.i(TAG, "Type Blinky");
             type = DemoDeviceType.BlinkyDemo;
         }
 
         if(type == DemoDeviceType.MainEvalDemo) {
             initServices();
         }
+
+        Log.i(TAG, "Type " + type.name());
         //TODO: Verify available characteristics
     }
 

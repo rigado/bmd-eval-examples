@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 
 import com.rigado.bmd200eval.BmdApplication;
 import com.rigado.bmd200eval.R;
@@ -51,6 +52,8 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BmdApplication.getInstance().getBmdManager().setContext(this);
 
         // Set up the action bar.
         mActionBar = getSupportActionBar();
@@ -145,8 +148,11 @@ public class MainActivity extends ActionBarActivity implements
         mAllowTabsClicking = toggle;
     }
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     public void onPermissionsRequested() {
+        Log.i(TAG, "onPermissionsRequested");
         startActivity(new Intent(this, PermissionActivity.class));
         finish();
     }

@@ -6,7 +6,6 @@ import android.util.Log;
 import com.rigado.bmd200eval.demodevice.BmdEvalManager;
 import com.rigado.bmd200eval.demodevice.IBmdEvalManagerListener;
 import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
-import com.rigado.bmd200eval.interfaces.IPermissionsRequestListener;
 import com.rigado.rigablue.RigCoreBluetooth;
 
 /**
@@ -24,14 +23,14 @@ public class BmdApplication extends Application implements
     private BmdEvalManager mBmdEvalManager;
     private BmdEvalDemoDevice mBmdEvalDemoDevice;//provides an interface to all of the functionality of the demo firmware
     private boolean mSearchingForDemoDevice;
-    private ConnectionNotification mConnectionNotification;
+    private IConnectionListener mIConnectionListener;
 
     public static BmdApplication getInstance() {
         return sSingleton;
     }
 
     // interface for fragments to use to be notified of a connection
-    public interface ConnectionNotification
+    public interface IConnectionListener
     {
         void isNowConnected(BmdEvalDemoDevice device);
         void isNowDisconnected();
@@ -49,7 +48,6 @@ public class BmdApplication extends Application implements
         sSingleton = this;
 
         mBmdEvalManager = BmdEvalManager.getInstance();
-        mBmdEvalManager.setContext(this);
         mBmdEvalManager.registerBmdManagerListener(this);
 
     }
@@ -61,8 +59,7 @@ public class BmdApplication extends Application implements
     public void searchForDemoDevices()
     {
         Log.d(TAG, "searchForDemoDevices");
-        mBmdEvalManager.maybeBeginScanning();
-        mSearchingForDemoDevice = true;
+        mSearchingForDemoDevice = mBmdEvalManager.maybeBeginScanning();
     }
 
 
@@ -75,10 +72,14 @@ public class BmdApplication extends Application implements
         return mBmdEvalManager.isConnected();
     }
 
-    public boolean isSearching()
-    {
+    public boolean isSearching() {
         return mSearchingForDemoDevice;
     }
+
+    public void setSearching(boolean isSearching) {
+        this.mSearchingForDemoDevice = isSearching;
+    }
+
 
     public void disconnectDevice()
     {
@@ -90,9 +91,9 @@ public class BmdApplication extends Application implements
         return mBmdEvalDemoDevice;
     }
 
-    public void setConnectionNotificationListener(ConnectionNotification listener)
+    public void setConnectionNotificationListener(IConnectionListener listener)
     {
-        mConnectionNotification = listener;
+        mIConnectionListener = listener;
     }
 
 
@@ -107,9 +108,9 @@ public class BmdApplication extends Application implements
         Log.d(TAG, "didConnectDevice "+device.getBaseDevice().getName());
 
         // alert a fragment that might be listening for this event
-        if (mConnectionNotification != null)
+        if (mIConnectionListener != null)
         {
-            mConnectionNotification.isNowConnected(device);
+            mIConnectionListener.isNowConnected(device);
         }
     }
 
@@ -121,8 +122,8 @@ public class BmdApplication extends Application implements
         Log.d(TAG, "didDisconnectDevice");
         //searchForDemoDevices();
 
-        if(mConnectionNotification != null) {
-            mConnectionNotification.isNowDisconnected();
+        if(mIConnectionListener != null) {
+            mIConnectionListener.isNowDisconnected();
         }
     }
 

@@ -40,12 +40,12 @@ import java.util.ArrayList;
 public class FirmwareUpdateFragment extends Fragment implements
         InterfaceFragmentLifecycle,
         View.OnClickListener,
-        BmdApplication.ConnectionNotification,
+        BmdApplication.IConnectionListener,
         IRigFirmwareUpdateManagerObserver {
 
     // Constants
     private static final String TAG = "BMD200Eval";
-    private final String BMD_EVAL_DEMO_NAME_SUBSET = "BMD200Eval";// string contained within the demo firmware name
+    private final String BMD_EVAL_DEMO_NAME_SUBSET = "BMD Eval";// string contained within the demo firmware name
     public static final String BLINKY_DEMO_NAME_SUBSET = "Blinky";// string contained within the Blinky firmware name
     public static final String BMDWARE_NAME_SUBSET = "RigCom";// string contained within the BMDware firmware name
 
@@ -195,7 +195,7 @@ public class FirmwareUpdateFragment extends Fragment implements
     }
 
     // ************
-    //  Concrete Implementation of BmdApplication.ConnectionNotification
+    //  Concrete Implementation of BmdApplication.IConnectionListener
     // ************
     @Override
     public void isNowConnected(BmdEvalDemoDevice device) {

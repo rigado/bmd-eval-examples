@@ -27,7 +27,7 @@ import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
 
 public class DemoFragment extends Fragment implements
         IBmdEvalDemoDeviceListener,
-        BmdApplication.ConnectionNotification,
+        BmdApplication.IConnectionListener,
         InterfaceFragmentLifecycle {
 
     private static final int MAX_ARRAY_SIZE = 30;
@@ -237,7 +237,7 @@ public class DemoFragment extends Fragment implements
     }
 
     // ************
-    //  Concrete Implementation of BmdApplication.ConnectionNotification
+    //  Concrete Implementation of BmdApplication.IConnectionListener
     // ************
     @Override
     public void isNowConnected(BmdEvalDemoDevice device) {

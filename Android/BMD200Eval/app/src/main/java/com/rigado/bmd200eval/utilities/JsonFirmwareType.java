@@ -13,12 +13,15 @@ public class JsonFirmwareType {
     public String getFwname() {
         return fwname;
     }
+
     public void setFwname(String fwname) {
         this.fwname = fwname;
     }
+
     public Properties getProperties() {
         return properties;
     }
+
     public void setProperties(Properties properties) {
         this.properties = properties;
     }

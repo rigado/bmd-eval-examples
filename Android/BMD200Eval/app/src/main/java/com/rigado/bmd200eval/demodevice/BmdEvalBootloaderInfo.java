@@ -4,6 +4,7 @@ import com.rigado.rigablue.RigLeBaseDevice;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.util.Log;
 
 import java.util.UUID;
 
@@ -31,6 +32,8 @@ public class BmdEvalBootloaderInfo {
     private final static byte [] bmdeval_bootloader_command = { -95, -4, -42, -25 };
     private final static byte [] blinky_bootloader_command = { -104, -74, 0x2f, 0x51 };
 
+    private final static String TAG = BmdEvalBootloaderInfo.class.getSimpleName();
+
     RigLeBaseDevice baseDevice;
     BluetoothGattService bootloader_service;
     BluetoothGattCharacteristic bootloader_char;
@@ -43,21 +46,25 @@ public class BmdEvalBootloaderInfo {
 
         baseDevice = device.getBaseDevice();
         bootloader_command = new byte[4];
-        if(device.getType() == com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice.DemoDeviceType.BlinkyDemo) {
+        if(device.getType() == BmdEvalDemoDevice.DemoDeviceType.BlinkyDemo) {
+            Log.i(TAG, "found blinky demo");
             serviceUuid = UUID.fromString(BLINKY_RESET_SERVICE_UUID);
             charUuid = UUID.fromString(BLINKY_RESET_CHAR_UUID);
             System.arraycopy(blinky_bootloader_command, 0, bootloader_command, 0, 4);
-        } else if(device.getType() == com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice.DemoDeviceType.BMDware) {
+        } else if(device.getType() == BmdEvalDemoDevice.DemoDeviceType.BMDware) {
+            Log.i(TAG, "found bmdware");
             serviceUuid = UUID.fromString(BMDWARE_RESET_SERVICE_UUID);
             charUuid = UUID.fromString(BMDWARE_RESET_CHAR_UUID);
             System.arraycopy(bmdware_bootloader_command, 0, bootloader_command, 0, 4);
         } else {
             serviceUuid = UUID.fromString(RESET_SERVICE_UUID);
+            Log.i(TAG, "found eval demo " + serviceUuid.toString());
             charUuid = UUID.fromString(RESET_CHAR_UUID);
             System.arraycopy(bmdeval_bootloader_command, 0, bootloader_command, 0, 4);
         }
 
         for(BluetoothGattService svc : baseDevice.getServiceList()) {
+            Log.i(TAG, "Service uuid " + svc.getUuid().toString());
             if(svc.getUuid().equals(serviceUuid)) {
                 bootloader_service = svc;
                 break;

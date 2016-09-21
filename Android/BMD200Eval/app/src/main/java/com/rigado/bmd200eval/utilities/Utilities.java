@@ -32,7 +32,8 @@ public class Utilities {
 
         if (firmwareRecord != null){
 
-            final String filename = firmwareRecord.getProperties().getFilename();
+            final String filename = firmwareRecord.getProperties().getFilename200();
+            Log.i(TAG, "filename " + filename);
 
             // ensure that the filenames contain no extension
             String strFilenameNoExt1;

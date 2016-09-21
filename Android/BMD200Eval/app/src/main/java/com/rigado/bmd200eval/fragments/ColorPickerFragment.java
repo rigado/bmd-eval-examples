@@ -27,7 +27,7 @@ import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
 
 public class ColorPickerFragment extends Fragment implements
         OnTouchListener,
-        BmdApplication.ConnectionNotification,
+        BmdApplication.IConnectionListener,
         View.OnClickListener,
         InterfaceFragmentLifecycle
 {
@@ -148,7 +148,7 @@ public class ColorPickerFragment extends Fragment implements
     }
 
     // ************
-    //  Concrete Implementation of BmdApplication.ConnectionNotification
+    //  Concrete Implementation of BmdApplication.IConnectionListener
     // ************
     @Override
     public void isNowConnected(BmdEvalDemoDevice device) {

@@ -1,5 +1,6 @@
-package com.rigado.bmd200eval;
+package com.rigado.bmd200eval.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,19 +10,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
+import com.rigado.bmd200eval.BmdApplication;
+import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
 import com.rigado.bmd200eval.fragments.DemoFragment;
 import com.rigado.bmd200eval.fragments.ColorPickerFragment;
 import com.rigado.bmd200eval.fragments.FirmwareUpdateFragment;
 import com.rigado.bmd200eval.fragments.AboutFragment;
+import com.rigado.bmd200eval.interfaces.IPermissionsRequestListener;
 import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
+import com.rigado.rigablue.RigCoreBluetooth;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 
-public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class MainActivity extends ActionBarActivity implements
+        ActionBar.TabListener,
+        IPermissionsRequestListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -102,6 +109,21 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        BmdApplication.getInstance().getBmdManager().registerPermissionsListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        BmdApplication.getInstance().getBmdManager().registerPermissionsListener(null);
+
+    }
+
+    @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in the ViewPager.
         if (mAllowTabsClicking) {
@@ -121,6 +143,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     {
         mViewPager.setPagingEnabled(toggle);
         mAllowTabsClicking = toggle;
+    }
+
+    @Override
+    public void onPermissionsRequested() {
+        startActivity(new Intent(this, PermissionActivity.class));
+        finish();
     }
 
     /**

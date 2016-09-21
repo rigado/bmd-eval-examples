@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.util.Log;
 
+import com.rigado.bmd200eval.interfaces.IPermissionsRequestListener;
+import com.rigado.bmd200eval.utilities.Utilities;
 import com.rigado.rigablue.IRigLeBaseDeviceObserver;
 import com.rigado.rigablue.IRigLeConnectionManagerObserver;
 import com.rigado.rigablue.IRigLeDiscoveryManagerObserver;
@@ -21,7 +23,8 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
     private static final int CONNECTION_TIMEOUT = 10000;
     BmdEvalDemoDevice demoDevice;
     boolean is_connected;
-    IBmdEvalManagerListener observer;
+    IBmdEvalManagerListener managerListener;
+    IPermissionsRequestListener permssionsListener;
     Context mContext;
 
     static BmdEvalManager instance;
@@ -29,7 +32,7 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
     private BmdEvalManager() {
         is_connected = false;
         demoDevice = null;
-        observer = null;
+        managerListener = null;
     }
 
     public static BmdEvalManager getInstance() {
@@ -42,6 +45,14 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
 
     public void setContext(Context context) {
         mContext = context;
+    }
+
+    public void maybeBeginScanning() {
+        if(Utilities.hasLocationPermission(mContext)) {
+            searchForDemoDevices();
+        } else {
+            permssionsListener.onPermissionsRequested();
+        }
     }
 
     public void searchForDemoDevices() {
@@ -75,8 +86,12 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
         RigLeConnectionManager.getInstance().disconnectDevice(demoDevice.getBaseDevice());
     }
 
-    public void setObserver(IBmdEvalManagerListener o) {
-        observer = o;
+    public void registerBmdManagerListener(IBmdEvalManagerListener listener) {
+        managerListener = listener;
+    }
+
+    public void registerPermissionsListener(IPermissionsRequestListener listener) {
+        permssionsListener = listener;
     }
 
     @Override
@@ -97,8 +112,8 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
     @Override
     public void discoveryDidComplete(RigLeBaseDevice device) {
         demoDevice = new BmdEvalDemoDevice(device);
-        if(observer != null) {
-            observer.didConnectDevice(demoDevice);
+        if(managerListener != null) {
+            managerListener.didConnectDevice(demoDevice);
         }
     }
 
@@ -113,8 +128,8 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
     @Override
     public void didDisconnectDevice(BluetoothDevice btDevice) {
         is_connected = false;
-        if(observer != null) {
-            observer.didDisconnectDevice();
+        if(managerListener != null) {
+            managerListener.didDisconnectDevice();
         }
     }
 
@@ -146,15 +161,15 @@ public class BmdEvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectio
 
     @Override
     public void bluetoothPowerStateChanged(boolean enabled) {
-        if(observer != null) {
-            observer.bluetoothPowerStateChanged(enabled);
+        if(managerListener != null) {
+            managerListener.bluetoothPowerStateChanged(enabled);
         }
     }
 
     @Override
     public void bluetoothDoesNotSupported() {
-        if(observer != null) {
-            observer.bluetoothNotSupported();;
+        if(managerListener != null) {
+            managerListener.bluetoothNotSupported();;
         }
     }
 }

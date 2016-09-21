@@ -15,7 +15,7 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.rigado.bmd200eval.BmdApplication;
-import com.rigado.bmd200eval.MainActivity;
+import com.rigado.bmd200eval.activities.MainActivity;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.demodevice.AccelData;
 import com.rigado.bmd200eval.demodevice.AmbientLight;
@@ -30,8 +30,8 @@ public class DemoFragment extends Fragment implements
         BmdApplication.ConnectionNotification,
         InterfaceFragmentLifecycle {
 
-    private final int MAX_ARRAY_SIZE = 30;
-    private final String TAG = getClass().getSimpleName();
+    private static final int MAX_ARRAY_SIZE = 30;
+    private static final String TAG = DemoFragment.class.getSimpleName();
 
     private BmdApplication mBmdApplication;
 
@@ -299,26 +299,27 @@ public class DemoFragment extends Fragment implements
         }
     }
 
+
     @Override
     public void onResumeFragment() {
-
+        Log.i(TAG, "onResumeFragment");
         // callback so we know when it's connected / disconnected
         mBmdApplication.setConnectionNotificationListener(this);
 
-        if (mBmdApplication.isConnected())
-        {
+        if (mBmdApplication.isConnected()) {
+            Log.i(TAG, "isConnected");
             // if the device is already connected, configure to stream data
             configureDevice();
             mLayoutProgressBar.setVisibility(View.INVISIBLE);
-        }
-        else if (mBmdApplication.isSearching() == false)
-        {
+
+        } else if (!mBmdApplication.isSearching()) {
+            Log.i(TAG, "!isSearching - begin search");
             // if device is not connected, and not searching, let's search !
             mBmdApplication.searchForDemoDevices();
             mLayoutProgressBar.setVisibility(View.VISIBLE);
-        }
-        else if (mBmdApplication.isSearching() == true)
-        {
+
+        } else {
+            Log.i(TAG, "isSearching already");
             // if device is still searching, simply show searching animation
             mLayoutProgressBar.setVisibility(View.VISIBLE);
         }

@@ -18,7 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
 import com.rigado.bmd200eval.BmdApplication;
-import com.rigado.bmd200eval.MainActivity;
+import com.rigado.bmd200eval.activities.MainActivity;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.customviews.CircleView;
 import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;

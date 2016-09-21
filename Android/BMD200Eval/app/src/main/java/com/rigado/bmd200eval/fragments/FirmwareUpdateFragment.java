@@ -18,9 +18,10 @@ import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rigado.bmd200eval.BmdApplication;
-import com.rigado.bmd200eval.MainActivity;
+import com.rigado.bmd200eval.activities.MainActivity;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.demodevice.BmdEvalBootloaderInfo;
 import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
@@ -29,6 +30,7 @@ import com.rigado.bmd200eval.utilities.JsonFirmwareReader;
 import com.rigado.bmd200eval.utilities.JsonFirmwareType;
 import com.rigado.bmd200eval.utilities.Utilities;
 import com.rigado.rigablue.IRigFirmwareUpdateManagerObserver;
+import com.rigado.rigablue.RigDfuError;
 import com.rigado.rigablue.RigFirmwareUpdateManager;
 import com.rigado.rigablue.RigLeBaseDevice;
 
@@ -292,8 +294,9 @@ public class FirmwareUpdateFragment extends Fragment implements
     }
 
     @Override
-    public void updateFailed(int error) {
-        Log.d(TAG, "updateFailed: " + error);
+    public void updateFailed(RigDfuError error) {
+        Toast.makeText(getActivity(), error.getErrorMessage(), Toast.LENGTH_LONG).show();
+
     }
 
     /**

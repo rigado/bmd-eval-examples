@@ -294,8 +294,13 @@ public class FirmwareUpdateFragment extends Fragment implements
     }
 
     @Override
-    public void updateFailed(RigDfuError error) {
-        Toast.makeText(getActivity(), error.getErrorMessage(), Toast.LENGTH_LONG).show();
+    public void updateFailed(final RigDfuError error) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), error.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 

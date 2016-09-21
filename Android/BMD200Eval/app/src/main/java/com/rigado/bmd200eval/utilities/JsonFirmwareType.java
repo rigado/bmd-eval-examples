@@ -27,16 +27,19 @@ public class JsonFirmwareType {
     public class Properties {
         private String version;
         private String build;
-        private String filename;
+        private String filename_200;
+        private String filename_300;
         private String comment;
 
         public String getVersion() {
             if (version == null) return "";
             return version;
         }
+
         public void setVersion(String version) {
             this.version = version;
         }
+
         public String getBuild() {
             if (build == null) return "";
             return build;
@@ -44,17 +47,28 @@ public class JsonFirmwareType {
         public void setBuild(String build) {
             this.build = build;
         }
-        public String getFilename() {
-            if (filename == null) return "";
-            return filename;
+
+        public String getFilename200() {
+            if (filename_200 == null) return "";
+            return filename_200;
         }
-        public void setFilename(String filename) {
-            this.filename = filename;
+
+        public void setFilename200(String filename) {
+            this.filename_200 = filename;
         }
+
+        public String getFilename300() {
+            if(filename_300 == null) return "";
+            return filename_300;
+        }
+
+        public void setFilename300(String filename) { this.filename_300 = filename; }
+
         public String getComment() {
             if (comment == null) return "";
             return comment;
         }
+
         public void setComment(String comment) {
             this.comment = comment;
         }

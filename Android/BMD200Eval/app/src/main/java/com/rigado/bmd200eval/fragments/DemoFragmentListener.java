@@ -23,15 +23,15 @@ import com.rigado.bmd200eval.demodevice.IBmdEvalDemoDeviceListener;
 import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmd200eval.demodevice.ButtonStatus;
 import com.rigado.bmd200eval.demodevice.RgbColor;
-import com.rigado.bmd200eval.interfaces.InterfaceFragmentLifecycle;
+import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 
-public class DemoFragment extends Fragment implements
+public class DemoFragmentListener extends Fragment implements
         IBmdEvalDemoDeviceListener,
         BmdApplication.IConnectionListener,
-        InterfaceFragmentLifecycle {
+        IFragmentLifecycleListener {
 
     private static final int MAX_ARRAY_SIZE = 30;
-    private static final String TAG = DemoFragment.class.getSimpleName();
+    private static final String TAG = DemoFragmentListener.class.getSimpleName();
 
     private BmdApplication mBmdApplication;
 
@@ -52,7 +52,7 @@ public class DemoFragment extends Fragment implements
     private TextView mTextViewAmbientLight;
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public DemoFragment(){}
+    public DemoFragmentListener(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -247,8 +247,8 @@ public class DemoFragment extends Fragment implements
 
         // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
         final String fwname = device.getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)) ||
-                (fwname.contains(FirmwareUpdateFragment.BMDWARE_NAME_SUBSET)))
+        if ((fwname.contains(FirmwareUpdateFragmentListener.BLINKY_DEMO_NAME_SUBSET)) ||
+                (fwname.contains(FirmwareUpdateFragmentListener.BMDWARE_NAME_SUBSET)))
         {
             ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override
@@ -279,7 +279,7 @@ public class DemoFragment extends Fragment implements
     }
 
     // ************
-    //  Concrete Implementation of InterfaceFragmentLifecycle
+    //  Concrete Implementation of IFragmentLifecycleListener
     // ************
     @Override
     public void onPauseFragment() {

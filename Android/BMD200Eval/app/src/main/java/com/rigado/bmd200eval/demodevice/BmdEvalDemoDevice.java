@@ -2,8 +2,10 @@ package com.rigado.bmd200eval.demodevice;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.rigado.bmd200eval.interfaces.IBmdHardwareListener;
 import com.rigado.bmd200eval.utilities.Constants;
 import com.rigado.rigablue.*;
 
@@ -22,6 +24,8 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
     BluetoothGattService bmdEvalService;
     BluetoothGattService disService;
     BluetoothGattService blinkyService;
+
+    IBmdHardwareListener mListener;
 
     public enum DemoDeviceType {
         MainEvalDemo,
@@ -57,6 +61,10 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
             initServices();
         }
 
+    }
+
+    public void registerHardwareListener(IBmdHardwareListener listener) {
+        mListener = listener;
     }
 
     public boolean isBmd200() {
@@ -248,7 +256,6 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
 
 
         } else if(uuid.equals(UUID.fromString(Constants.BLINKY_UUID_CTRL_CHAR))) {
-            //TODO : Note return values
             Log.i(TAG, String.format("blinky reset char %s", Arrays.toString(characteristic.getValue())));
 
             determineHardwareVersion(characteristic.getValue());
@@ -267,6 +274,11 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
         }
 
         hardwareVersionFound = true;
+
+        if(mListener!=null) {
+
+            mListener.onHardwareVersionReceived();
+        }
     }
 
     private void beginStatusUpdates() {

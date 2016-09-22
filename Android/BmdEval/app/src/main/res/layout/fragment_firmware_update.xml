@@ -74,7 +74,8 @@
             android:textSize="12pt"
             android:textColor="@android:color/black"
             android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_margin="16dp"/>
 
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"

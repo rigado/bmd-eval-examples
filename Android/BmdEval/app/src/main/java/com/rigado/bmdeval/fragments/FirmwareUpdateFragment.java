@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.rigado.bmdeval.R;
 import com.rigado.bmdeval.demodevice.BmdEvalBootloaderInfo;
 import com.rigado.bmdeval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
+import com.rigado.bmdeval.utilities.Constants;
 import com.rigado.bmdeval.utilities.JsonFirmwareReader;
 import com.rigado.bmdeval.utilities.JsonFirmwareType;
 import com.rigado.bmdeval.utilities.Utilities;
@@ -261,7 +263,23 @@ public class FirmwareUpdateFragment extends Fragment implements
 
     @Override
     public void didFinishUpdate() {
+        finishUpdate();
+    }
 
+    @Override
+    public void updateFailed(final RigDfuError error) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), error.getErrorMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        finishUpdate();
+
+    }
+
+    private void finishUpdate() {
         mButtonDeploy.post(new Runnable() {
             @Override
             public void run() {
@@ -290,22 +308,11 @@ public class FirmwareUpdateFragment extends Fragment implements
             ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(0);
+                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(Constants.DEMO_STATUS_FRAGMENT);
                 }
             });
 
         }
-    }
-
-    @Override
-    public void updateFailed(final RigDfuError error) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getActivity(), error.getErrorMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
 
     /**

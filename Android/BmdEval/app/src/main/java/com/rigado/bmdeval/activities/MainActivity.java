@@ -20,6 +20,7 @@ import com.rigado.bmdeval.fragments.FirmwareUpdateFragment;
 import com.rigado.bmdeval.fragments.AboutFragment;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmdeval.interfaces.IPermissionsRequestListener;
+import com.rigado.bmdeval.utilities.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,13 +187,13 @@ public class MainActivity extends ActionBarActivity implements
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0:
+                case Constants.DEMO_STATUS_FRAGMENT:
                     return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
+                case Constants.COLOR_WHEEL_FRAGMENT:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
+                case Constants.FIRMWARE_UPDATE_FRAGMENT:
                     return getString(R.string.title_section3).toUpperCase(l);
-                case 3:
+                case Constants.ABOUT_FRAGMENT:
                     return getString(R.string.title_section4).toUpperCase(l);
             }
             return null;

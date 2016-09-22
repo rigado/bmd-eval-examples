@@ -27,6 +27,9 @@ public class Constants {
     public static final byte EVAL_CMD_ACCEL_STREAM_STOP = 0x09;
     public static final byte[] CMD_HARDWARE_VERSION = { 0x0A };
 
+    public final static int DEMO_STATUS_FRAGMENT = 0;
+    public final static int COLOR_WHEEL_FRAGMENT = 1;
     public final static int FIRMWARE_UPDATE_FRAGMENT = 2;
+    public final static int ABOUT_FRAGMENT = 3;
 
 }

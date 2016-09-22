@@ -27,7 +27,7 @@ import java.util.UUID;
  * @version 1.0
  */
 public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver,
-                                                 IRigLeBaseDeviceObserver {
+        IRigLeBaseDeviceObserver {
 
 	private static final String kupdateDfuServiceUuidStringBMD200 = "00001530-1212-efde-1523-785feabcd123";
     private static final String kupdateDfuControlPointUuidStringBMD200 = "00001531-1212-efde-1523-785feabcd123";

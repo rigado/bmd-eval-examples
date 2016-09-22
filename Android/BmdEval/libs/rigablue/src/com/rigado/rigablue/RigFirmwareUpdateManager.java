@@ -91,7 +91,7 @@ enum FirmwareManagerStateEnum {
  * bootloader reset command.
  */
 public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver, IRigLeConnectionManagerObserver,
-                                                IRigFirmwareUpdateServiceObserver {
+        IRigFirmwareUpdateServiceObserver {
 
     private static final int Response = 16; //unused in iOS
     private static final int PacketReceivedNotificationRequest = 8;
@@ -403,6 +403,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
+     * Max time in milliseconds to discover RigDfu
+     */
+    private final static int MAX_RIGDFU_DISCOVERY_TIMEOUT = 20000;
+
+    /**
      * Sends the command to put the device in to bootloader mode.
      *
      * @param characteristic The characteristic which accepts the bootloader activate command
@@ -421,7 +426,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
 
         String[] dfuServiceUuidStrings = mFirmwareUpdateService.getDfuServiceUuidStrings();
-        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, 0);
+        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, MAX_RIGDFU_DISCOVERY_TIMEOUT);
         dr.setObserver(this);
         dm.startDiscoverDevices(dr);
         if(mObserver != null) {
@@ -1063,6 +1068,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
             //Give this to the original observer
             mFirmwareUpdateService.didDisconnectInitialNonBootloaderDevice();
+
+        } else if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
+            //RigDfu disconnected before the firmware update completed!!!
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
         }
     }
 

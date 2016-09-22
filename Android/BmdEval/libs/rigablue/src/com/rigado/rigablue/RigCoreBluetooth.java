@@ -352,7 +352,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
         } else {
             if(request instanceof RigWriteRequest) {
                 RigLog.d("queue write request");
-            } else if(request instanceof RigNotificationStateChangeRequest) {
+            } else if(request instanceof  RigNotificationStateChangeRequest) {
                 RigLog.d("queue notification state change request");
             }
             mOpsQueue.add(request);

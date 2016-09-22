@@ -110,7 +110,10 @@ public class BmdApplication extends Application implements
         // alert a fragment that might be listening for this event
         if (mIConnectionListener != null)
         {
+            Log.i(TAG, "isNowConnected");
             mIConnectionListener.isNowConnected(device);
+        } else {
+            Log.i(TAG, "Connection listener was null??");
         }
     }
 

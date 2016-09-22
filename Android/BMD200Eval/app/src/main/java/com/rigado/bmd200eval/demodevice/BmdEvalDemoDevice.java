@@ -2,7 +2,6 @@ package com.rigado.bmd200eval.demodevice;
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.rigado.bmd200eval.interfaces.IBmdHardwareListener;
@@ -250,7 +249,7 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
         } else if(uuid.equals(UUID.fromString(Constants.BMDEVAL_UUID_CTRL_CHAR))) {
             Log.i(TAG, String.format("bmd eval ctrl char value %s", Arrays.toString(characteristic.getValue())));
 
-            determineHardwareVersion(value);
+            getHardwareVersion(value);
 
             beginStatusUpdates();
 
@@ -258,7 +257,7 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
         } else if(uuid.equals(UUID.fromString(Constants.BLINKY_UUID_CTRL_CHAR))) {
             Log.i(TAG, String.format("blinky reset char %s", Arrays.toString(characteristic.getValue())));
 
-            determineHardwareVersion(characteristic.getValue());
+            getHardwareVersion(characteristic.getValue());
 
         }
     }
@@ -267,7 +266,7 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
     // A 300+Shield will return [3, 2, 0, 42, 0, 0, 0, 1, 1, 2, 3, 0] - calling getValue[9] returns the version
     // if version == 2, we have a bmd300
     // After receiving hardware version, enable status updates
-    private void determineHardwareVersion(final byte[] value) {
+    private void getHardwareVersion(final byte[] value) {
 
         if(value.length > 1 && value[9] == 2) {
             setBmd200Status(false);
@@ -278,6 +277,8 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
         if(mListener!=null) {
 
             mListener.onHardwareVersionReceived();
+        } else {
+            Log.i(TAG, "listener was null??");
         }
     }
 
@@ -310,7 +311,14 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
     public void didWriteValue(RigLeBaseDevice device, BluetoothGattCharacteristic characteristic) {
         Log.i(TAG, String.format("didWriteValue %s %s", characteristic.getUuid().toString(), Arrays.toString(characteristic.getValue())));
         if(characteristic.getUuid().equals(UUID.fromString(Constants.BLINKY_UUID_CTRL_CHAR))) {
-            baseDevice.readCharacteristic(characteristic);
+            // Blinky 200 boards do not respond to read requests
+            if((characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_READ) == 0) {
+                Log.i(TAG, "Found blinky 200!");
+                getHardwareVersion(new byte[] {0x00});
+            } else {
+                Log.i(TAG, "Found blinky 300!");
+                baseDevice.readCharacteristic(characteristic);
+            }
         }
     }
 

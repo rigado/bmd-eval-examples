@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 
-public class AboutFragmentListener extends Fragment implements IFragmentLifecycleListener {
+public class AboutFragment extends Fragment implements IFragmentLifecycleListener {
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public AboutFragmentListener(){}
+    public AboutFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

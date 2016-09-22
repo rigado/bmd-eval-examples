@@ -23,15 +23,17 @@ import com.rigado.bmd200eval.demodevice.IBmdEvalDemoDeviceListener;
 import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmd200eval.demodevice.ButtonStatus;
 import com.rigado.bmd200eval.demodevice.RgbColor;
+import com.rigado.bmd200eval.interfaces.IBmdHardwareListener;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 
-public class DemoFragmentListener extends Fragment implements
+public class DemoFragment extends Fragment implements
         IBmdEvalDemoDeviceListener,
         BmdApplication.IConnectionListener,
-        IFragmentLifecycleListener {
+        IFragmentLifecycleListener,
+        IBmdHardwareListener {
 
     private static final int MAX_ARRAY_SIZE = 30;
-    private static final String TAG = DemoFragmentListener.class.getSimpleName();
+    private static final String TAG = DemoFragment.class.getSimpleName();
 
     private BmdApplication mBmdApplication;
 
@@ -52,7 +54,7 @@ public class DemoFragmentListener extends Fragment implements
     private TextView mTextViewAmbientLight;
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public DemoFragmentListener(){}
+    public DemoFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -236,7 +238,7 @@ public class DemoFragmentListener extends Fragment implements
     // ************
     @Override
     public void isNowConnected(BmdEvalDemoDevice device) {
-
+        mBmdApplication.getBMD200EvalDemoDevice().registerHardwareListener(this);
         // hide the SEARCHING UI
         mLayoutProgressBar.post(new Runnable() {
             @Override
@@ -244,23 +246,6 @@ public class DemoFragmentListener extends Fragment implements
                 mLayoutProgressBar.setVisibility(View.GONE);
             }
         });
-
-        // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
-        final String fwname = device.getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragmentListener.BLINKY_DEMO_NAME_SUBSET)) ||
-                (fwname.contains(FirmwareUpdateFragmentListener.BMDWARE_NAME_SUBSET)))
-        {
-            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(2);
-                }
-            });
-        }
-        // otherwise, set up device for data streaming
-        else {
-            configureDevice();
-        }
     }
 
     @Override
@@ -317,6 +302,29 @@ public class DemoFragmentListener extends Fragment implements
             Log.i(TAG, "isSearching already");
             // if device is still searching, simply show searching animation
             mLayoutProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private final static int FIRMWARE_UPDATE_FRAGMENT = 2;
+
+    @Override
+    public void onHardwareVersionReceived() {
+        Log.i(TAG, "onHardwareVersionReceived");
+        // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
+        final String fwname = mBmdApplication.getBMD200EvalDemoDevice().getBaseDevice().getName();
+        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)) ||
+                (fwname.contains(FirmwareUpdateFragment.BMDWARE_NAME_SUBSET)))
+        {
+            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(FIRMWARE_UPDATE_FRAGMENT);
+                }
+            });
+        }
+        // otherwise, set up device for data streaming
+        else {
+            configureDevice();
         }
     }
 }

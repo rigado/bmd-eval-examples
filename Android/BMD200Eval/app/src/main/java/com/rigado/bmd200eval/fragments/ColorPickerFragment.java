@@ -25,7 +25,7 @@ import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmd200eval.demodevice.RgbColor;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 
-public class ColorPickerFragmentListener extends Fragment implements
+public class ColorPickerFragment extends Fragment implements
         OnTouchListener,
         BmdApplication.IConnectionListener,
         View.OnClickListener,
@@ -41,7 +41,7 @@ public class ColorPickerFragmentListener extends Fragment implements
     private ToggleButton mToggleButton;
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public ColorPickerFragmentListener()
+    public ColorPickerFragment()
     {}
 
     @Override
@@ -163,8 +163,8 @@ public class ColorPickerFragmentListener extends Fragment implements
 
         // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
         final String fwname = device.getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragmentListener.BLINKY_DEMO_NAME_SUBSET)) ||
-                (fwname.contains(FirmwareUpdateFragmentListener.BMDWARE_NAME_SUBSET)))
+        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)) ||
+                (fwname.contains(FirmwareUpdateFragment.BMDWARE_NAME_SUBSET)))
         {
             ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override

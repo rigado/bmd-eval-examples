@@ -37,12 +37,11 @@ import com.rigado.rigablue.RigFirmwareUpdateManager;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
-public class FirmwareUpdateFragmentListener extends Fragment implements
+public class FirmwareUpdateFragment extends Fragment implements
         IFragmentLifecycleListener,
         View.OnClickListener,
         BmdApplication.IConnectionListener,
-        IRigFirmwareUpdateManagerObserver,
-        IBmdHardwareListener{
+        IRigFirmwareUpdateManagerObserver {
 
     // Constants
     private static final String TAG = "BMD200Eval";
@@ -70,7 +69,7 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
     private AlertDialog alertDialog1;
 
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public FirmwareUpdateFragmentListener(){}
+    public FirmwareUpdateFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -135,14 +134,15 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
 
     @Override
     public void onResumeFragment() {
-
+        Log.i(TAG, "onResumeFragment");
         // callback so we know when it's connected / disconnected
         mBmdApplication.setConnectionNotificationListener(this);
+
+        checkFirmwareInstalled(mBmdApplication.getBMD200EvalDemoDevice());
 
         if (mBmdApplication.isConnected())
         {
             // if the device is already connected, enable Deploy button
-            mBmdApplication.getBMD200EvalDemoDevice().registerHardwareListener(this);
             mButtonDeploy.setEnabled(true);
             mLayoutProgressBar.setVisibility(View.INVISIBLE);
         }
@@ -205,6 +205,7 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
     // ************
     @Override
     public void isNowConnected(BmdEvalDemoDevice device) {
+        //After connecting, register the hardware listener.
 
         if (mIsUpdateInProgress == false) {
 
@@ -217,7 +218,6 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
                 }
             });
 
-            checkFirmwareInstalled(device);
         }
     }
 
@@ -378,6 +378,7 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
      */
     private void checkFirmwareInstalled(BmdEvalDemoDevice device)
     {
+        Log.i(TAG, "checkFirmwareInstalled");
         // if the Blinky Demo fw is programmed, show message to the user
         if (device.getBaseDevice().getName().contains(BLINKY_DEMO_NAME_SUBSET))
         {
@@ -395,6 +396,7 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
      */
     private void showFirmwareUpdateDialog(int idTitle, int idMessage)
     {
+        Log.i(TAG, "showFirmwareUpdateDialog");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle(idTitle);
         alertDialogBuilder.setMessage(idMessage);
@@ -469,13 +471,5 @@ public class FirmwareUpdateFragmentListener extends Fragment implements
         alertDialog1.show();
     }
 
-    @Override
-    public void onHardwareVersionReceived() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                checkFirmwareInstalled(mBmdApplication.getBMD200EvalDemoDevice());
-            }
-        });
-    }
+
 }

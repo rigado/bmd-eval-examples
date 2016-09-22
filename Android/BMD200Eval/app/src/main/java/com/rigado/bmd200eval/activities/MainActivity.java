@@ -14,10 +14,10 @@ import android.util.Log;
 import com.rigado.bmd200eval.BmdApplication;
 import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
-import com.rigado.bmd200eval.fragments.DemoFragmentListener;
-import com.rigado.bmd200eval.fragments.ColorPickerFragmentListener;
-import com.rigado.bmd200eval.fragments.FirmwareUpdateFragmentListener;
-import com.rigado.bmd200eval.fragments.AboutFragmentListener;
+import com.rigado.bmd200eval.fragments.DemoFragment;
+import com.rigado.bmd200eval.fragments.ColorPickerFragment;
+import com.rigado.bmd200eval.fragments.FirmwareUpdateFragment;
+import com.rigado.bmd200eval.fragments.AboutFragment;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmd200eval.interfaces.IPermissionsRequestListener;
 
@@ -166,10 +166,10 @@ public class MainActivity extends ActionBarActivity implements
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             mFragmentList = new ArrayList<Fragment>();
-            mFragmentList.add(new DemoFragmentListener());
-            mFragmentList.add(new ColorPickerFragmentListener());
-            mFragmentList.add(new FirmwareUpdateFragmentListener());
-            mFragmentList.add(new AboutFragmentListener());
+            mFragmentList.add(new DemoFragment());
+            mFragmentList.add(new ColorPickerFragment());
+            mFragmentList.add(new FirmwareUpdateFragment());
+            mFragmentList.add(new AboutFragment());
         }
 
         @Override

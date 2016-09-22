@@ -184,13 +184,18 @@ public class FirmwareUpdateFragment extends Fragment implements
         BmdEvalBootloaderInfo bmdEvalBootloaderInfo = mBmdApplication.getBMD200EvalDemoDevice().getBootloaderInfo();
 
         BluetoothGattCharacteristic resetChar = bmdEvalBootloaderInfo.getBootloaderCharacteristic();
-        RigLeBaseDevice rigLeBaseDevice = mBmdApplication.getBMD200EvalDemoDevice().getBaseDevice();
 
         // initialize FW Manager
         mRigFirmwareUpdateManager = new RigFirmwareUpdateManager();
         mRigFirmwareUpdateManager.setObserver(this);
 
-        mUtilities.startFirmwareUpdate(getActivity(), mRigFirmwareUpdateManager, rigLeBaseDevice, firmwareRecord, resetChar, bmdEvalBootloaderInfo.getBootloaderCommand());
+        mUtilities.startFirmwareUpdate(
+                getActivity(),
+                mRigFirmwareUpdateManager,
+                mBmdApplication.getBMD200EvalDemoDevice(),
+                firmwareRecord,
+                resetChar,
+                bmdEvalBootloaderInfo.getBootloaderCommand());
         mIsUpdateInProgress = true;
     }
 

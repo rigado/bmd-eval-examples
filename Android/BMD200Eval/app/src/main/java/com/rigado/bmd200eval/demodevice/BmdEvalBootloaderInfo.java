@@ -1,5 +1,6 @@
 package com.rigado.bmd200eval.demodevice;
 
+import com.rigado.bmd200eval.utilities.Constants;
 import com.rigado.rigablue.RigLeBaseDevice;
 
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -12,15 +13,6 @@ import java.util.UUID;
  * Created by stutzenbergere on 7/23/15.
  */
 public class BmdEvalBootloaderInfo {
-
-    private static final String RESET_SERVICE_UUID = "50db1523-418d-4690-9589-ab7be9e22684";
-    private static final String RESET_CHAR_UUID = "50db1527-418d-4690-9589-ab7be9e22684";
-
-    private static final String BLINKY_RESET_SERVICE_UUID = "6d580001-fc91-486b-82c4-86a1d2eb8f88";
-    private static final String BLINKY_RESET_CHAR_UUID = "6d580002-fc91-486b-82c4-86a1d2eb8f88";
-
-    private static final String BMDWARE_RESET_SERVICE_UUID = "2413B33F-707F-90BD-2045-2AB8807571B7";
-    private static final String BMDWARE_RESET_CHAR_UUID = "2413B43F-707F-90BD-2045-2AB8807571B7";
 
     /* Note: Java is pretty annoying when it comes to dealing with raw bytes.  Because the type
      * 'byte' is not unsigned, values like 0xfc and 0xd6 are considered integers by the compiler
@@ -48,18 +40,18 @@ public class BmdEvalBootloaderInfo {
         bootloader_command = new byte[4];
         if(device.getType() == BmdEvalDemoDevice.DemoDeviceType.BlinkyDemo) {
             Log.i(TAG, "found blinky demo");
-            serviceUuid = UUID.fromString(BLINKY_RESET_SERVICE_UUID);
-            charUuid = UUID.fromString(BLINKY_RESET_CHAR_UUID);
+            serviceUuid = UUID.fromString(Constants.BLINKY_RESET_SERVICE_UUID);
+            charUuid = UUID.fromString(Constants.BLINKY_UUID_CTRL_CHAR);
             System.arraycopy(blinky_bootloader_command, 0, bootloader_command, 0, 4);
         } else if(device.getType() == BmdEvalDemoDevice.DemoDeviceType.BMDware) {
             Log.i(TAG, "found bmdware");
-            serviceUuid = UUID.fromString(BMDWARE_RESET_SERVICE_UUID);
-            charUuid = UUID.fromString(BMDWARE_RESET_CHAR_UUID);
+            serviceUuid = UUID.fromString(Constants.BMDWARE_RESET_SERVICE_UUID);
+            charUuid = UUID.fromString(Constants.BMDWARE_RESET_CHAR_UUID);
             System.arraycopy(bmdware_bootloader_command, 0, bootloader_command, 0, 4);
         } else {
-            serviceUuid = UUID.fromString(RESET_SERVICE_UUID);
+            serviceUuid = UUID.fromString(Constants.BMDEVAL_UUID_SERVICE);
             Log.i(TAG, "found eval demo " + serviceUuid.toString());
-            charUuid = UUID.fromString(RESET_CHAR_UUID);
+            charUuid = UUID.fromString(Constants.BMDEVAL_UUID_CTRL_CHAR);
             System.arraycopy(bmdeval_bootloader_command, 0, bootloader_command, 0, 4);
         }
 

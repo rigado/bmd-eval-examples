@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.rigado.bmd200eval.BmdApplication;
+import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.rigablue.RigCoreBluetooth;
 import com.rigado.rigablue.RigFirmwareUpdateManager;
 import com.rigado.rigablue.RigLeBaseDevice;
@@ -27,12 +28,17 @@ public class Utilities {
     // Constants
     private final String TAG = getClass().getSimpleName();
 
-    public void startFirmwareUpdate(Context context, RigFirmwareUpdateManager fwManager, RigLeBaseDevice device, JsonFirmwareType firmwareRecord,
+    public void startFirmwareUpdate(Context context, RigFirmwareUpdateManager fwManager, BmdEvalDemoDevice device, JsonFirmwareType firmwareRecord,
                                     BluetoothGattCharacteristic bootCharacteristic, byte [] bootCommand) {
 
         if (firmwareRecord != null){
+            String filename = "";
+            if(device.isBmd200()) {
+                filename = firmwareRecord.getProperties().getFilename200();
+            } else {
+                filename = firmwareRecord.getProperties().getFilename300();
+            }
 
-            final String filename = firmwareRecord.getProperties().getFilename200();
             Log.i(TAG, "filename " + filename);
 
             // ensure that the filenames contain no extension
@@ -47,7 +53,8 @@ public class Utilities {
 
             InputStream fwImageInputStream = (deviceFWid != 0) ? context.getResources().openRawResource(deviceFWid) : null;
 
-            fwManager.updateFirmware(device, fwImageInputStream, bootCharacteristic, bootCommand);
+            fwManager.updateFirmware(device.getBaseDevice(), fwImageInputStream, bootCharacteristic, bootCommand);
+
         } else {
             Log.e(TAG, "Firmware filenames are unknown - were the JSON values read correctly?");
         }

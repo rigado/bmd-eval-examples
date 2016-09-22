@@ -226,13 +226,8 @@ public class DemoFragment extends Fragment implements
 
     private void configureDevice() {
         mBmdApplication.getBMD200EvalDemoDevice().setObserver(this);
-
-        //Uncomment to enable accel streaming
         mBmdApplication.getBMD200EvalDemoDevice().startAccelerometerStream();
-
-        //Uncomment to enable ambient light data sensing
         mBmdApplication.getBMD200EvalDemoDevice().startAmbientLightSensing();
-
         mIsConfigured = true;
     }
 

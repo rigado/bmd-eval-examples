@@ -1,11 +1,11 @@
 [
   {
-    "fwname": "BMD Eval Demo",
+    "fwname": "BMDEval Demo",
     "properties": {
       "version": 1.0,
       "build": 0,
       "filename_200": "eval_demo_1_0_0_ota",
-      "filename_300": "bmd-300-demo-shield-rel_1_0_4_ota",
+      "filename_300": "bmd_300_demo_shield_rel_1_0_4_ota",
       "comment": "in the fw filename above, the .bin extension is not necessary"
     }
   },

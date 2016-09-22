@@ -20,7 +20,6 @@ public class BmdEvalBootloaderInfo {
      * value range of a 'byte' type is -128 to 127.  So, negative numbers are used below where
      * appropriate to get around this issue.
      */
-    private final static byte [] bmdware_bootloader_command = { 0x03, 0x56, 0x30, 0x57 };
     private final static byte [] bmdeval_bootloader_command = { -95, -4, -42, -25 };
     private final static byte [] blinky_bootloader_command = { -104, -74, 0x2f, 0x51 };
 
@@ -43,11 +42,6 @@ public class BmdEvalBootloaderInfo {
             serviceUuid = UUID.fromString(Constants.BLINKY_RESET_SERVICE_UUID);
             charUuid = UUID.fromString(Constants.BLINKY_UUID_CTRL_CHAR);
             System.arraycopy(blinky_bootloader_command, 0, bootloader_command, 0, 4);
-        } else if(device.getType() == BmdEvalDemoDevice.DemoDeviceType.BMDware) {
-            Log.i(TAG, "found bmdware");
-            serviceUuid = UUID.fromString(Constants.BMDWARE_RESET_SERVICE_UUID);
-            charUuid = UUID.fromString(Constants.BMDWARE_RESET_CHAR_UUID);
-            System.arraycopy(bmdware_bootloader_command, 0, bootloader_command, 0, 4);
         } else {
             serviceUuid = UUID.fromString(Constants.BMDEVAL_UUID_SERVICE);
             Log.i(TAG, "found eval demo " + serviceUuid.toString());

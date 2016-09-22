@@ -28,8 +28,7 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
 
     public enum DemoDeviceType {
         MainEvalDemo,
-        BlinkyDemo,
-        BMDware
+        BlinkyDemo
     }
 
     private boolean is200;
@@ -48,17 +47,13 @@ public class BmdEvalDemoDevice implements IRigLeBaseDeviceObserver {
         String name = device.getName();
         baseDevice.setObserver(this);
 
-        if(name.contains(Constants.BMDWARE_DEVICE_NAME)) {
-            Log.i(TAG, "Type Bmdware");
-            type = DemoDeviceType.BMDware;
-        } else if(name.contains(Constants.BLINKY_DEMO_DEVICE_NAME)) {
+        if(name.contains(Constants.BLINKY_DEMO_DEVICE_NAME)) {
             Log.i(TAG, "Type Blinky");
             type = DemoDeviceType.BlinkyDemo;
         }
 
-        if(type == DemoDeviceType.BlinkyDemo || type == DemoDeviceType.MainEvalDemo) {
-            initServices();
-        }
+        initServices();
+
 
     }
 

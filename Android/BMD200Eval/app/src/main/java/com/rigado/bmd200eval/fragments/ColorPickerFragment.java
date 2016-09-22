@@ -24,6 +24,7 @@ import com.rigado.bmd200eval.customviews.CircleView;
 import com.rigado.bmd200eval.demodevice.BmdEvalDemoDevice;
 import com.rigado.bmd200eval.demodevice.RgbColor;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
+import com.rigado.bmd200eval.utilities.Constants;
 
 public class ColorPickerFragment extends Fragment implements
         OnTouchListener,
@@ -161,15 +162,14 @@ public class ColorPickerFragment extends Fragment implements
             }
         });
 
-        // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
+        // if the Blinky Demo fw is programmed show "UPDATE" fragment
         final String fwname = device.getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)) ||
-                (fwname.contains(FirmwareUpdateFragment.BMDWARE_NAME_SUBSET)))
+        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)))
         {
             ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(2);
+                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(Constants.FIRMWARE_UPDATE_FRAGMENT);
                 }
             });
         }

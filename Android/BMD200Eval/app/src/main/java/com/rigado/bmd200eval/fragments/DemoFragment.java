@@ -25,6 +25,7 @@ import com.rigado.bmd200eval.demodevice.ButtonStatus;
 import com.rigado.bmd200eval.demodevice.RgbColor;
 import com.rigado.bmd200eval.interfaces.IBmdHardwareListener;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
+import com.rigado.bmd200eval.utilities.Constants;
 
 public class DemoFragment extends Fragment implements
         IBmdEvalDemoDeviceListener,
@@ -305,20 +306,17 @@ public class DemoFragment extends Fragment implements
         }
     }
 
-    private final static int FIRMWARE_UPDATE_FRAGMENT = 2;
-
     @Override
     public void onHardwareVersionReceived() {
         Log.i(TAG, "onHardwareVersionReceived");
-        // if the Blinky Demo fw is programmed, or the BMDware fw, show "UPDATE" fragment
+        // if the Blinky Demo fw is programmed show "UPDATE" fragment
         final String fwname = mBmdApplication.getBMD200EvalDemoDevice().getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)) ||
-                (fwname.contains(FirmwareUpdateFragment.BMDWARE_NAME_SUBSET)))
+        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)))
         {
             ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
                 @Override
                 public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(FIRMWARE_UPDATE_FRAGMENT);
+                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(Constants.FIRMWARE_UPDATE_FRAGMENT);
                 }
             });
         }

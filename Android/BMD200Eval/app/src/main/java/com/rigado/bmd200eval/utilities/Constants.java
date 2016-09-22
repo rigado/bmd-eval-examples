@@ -6,10 +6,6 @@ public class Constants {
     public static final String BLINKY_RESET_SERVICE_UUID = "6d580001-fc91-486b-82c4-86a1d2eb8f88";
     public static final String BLINKY_UUID_CTRL_CHAR = "6d580002-fc91-486b-82c4-86a1d2eb8f88";
 
-    public static final String BMDWARE_RESET_SERVICE_UUID = "2413B33F-707F-90BD-2045-2AB8807571B7";
-    public static final String BMDWARE_RESET_CHAR_UUID = "2413B43F-707F-90BD-2045-2AB8807571B7";
-
-    public static final String BMDWARE_DEVICE_NAME = "RigCom";
     public static final String BLINKY_DEMO_DEVICE_NAME = "Blinky";
 
     public static final String BMDEVAL_UUID_SERVICE = "50db1523-418d-4690-9589-ab7be9e22684";
@@ -30,4 +26,7 @@ public class Constants {
     public static final byte EVAL_CMD_ACCEL_STREAM_START = 0x06;
     public static final byte EVAL_CMD_ACCEL_STREAM_STOP = 0x09;
     public static final byte[] CMD_HARDWARE_VERSION = { 0x0A };
+
+    public final static int FIRMWARE_UPDATE_FRAGMENT = 2;
+
 }

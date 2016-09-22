@@ -47,7 +47,6 @@ public class FirmwareUpdateFragment extends Fragment implements
     private static final String TAG = "BMD200Eval";
     private final String BMD_EVAL_DEMO_NAME_SUBSET = "BMD Eval";// string contained within the demo firmware name
     public static final String BLINKY_DEMO_NAME_SUBSET = "Blinky";// string contained within the Blinky firmware name
-    public static final String BMDWARE_NAME_SUBSET = "RigCom";// string contained within the BMDware firmware name
 
     // UI References
     private RelativeLayout mLayoutProgressBar;
@@ -383,11 +382,6 @@ public class FirmwareUpdateFragment extends Fragment implements
         if (device.getBaseDevice().getName().contains(BLINKY_DEMO_NAME_SUBSET))
         {
             showFirmwareUpdateDialog(R.string.title_blinky_dialog, R.string.message_blinky);
-        }
-        // if the BMD Eval fw is programmed, show message to the user
-        else if (device.getBaseDevice().getName().contains(BMDWARE_NAME_SUBSET))
-        {
-            showFirmwareUpdateDialog(R.string.title_bmdware, R.string.message_bmdware);
         }
     }
 

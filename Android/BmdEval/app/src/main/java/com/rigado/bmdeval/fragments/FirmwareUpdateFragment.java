@@ -404,6 +404,7 @@ public class FirmwareUpdateFragment extends Fragment implements
                     final JsonFirmwareType firmwareRecord = mJsonFirmwareTypeList.get(index);
 
                     String strname = firmwareRecord.getFwname();
+                    Log.i(TAG, "strname " +strname);
 
                     // check whether it's the end of the list and we still haven't found it
                     if ((index == mJsonFirmwareTypeList.size()-1) && (!strname.contains(BMD_EVAL_DEMO_NAME_SUBSET)) )

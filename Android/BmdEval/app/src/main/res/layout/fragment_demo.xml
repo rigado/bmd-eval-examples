@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo3_white"
+        android:src="@drawable/rigado_logo"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:contentDescription="@null"/>
 
     <!-- IMAGES: Ambient light, User1, User2 -->

@@ -13,6 +13,8 @@
 #import "CBUUID+UUIDHelperMethods.h"
 #import "Rigablue.h"
 
+#define EVAL_CMD_HARDWARE_VERSION       0x0A
+
 #define EVAL_CMD_ADC_STREAM_START       0x01
 #define EVAL_CMD_ADC_STREAM_STOP        0x02
 #define EVAL_CMD_ACCEL_STREAM_START     0x06
@@ -45,6 +47,18 @@
     CBCharacteristic *demoAdcChar;
     CBCharacteristic *demoCtrlChar;
     CBCharacteristic *demoAccelChar;
+
+    CBUUID *blinkyServiceUuid;
+    CBUUID *blinkyCtrlCharUuid;
+    
+    CBService *blinkyService;
+    CBCharacteristic *blinkyCtrlChar;
+
+    CBUUID *bmdwareServiceUuid;
+    CBUUID *bmdwareCtrlCharUuid;
+    
+    CBService *bmdwareService;
+    CBCharacteristic *bmdwareCtrlChar;
     
     CBUUID *disServiceUuid;
     CBUUID *disMfgNameUuid;
@@ -72,6 +86,7 @@
         baseDevice.delegate = self;
         [self initUuidObjs];
         [self initServiceObjects];
+        [self determineDeviceHardwareVersion];
     }
     
     return self;
@@ -79,19 +94,31 @@
 
 - (void)initServiceObjects
 {
-    for (CBService *service in [baseDevice getSerivceList]) {
+    for (CBService *service in [baseDevice getServiceList]) {
         if ([service.UUID isEqual:demoServiceUuid]) {
             demoService = service;
             [self populateDemoServiceCharacteristics];
         } else if ([service.UUID isEqual:disServiceUuid]) {
             disService = service;
             [self populateDisServiceCharacteristics];
+        } else if ([service.UUID isEqual:blinkyServiceUuid]) {
+            blinkyService = service;
+            [self populateDemoServiceCharacteristics];
+        } else if ([service.UUID isEqual:bmdwareServiceUuid]) {
+            bmdwareService = service;
+            [self populateDemoServiceCharacteristics];
         }
     }
 }
 
 - (void)initUuidObjs
 {
+    blinkyServiceUuid = [CBUUID UUIDWithString:BLINKY_SERVICE];
+    blinkyCtrlCharUuid = [CBUUID UUIDWithString:BLINKY_CHAR];
+    
+    bmdwareServiceUuid = [CBUUID UUIDWithString:BMDWARE_RESET_SERVICE];
+    bmdwareCtrlCharUuid = [CBUUID UUIDWithString:BMDWARE_RESET_CHAR];
+    
     demoServiceUuid = [CBUUID uuidForBaseUuidString:BMDEVAL_BASE_UUID withShortUuidString:BMDEVAL_UUID_SERVICE];
     demoButtonCharUuid = [CBUUID uuidForBaseUuidString:BMDEVAL_BASE_UUID withShortUuidString:BMDEVAL_UUID_BUTTON_CHAR];
     demoLedCharUuid = [CBUUID uuidForBaseUuidString:BMDEVAL_BASE_UUID withShortUuidString:BMDEVAL_UUID_LED_CHAR];
@@ -123,13 +150,27 @@
             [baseDevice.peripheral setNotifyValue:YES forCharacteristic:demoAdcChar];
         } else if([characteristic.UUID isEqual:demoCtrlCharUuid]) {
             demoCtrlChar = characteristic;
-            //[baseDevice.peripheral setNotifyValue:YES forCharacteristic:demoCtrlChar];
+            [baseDevice.peripheral setNotifyValue:YES forCharacteristic:demoCtrlChar];
         } else if([characteristic.UUID isEqual:demoAccelCharUuid]) {
             _isAccelAvailable = YES;
             demoAccelChar = characteristic;
             [baseDevice.peripheral setNotifyValue:YES forCharacteristic:demoAccelChar];
         }
     }
+    for (CBCharacteristic *characteristic in blinkyService.characteristics) {
+        if([characteristic.UUID isEqual:blinkyCtrlCharUuid]) {
+            blinkyCtrlChar = characteristic;
+            [baseDevice.peripheral setNotifyValue:YES forCharacteristic:blinkyCtrlChar];
+        }
+    }
+    for (CBCharacteristic *characteristic in bmdwareService.characteristics) {
+        if([characteristic.UUID isEqual:bmdwareCtrlCharUuid]) {
+            bmdwareCtrlChar = characteristic;
+            [baseDevice.peripheral setNotifyValue:YES forCharacteristic:bmdwareCtrlChar];
+        }
+    }
+    
+
 }
 
 - (void)populateDisServiceCharacteristics
@@ -175,28 +216,57 @@
     return color;
 }
 
+- (void)determineDeviceHardwareVersion {
+    uint8_t cmd = EVAL_CMD_HARDWARE_VERSION;
+    NSData *data = [NSData dataWithBytes:&cmd length: 1];
+    CBCharacteristic *characteristic;
+    if (demoCtrlChar) {
+        characteristic = demoCtrlChar;
+    } else if (blinkyCtrlChar) {
+        characteristic = blinkyCtrlChar;
+    }
+    if (bmdwareCtrlChar) {
+        uint8_t cmd = 0x60;
+        data = [NSData dataWithBytes:&cmd length: 1];
+        characteristic = bmdwareCtrlChar;
+    }
+    if (characteristic) {
+        [baseDevice.peripheral setNotifyValue:YES forCharacteristic:characteristic];
+        [baseDevice.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+    }
+
+}
+
 - (void)startAmbientLightSensing
 {
-    uint8_t cmd = EVAL_CMD_ADC_STREAM_START;
-    [baseDevice.peripheral writeValue:[NSData dataWithBytes:&cmd length:sizeof cmd] forCharacteristic:demoCtrlChar type:CBCharacteristicWriteWithoutResponse];
+    if (demoCtrlChar) {
+        uint8_t cmd = EVAL_CMD_ADC_STREAM_START;
+        [baseDevice.peripheral writeValue:[NSData dataWithBytes:&cmd length:sizeof cmd] forCharacteristic:demoCtrlChar type:CBCharacteristicWriteWithoutResponse];
+    }
 }
 
 - (void)stopAmbientLightSensing
 {
+    if (demoCtrlChar) {
     uint8_t cmd = EVAL_CMD_ADC_STREAM_STOP;
     [baseDevice.peripheral writeValue:[NSData dataWithBytes:&cmd length:sizeof cmd] forCharacteristic:demoCtrlChar type:CBCharacteristicWriteWithoutResponse];
+    }
 }
 
 - (void)startAccelerometer
 {
-    uint8_t cmd = EVAL_CMD_ACCEL_STREAM_START;
+    if (demoCtrlChar) {
+        uint8_t cmd = EVAL_CMD_ACCEL_STREAM_START;
     [baseDevice.peripheral writeValue:[NSData dataWithBytes:&cmd length:sizeof cmd] forCharacteristic:demoCtrlChar type:CBCharacteristicWriteWithoutResponse];
+    }
 }
 
 - (void)stopAccelerometer
 {
+    if (demoCtrlChar) {
     uint8_t cmd = EVAL_CMD_ACCEL_STREAM_STOP;
     [baseDevice.peripheral writeValue:[NSData dataWithBytes:&cmd length:sizeof cmd] forCharacteristic:demoCtrlChar type:CBCharacteristicWriteWithoutResponse];
+    }
 }
 
 #pragma mark -
@@ -208,18 +278,19 @@
 
 - (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device
 {
-    
 }
 
 - (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device
 {
-    
+    if ((!_is300 && blinkyCtrlChar) || (!_is300 && bmdwareCtrlChar)) {
+        [device.peripheral readValueForCharacteristic:characteristic];
+    }
 }
 
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device
 {
     if (characteristic == demoLedChar) {
-        if (_delegate != nil) {
+        if ([_delegate respondsToSelector:@selector(didUpdateLedColor:)]) {
             RgbColor_t color;
             uint8_t * ledData = (uint8_t*)characteristic.value.bytes;
             color.red = ledData[0];
@@ -228,17 +299,17 @@
             [_delegate didUpdateLedColor:color];
         }
     } else if(characteristic == demoButtonChar) {
-        if (_delegate != nil) {
+        if ([_delegate respondsToSelector:@selector(didUpdateButtonData:)]) {
             uint8_t button_state = ((uint8_t*)characteristic.value.bytes)[0];
             [_delegate didUpdateButtonData:button_state];
         }
     } else if(characteristic == demoAdcChar) {
-        if (_delegate != nil) {
+        if ([_delegate respondsToSelector:@selector(didUpdateAdcData:)]) {
             uint8_t ambient = ((uint8_t*)characteristic.value.bytes)[0];
             [_delegate didUpdateAdcData:ambient];
         }
     } else if(characteristic == demoAccelChar) {
-        if (_delegate != nil) {
+        if ([_delegate respondsToSelector:@selector(didUpdateAccelData:)]) {
             AccelData_t accelData;
             uint8_t * data = (uint8_t*)characteristic.value.bytes;
             accelData.x = data[0];
@@ -246,6 +317,44 @@
             accelData.z = data[2];
             [_delegate didUpdateAccelData:accelData];
         }
+    } else if (characteristic == demoCtrlChar || characteristic == blinkyCtrlChar) {
+        uint8_t * data = (uint8_t*)characteristic.value.bytes;
+        // check the 9th value of the data,
+        // this is the hardware version number, if it equals 2, then it's a 300
+        // is this check enough? would there be a time where the 9th number is 2 just by chance?
+        // 1 in 16
+        if (data[9] == 02) {
+            self.is300 = YES;
+            self.is200 = NO;
+        } else {
+            self.is300 = NO;
+            self.is200 = YES;
+        }
+        if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
+            [_delegate didDiscoverHardwareVersion];
+        }
+        NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);
+        [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
+    } else if (characteristic == bmdwareCtrlChar) {
+        uint8_t * data = (uint8_t*)characteristic.value.bytes;
+        // check the 9th value of the data,
+        // this is the hardware version number, if it equals 2, then it's a 300
+        // is this check enough? would there be a time where the 9th number is 2 just by chance?
+        // 1 in 16
+        if (data[10] == 02) {
+            self.is300 = YES;
+            self.is200 = NO;
+        } else {
+            self.is300 = NO;
+            self.is200 = YES;
+        }
+        if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
+            [_delegate didDiscoverHardwareVersion];
+        }
+        NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);
+        [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
     }
+    
 }
+
 @end

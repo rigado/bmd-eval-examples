@@ -43,6 +43,11 @@ static NSTimer *connectionTimeoutTimer = nil;
     
 }
 
+- (BOOL)isCentralManagerReady
+{
+    return isCentralManagerReady;
+}
+
 - (NSArray*)getConnectedPeripheralsWithServices:(NSArray*)serviceList
 {
     return [manager retrieveConnectedPeripheralsWithServices:serviceList];
@@ -51,7 +56,7 @@ static NSTimer *connectionTimeoutTimer = nil;
 - (void)initCentralManagerWithDelegate:(id<CBCentralManagerDelegate>)centralDelegate
 {
     if (manager == nil) {
-        manager = [[CBCentralManager alloc] initWithDelegate:centralDelegate queue:kBgQueue]; //TODO: Add background queue
+        manager = [[CBCentralManager alloc] initWithDelegate:centralDelegate queue:kBgQueue];
     }
     
     if (!manager) {
@@ -68,6 +73,8 @@ static NSTimer *connectionTimeoutTimer = nil;
     NSLog(@"CBI Start Discovery");
     if (!isCentralManagerReady) {
         NSLog(@"startDiscovery was called but central manager was not in the ready state!");
+        //TODO: Wait until message is received that manager is ready and then start discovery
+        //TODO: Discovery manager should really handle this and add a callback to discovery observer
         return; //TODO: Throw error to someone...
     }
     
@@ -104,9 +111,16 @@ static NSTimer *connectionTimeoutTimer = nil;
 #pragma mark - Connection related methods
 - (void)connectPeripheral:(CBPeripheral *)peripheral timeout:(NSNumber*)timeout
 {
-    [manager connectPeripheral:peripheral options:nil];
-    if (timeout) {
-        connectionTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:timeout.floatValue target:self selector:@selector(connectionTimeoutTimerDidFire:) userInfo:peripheral repeats:NO];
+    void (^scheduleTimeout)(void) = ^void(void) {
+        [manager connectPeripheral:peripheral options:nil];
+        if (timeout) {
+            connectionTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:timeout.doubleValue target:self selector:@selector(connectionTimeoutTimerDidFire:) userInfo:peripheral repeats:NO];
+        }
+    };
+    if (![NSThread isMainThread]) {
+        dispatch_sync(dispatch_get_main_queue(), scheduleTimeout);
+    } else {
+        scheduleTimeout();
     }
 }
 
@@ -135,7 +149,14 @@ static NSTimer *connectionTimeoutTimer = nil;
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    [connectionTimeoutTimer invalidate];
+    void (^disable_timer)(void) = ^void(void) {
+        [connectionTimeoutTimer invalidate];
+    };
+    if (![NSThread isMainThread]) {
+        dispatch_sync(dispatch_get_main_queue(), disable_timer);
+    } else {
+        disable_timer();
+    }
     if (_connectionObserver != nil) {
         [_connectionObserver didConnectDevice:peripheral];
     }
@@ -161,10 +182,15 @@ static NSTimer *connectionTimeoutTimer = nil;
     switch (central.state) {
         case CBCentralManagerStatePoweredOff:
             isCentralManagerReady = NO;
-            //Notify delegate
+            if (_discoveryObserver != nil) {
+                [_discoveryObserver btPoweredOff];
+            }
             break;
         case CBCentralManagerStatePoweredOn:
             isCentralManagerReady = YES;
+            if (_discoveryObserver != nil) {
+                [_discoveryObserver btReady];
+            }
             break;
         case CBCentralManagerStateResetting:
             isCentralManagerReady = NO;

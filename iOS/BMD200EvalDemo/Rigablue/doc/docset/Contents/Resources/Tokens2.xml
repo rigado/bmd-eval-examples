@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigCoreBluetoothInterface.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigCoreBluetoothInterface</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+            
+			
+			<NodeRef refid="2"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/setDiscoveryObserver:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigCoreBluetoothDiscoveryObserver&gt; discoveryObserver</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryObserver</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/discoveryObserver</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigCoreBluetoothDiscoveryObserver&gt; discoveryObserver</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryObserver</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigCoreBluetoothInterface/discoveryObserver</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigCoreBluetoothDiscoveryObserver&gt; discoveryObserver</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryObserver</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/setConnectionObserver:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigCoreBluetoothConnectionObserver&gt; connectionObserver</Declaration>
+			
+			
+			<Anchor>//api/name/connectionObserver</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/connectionObserver</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigCoreBluetoothConnectionObserver&gt; connectionObserver</Declaration>
+			
+			
+			<Anchor>//api/name/connectionObserver</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigCoreBluetoothInterface/connectionObserver</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigCoreBluetoothConnectionObserver&gt; connectionObserver</Declaration>
+			
+			
+			<Anchor>//api/name/connectionObserver</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/RigCoreBluetoothInterface/sharedInstance</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>+ (id)sharedInstance</Declaration>
+			
+			
+			<Anchor>//api/name/sharedInstance</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/startUpCentralManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (void)startUpCentralManager</Declaration>
+			
+			
+			<Anchor>//api/name/startUpCentralManager</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/isCentralManagerReady</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isCentralManagerReady</Declaration>
+			
+			
+			<Anchor>//api/name/isCentralManagerReady</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/startDiscovery:timeout:allowDuplicates:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (void)startDiscovery:(NSArray *)uuidList timeout:(NSNumber *)timeout allowDuplicates:(BOOL)duplicates</Declaration>
+			
+			
+			<Anchor>//api/name/startDiscovery:timeout:allowDuplicates:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/getConnectedPeripheralsWithServices:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getConnectedPeripheralsWithServices:(NSArray *)serviceList</Declaration>
+			
+			
+			<Anchor>//api/name/getConnectedPeripheralsWithServices:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/stopDiscovery</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (void)stopDiscovery</Declaration>
+			
+			
+			<Anchor>//api/name/stopDiscovery</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/connectPeripheral:timeout:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (void)connectPeripheral:(CBPeripheral *)peripheral timeout:(NSNumber *)timeout</Declaration>
+			
+			
+			<Anchor>//api/name/connectPeripheral:timeout:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigCoreBluetoothInterface/disconnectPeripheral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothInterface.h</DeclaredIn>
+			
+			<Declaration>- (void)disconnectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/disconnectPeripheral:</Anchor>
+            <NodeRef refid="2"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

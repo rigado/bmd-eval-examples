@@ -3,7 +3,7 @@
 *.dep
 JLink*
 *.bak
-*.bin
+
 *.hex
 /pca10028/s110/arm5/_build/
 /pca10028/s130/arm5/_build/

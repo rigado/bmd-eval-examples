@@ -22,23 +22,27 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 {
     NSMutableArray *discoveredDevices;
     NSLock *discoveredDevicesLock;
+    BOOL btIsReady;
+    RigDeviceRequest *delayedRequest;
 }
 @end
 
 @implementation RigLeDiscoveryManager
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
         discoveredDevices = [[NSMutableArray alloc] init];
         discoveredDevicesLock = [[NSLock alloc] init];
         _isDiscoveryRunning = NO;
+        btIsReady = NO;
+        delayedRequest = nil;
     }
     return self;
 }
 
-+ (id)sharedInstance
++ (instancetype)sharedInstance
 {
     if (instance == nil) {
         instance = [[RigLeDiscoveryManager alloc] init];
@@ -49,6 +53,8 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 
 - (void)startLeInterface
 {
+    RigCoreBluetoothInterface *rcb = [RigCoreBluetoothInterface sharedInstance];
+    rcb.discoveryObserver = self;
     [[RigCoreBluetoothInterface sharedInstance] startUpCentralManager];
 }
 
@@ -58,7 +64,21 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     if (request == nil) {
         return;
     }
+
+    if (!btIsReady) {
+        //
+        NSLog(@"Central manager not yet ready, delaying request until it is ready");
+        delayedRequest = request;
+        return;
+    }
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startDiscovery:request];
+    });
+}
+
+- (void)startDiscovery:(RigDeviceRequest*)request
+{
     [discoveredDevicesLock lock];
     [discoveredDevices removeAllObjects];
     [discoveredDevicesLock unlock];
@@ -73,6 +93,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     _isDiscoveryRunning = YES;
     
     [cbi startDiscovery:request.uuidList timeout:timeoutObj allowDuplicates:request.allowDuplicates];
+
 }
 
 - (void)findConnectedDevices:(RigDeviceRequest*)request
@@ -124,12 +145,8 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 - (void)didDiscoverDevice:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi
 {
     BOOL found = NO;
-    if (rssi.intValue >= 0) {
-        /* Sometimes an invalid RSSI is provided by the OS.  Connecting to devices reported in this state will generally result in an unknown connection error. */
-        return;
-    }
     
-    RigAvailableDeviceData *availableDevice = [[RigAvailableDeviceData alloc] initWithPeripheral:peripheral advertisementData:advData rssi:rssi discoverTime:[NSDate date]];
+    RigAvailableDeviceData *availableDevice = nil;
     
     /* If we already have this peripheral in the list, don't show it or notify anyone we saw it again */
     [discoveredDevicesLock lock];
@@ -139,16 +156,22 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
             found = YES;
             device.advertisementData = advData;
             device.rssi = rssi;
-            device.discoverTime = availableDevice.discoverTime;
-            [delegate didUpdateDeviceData:device deviceIndex:[discoveredDevices indexOfObject:device]];
+            device.lastSeenTime = [NSDate date];
+            if ([delegate respondsToSelector:@selector(didUpdateDeviceData:deviceIndex:)]) {
+                [delegate didUpdateDeviceData:device deviceIndex:[discoveredDevices indexOfObject:device]];
+            }
+
+            availableDevice = device;
             break;
         }
     }
     
     if (!found) {
+        availableDevice = [[RigAvailableDeviceData alloc] initWithPeripheral:peripheral advertisementData:advData rssi:rssi discoverTime:[NSDate date]];
         [discoveredDevices addObject:availableDevice];
         [discoveredDevicesLock unlock];
     }
+    
     [delegate didDiscoverDevice:availableDevice];
 }
 
@@ -160,6 +183,18 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 
 - (void)btPoweredOff
 {
+    btIsReady = NO;
     [delegate bluetoothNotPowered];
+}
+
+- (void)btReady
+{
+    btIsReady = YES;
+    if (delayedRequest != nil) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self startDiscovery:delayedRequest];
+        });
+        delayedRequest = nil;
+    }
 }
 @end

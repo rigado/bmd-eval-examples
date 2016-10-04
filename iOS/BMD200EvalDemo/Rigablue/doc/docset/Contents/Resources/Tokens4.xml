@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigFirmwareUpdateManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigFirmwareUpdateManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="4"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">This delegate does not have to be set but if it is, then progress updates will be reported to the App.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/delegate</TokenIdentifier>
+			<Abstract type="html">This delegate does not have to be set but if it is, then progress updates will be reported to the App.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateManager/delegate</TokenIdentifier>
+			<Abstract type="html">This delegate does not have to be set but if it is, then progress updates will be reported to the App.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/init</TokenIdentifier>
+			<Abstract type="html">Initializes a new instance of RigFirmwareUpdateManager.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			<ReturnValue><Abstract type="html">A firmware update manager instance</Abstract></ReturnValue>
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/updateFirmware:image:activateChar:activateCommand:activateCommandLen:</TokenIdentifier>
+			<Abstract type="html">Begins a firmware update for the given device.  If a device is not currently running the bootloader, a command to enter
+the bootloader must be provided.  If it is already in the bootloader, then the command may be nil and the command len 0.
+Additionally, the calling code must provide a characteristic on the device to which the command will be sent.  Again, if
+already in the bootloader, this characteristic parameter may be nil.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)device image:(NSData *)firmwareImage activateChar:(CBCharacteristic *)characteristic activateCommand:(uint8_t *)command activateCommandLen:(uint8_t)commandLen</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device for which to perform the firmware update</Abstract>
+				</Parameter><Parameter>
+					<Name>firmwareImage</Name>
+					<Abstract type="html">The firmware image to send to the device</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The command characteristic</Abstract>
+				</Parameter><Parameter>
+					<Name>command</Name>
+					<Abstract type="html">The command to send to the device to activate the bootloader</Abstract>
+				</Parameter><Parameter>
+					<Name>commandLen</Name>
+					<Abstract type="html">The length of the bootloader activation command</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">YES if successful, NO otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/updateFirmware:image:activateChar:activateCommand:activateCommandLen:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/performUpdate:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/performUpdate:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

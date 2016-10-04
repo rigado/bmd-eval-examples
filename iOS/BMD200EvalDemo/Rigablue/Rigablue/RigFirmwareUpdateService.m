@@ -16,19 +16,21 @@
 
 #define SECURE_DFU_MODEL_NUMBER @"Rigado Secure DFU"
 
-NSString *kupdateDFUServiceUuidString = @"00001530-1212-efde-1523-785feabcd123";
-NSString *kupdateDFUControlPointUuidString = @"00001531-1212-efde-1523-785feabcd123";
-NSString *kupdateDFUPacketCharUuidString = @"00001532-1212-efde-1523-785feabcd123";
 NSString *kupdateDFUReportCharUuidString = @"00001533-1212-efde-1523-785feabcd123";
+
+// 200 Eval Board UUIDs named EvalDemo
+NSString *kupdateDFUServiceUuidString200 = @"00001530-1212-efde-1523-785feabcd123";
+NSString *kupdateDFUControlPointUuidString200 = @"00001531-1212-efde-1523-785feabcd123";
+NSString *kupdateDFUPacketCharUuidString200 = @"00001532-1212-efde-1523-785feabcd123";
+
+// 300 Eval Board UUIDs named RB-Demo
+NSString *kupdateDFUServiceUuidString300 = @"41c89030-1756-4c30-93cc-a8fcc2fb0202";
+NSString *kupdateDFUControlPointUuidString300 = @"41c89032-1756-4c30-93cc-a8fcc2fb0202";
+NSString *kupdateDFUPacketCharUuidString300 = @"41c89031-1756-4c30-93cc-a8fcc2fb0202";
 
 NSString *kDisUuidString = @"180A";
 NSString *kDisFirmwareVersionUuidString = @"2a26";
 NSString *kDisModelNumberUuidString = @"2a24";
-
-//NSString *kupdateDFUServiceUuidString = @"00001530-eb68-4181-a6df-42562b7fef98";
-//NSString *kupdateDFUControlPointUuidString = @"00001531-eb68-4181-a6df-42562b7fef98";
-//NSString *kupdateDFUPacketCharUuidString = @"00001532-eb68-4181-a6df-42562b7fef98";
-//NSString *kupdateDFUReportCharUuidString = @"00001533-eb68-4181-a6df-42562b7fef98";
 
 @interface RigFirmwareUpdateService() <RigLeBaseDeviceDelegate, RigLeConnectionManagerDelegate, RigLeDiscoveryManagerDelegate>
 
@@ -67,11 +69,15 @@ NSString *kDisModelNumberUuidString = @"2a24";
     id<RigLeConnectionManagerDelegate> oldDelegate;
     
     BOOL                isSecureDfu;
+    BOOL                isConnected;
 }
 
 @synthesize delegate;
 @synthesize shouldReconnectToPeripheral;
 @synthesize alwaysReconnectOnDisconnect;
+@synthesize updateDFUServiceUuidString;
+
+
 
 - (id)init
 {
@@ -79,10 +85,6 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (self) {
         oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
         [RigLeConnectionManager sharedInstance].delegate = self;
-        updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-        updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString];
-        updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString];
-        updateDFUReportCharUuid = [CBUUID UUIDWithString:kupdateDFUReportCharUuidString];
         
         disUuid = [CBUUID UUIDWithString:kDisUuidString];
         disFirmwareVersionUuid = [CBUUID UUIDWithString:kDisFirmwareVersionUuidString];
@@ -121,7 +123,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     shouldReconnectToPeripheral = YES;
     reconnectAttempts = 0;
     [[RigLeConnectionManager sharedInstance] disconnectDevice:updateDevice];
-
+    
     return DfuError_None;
 }
 
@@ -130,10 +132,15 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (baseDevice == nil) {
         return DfuError_BadDevice;
     }
+    updateDFUReportCharUuid = [CBUUID UUIDWithString:kupdateDFUReportCharUuidString];
     
     updateDevice = baseDevice;
     updatePeripheral = updateDevice.peripheral;
     updateDevice.delegate = self;
+    
+    if (updateDevice.peripheral.state == CBPeripheralStateConnected) {
+        isConnected = YES;
+    }
     
     availDevice = [[RigAvailableDeviceData alloc] initWithPeripheral:baseDevice.peripheral advertisementData:NULL rssi:NULL discoverTime:NULL];
     
@@ -146,7 +153,18 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 - (void)assignServicesAndCharacteristics
 {
-    for (CBService *service in [updateDevice getSerivceList]) {
+    if ([updateDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString300]]) {
+        updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
+        updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString300];
+        updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString300];
+        updateDFUServiceUuidString = kupdateDFUServiceUuidString300;
+    } else if ([updateDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString200]]) {
+        updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
+        updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString200];
+        updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString200];
+        updateDFUServiceUuidString = kupdateDFUServiceUuidString200;
+    }
+    for (CBService *service in [updateDevice getServiceList]) {
         if ([[service UUID] isEqual:updateDFUServiceUuid]) {
             updateDFUService = service;
         } else if([service.UUID isEqual:disUuid]) {
@@ -161,6 +179,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (disService) {
         [self updateDisChacteristics:disService.characteristics];
     }
+    
 }
 
 - (RigDfuError_t)triggerServiceDiscovery
@@ -236,19 +255,20 @@ NSString *kDisModelNumberUuidString = @"2a24";
         char * val = (char*)disModelNumberChacteristic.value.bytes;
         NSString *modelNumberString = [NSString stringWithUTF8String:val];
         if ([modelNumberString isEqualToString:SECURE_DFU_MODEL_NUMBER]) {
+            NSLog(@"Secure DFU detected");
             isSecureDfu = YES;
         }
     }
 }
 
-- (NSArray*)getCharacteristicUuids
-{
-    NSArray *characteristicUuids = [NSArray arrayWithObjects:updateDFUServiceUuid,
-                                    updateDFUPacketCharUuid,
-                                    updateDFUReportCharUuid, nil];
-    
-    return characteristicUuids;
-}
+//- (NSArray*)getCharacteristicUuids
+//{
+//    NSArray *characteristicUuids = [NSArray arrayWithObjects:updateDFUServiceUuid,
+//                                    updateDFUPacketCharUuid,
+//                                    updateDFUReportCharUuid, nil];
+//
+//    return characteristicUuids;
+//}
 
 - (NSArray*)getCharacteristicArray
 {
@@ -397,18 +417,31 @@ NSString *kDisModelNumberUuidString = @"2a24";
         NSLog(@"Connected!  Starting Discovery...");
         updateDevice = device;
         updateDevice.delegate = self;
+        isConnected = YES;
         [updateDevice runDiscovery];
     }
 }
 
 - (void)didDisconnectPeripheral:(CBPeripheral *)peripheral
 {
+    if (!isConnected) {
+        NSLog(@"Warning: Received disconnect but was not recently connected.");
+        return;
+    }
+    
+    // This method is fired when RigDFU is disconnected, and when the Device is disconnected
+    // When it's the Device, we do nothing because that's expected to happen
+    
     NSLog(@"Disconnected!");
     if (peripheral == updateDevice.peripheral) {
+        isConnected = NO;
         [updateDFUCharArray removeAllObjects];
         if (shouldReconnectToPeripheral || alwaysReconnectOnDisconnect) {
             NSLog(@"Reconnecting...");
-            if (reconnectAttempts == 10) {
+            reconnectAttempts++;
+            if (reconnectAttempts == 5) {
+                // If after 5 tries to reconnect we can not, we stop trying.
+                // This allows the delegate call "didFailToConnectToBootloader" to be called.
                 shouldReconnectToPeripheral = NO;
             }
             [NSThread sleepForTimeInterval:.3];
@@ -425,7 +458,23 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 - (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device
 {
-    //TODO: Retry???
+    NSLog(@"Connection Timeout!");
+    if (device.peripheral == updateDevice.peripheral) {
+        [updateDFUCharArray removeAllObjects];
+        if (shouldReconnectToPeripheral || alwaysReconnectOnDisconnect) {
+            NSLog(@"Reconnecting...");
+            reconnectAttempts++;
+            if (reconnectAttempts == 5) {
+                shouldReconnectToPeripheral = NO;
+                alwaysReconnectOnDisconnect = NO;
+            }
+            [NSThread sleepForTimeInterval:.3];
+            availDevice = [[RigAvailableDeviceData alloc] initWithPeripheral:device.peripheral advertisementData:NULL rssi:NULL discoverTime:NULL];
+            [[RigLeConnectionManager sharedInstance] connectDevice:availDevice connectionTimeout:5.0f];
+        } else {
+            [delegate didFailToConnectToBootloader];
+        }
+    }
 }
 
 #pragma mark
@@ -435,9 +484,9 @@ NSString *kDisModelNumberUuidString = @"2a24";
     NSLog(@"Discovery complete!");
     updateDevice = device;
     [self assignServicesAndCharacteristics];
-
+    
     NSLog(@"Starting update!");
-    [delegate didDiscoverCharacteristicsForDFUSerivce];
+    [delegate didDiscoverCharacteristicsForDFUService];
 }
 
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device
@@ -462,4 +511,5 @@ NSString *kDisModelNumberUuidString = @"2a24";
         [delegate didWriteValueForControlPoint];
     }
 }
+
 @end

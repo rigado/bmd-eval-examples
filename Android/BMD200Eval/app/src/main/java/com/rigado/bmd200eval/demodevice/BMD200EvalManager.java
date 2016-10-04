@@ -3,6 +3,7 @@ package com.rigado.bmd200eval.demodevice;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
+import android.util.Log;
 
 import com.rigado.rigablue.IRigLeBaseDeviceObserver;
 import com.rigado.rigablue.IRigLeConnectionManagerObserver;
@@ -16,6 +17,8 @@ import com.rigado.rigablue.RigLeDiscoveryManager;
  * Created by stutzenbergere on 7/23/15.
  */
 public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnectionManagerObserver, IRigLeDiscoveryManagerObserver {
+    private static final String TAG = "BMD200Eval";
+
     BMD200EvalDemoDevice demoDevice;
     boolean is_connected;
     BMD200EvalManagerObserver observer;
@@ -50,7 +53,6 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
 
         };
 
-        RigLeConnectionManager.setContext(mContext);
         final RigLeConnectionManager rigLeConnectionManager = RigLeConnectionManager.getInstance();
         rigLeConnectionManager.setObserver(this);
 
@@ -128,11 +130,12 @@ public class BMD200EvalManager implements IRigLeBaseDeviceObserver, IRigLeConnec
 
     @Override
     public void didDiscoverDevice(RigAvailableDeviceData device) {
-        if(device.getRssi() > -60) {
+        int rssi = device.getRssi();
+        if(rssi > -60) {
             RigLeDiscoveryManager.getInstance().stopDiscoveringDevices();
             RigLeConnectionManager.getInstance().connectDevice(device, 10000);
         } else {
-            //TODO: Output to log??
+            Log.d(TAG, "Skipping connection. RSSI: " + rssi);
         }
     }
 

@@ -29,12 +29,12 @@
 
 #define BMDWARE_RESET_SERVICE   @"2413B33F-707F-90BD-2045-2AB8807571B7"
 #define BMDWARE_RESET_CHAR      @"2413B43F-707F-90BD-2045-2AB8807571B7"
-//0xE7D6FCA1
+
 static uint8_t bootloader_command[] = { 0xa1, 0xfc, 0xd6, 0xe7 };
 static uint8_t blinky_boot_command[] = { 0x98, 0xb6, 0x2f, 0x51 };
 static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
-@interface UpdateViewController () <UIPickerViewDataSource, UIPickerViewDelegate, RigFirmwareUpdateManagerDelegate, BMD200EvalDemoTabBarDelegate>
+@interface UpdateViewController () <UIPickerViewDataSource, UIPickerViewDelegate, RigFirmwareUpdateManagerDelegate, BMD200EvalDemoTabBarDelegate, BMD200EvalDemoDeviceDelegate>
 {
     RigFirmwareUpdateManager *updateManager;
     RigLeBaseDevice *updateDevice;
@@ -60,12 +60,15 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
     /* TODO: Firmware list will be displayed to the user.  Provide a useful string for the name of the binary. */
-    firmwareList = [NSArray arrayWithObjects:@"BMD Eval Demo", @"BMD Eval Blinky Demo", @"BMDWare Eval Release", nil];
+    firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", nil];
     /* TODO: Create an array listing that matches the name of the firmware image added to the project.  The file must be of type .bin
      * Note: DO NOT add the file extention (e.g. bin) as it will be handled later
      */
-    firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmdware_eval_rel_2_0_5_ota", nil];
+    firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", nil];
+
+    
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -90,8 +93,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     if (![tbc isSearching] && ![tbc isConnected]) {
         [tbc searchForDevice];
     }
-    
-    //[_deploymentPicker reloadAllComponents];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -114,18 +115,18 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     }
 }
 
--(UIStatusBarStyle)preferredStatusBarStyle{
+- (UIStatusBarStyle)preferredStatusBarStyle{
     return UIStatusBarStyleLightContent;
 }
 
--(void)appWillResignActive:(NSNotification*)note
+- (void)appWillResignActive:(NSNotification*)note
 {
     isUpdateInProgress = NO;
     self.tabBarController.tabBar.userInteractionEnabled = YES;
     [RigLeConnectionManager sharedInstance].delegate = connectionManagerDelegate;
 }
 
--(void)appWillTerminate:(NSNotification*)note
+- (void)appWillTerminate:(NSNotification*)note
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillTerminateNotification object:nil];
@@ -134,6 +135,11 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 - (void)configureDevice
 {
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    demoDevice = [tbc getDevice];
+    updateDevice = [demoDevice getBaseDevice];
+    demoDevice.delegate = self;
+    [demoDevice determineDeviceHardwareVersion];
+
     if ([tbc isConnectedToBlinkyDemo]) {
         isBlinkyDemo = YES;
         UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Blinky Connected" message:@"The Blinky demo is currently programmed.  Would you like to revert to the main demo firmware?" preferredStyle:UIAlertControllerStyleAlert];
@@ -149,7 +155,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         [self presentViewController:ac animated:NO completion:nil];
     } else if([tbc isConnectedToBmdWare]) {
         isBmdWare = YES;
-        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"BMDWare Installed" message:@"BMDWare is installed to this evaulation board.  If you would like to use its features, download the Rigado Toolbox app from the app store.  Would you like to program the Evaluation demo firmware?" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"BMDWare Installed" message:@"BMDWare is installed to this evaluation board.  If you would like to use its features, download the Rigado Toolbox app from the app store.  Would you like to program the Evaluation demo firmware?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *aaYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             [_deploymentPicker selectRow:0 inComponent:0 animated:YES];
             [self didTouchBeginUpdate:nil];
@@ -160,11 +166,20 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         [ac addAction:aaYes];
         [ac addAction:aaNo];
         [self presentViewController:ac animated:NO completion:nil];
-
-    } else {
-        demoDevice = [tbc getDevice];
-        updateDevice = [demoDevice getBaseDevice];
     }
+    //[self configureDeploymentPicker];
+}
+
+- (void)configureDeploymentPicker {
+    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    if ([tbc isConnectedTo200]) {
+        firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", nil];
+        firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", nil];
+    } else if ([tbc isConnectedTo300]) {
+        firmwareList = [NSArray arrayWithObjects:@"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", nil];
+        firmwareBinaryList = [NSArray arrayWithObjects:@"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", nil];
+    }
+    [self.deploymentPicker reloadAllComponents];
 }
 
 - (IBAction)didTouchBeginUpdate:(id)sender
@@ -184,10 +199,11 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     
     NSUInteger row = [_deploymentPicker selectedRowInComponent:0];
     NSString *firmwareFile = [firmwareBinaryList objectAtIndex:row];
-    
+
     /* Load firmware image in to local memory */
     filePath = [[NSBundle mainBundle] pathForResource:firmwareFile ofType:@"bin"];
     firmwareImageData = [NSData dataWithContentsOfFile:filePath];
+    NSLog(@"%@", firmwareFile);
     
     updateManager = [[RigFirmwareUpdateManager alloc] init];
     updateManager.delegate = self;
@@ -195,7 +211,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     if (isAlreadyBootloader) {
         /* This path is for when only the bootloader is present on the device. */
         /* Invoke bootloader here with pointer to binary image of firmware. */
-        [updateManager updateFirmware:updateDevice Image:firmwareImageData ImageSize:(uint32_t)firmwareImageData.length activateChar:nil activateCommand:nil activateCommandLen:0];
+        [updateManager updateFirmware:updateDevice image:firmwareImageData activateChar:nil activateCommand:nil activateCommandLen:0];
         isUpdateInProgress = YES;
         return;
     }
@@ -221,7 +237,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         boot_command = bootloader_command;
     }
     
-    for (CBService *svc in [updateDevice getSerivceList]) {
+    for (CBService *svc in [updateDevice getServiceList]) {
         if ([svc.UUID isEqual:serviceUuid]) {
             service = svc;
             break;
@@ -239,7 +255,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     
     if (controlPoint != nil) {
         /* Invoke bootloader here with pointer to binary image of firmware. */
-        [updateManager updateFirmware:updateDevice Image:firmwareImageData ImageSize:(uint32_t)firmwareImageData.length activateChar:controlPoint activateCommand:boot_command activateCommandLen:BOOTLOADER_COMMAND_LEN];
+        [updateManager updateFirmware:updateDevice image:firmwareImageData activateChar:controlPoint activateCommand:boot_command activateCommandLen:BOOTLOADER_COMMAND_LEN];
         isUpdateInProgress = YES;
     } else {
         _updateStatusLabel.text = @"Characteristic for Reset not found!";
@@ -355,4 +371,12 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     if (![NSThread isMainThread]) dispatch_sync(dispatch_get_main_queue(), update);
     else update();
 }
+
+- (void)didDiscoverHardwareVersion {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [self configureDeploymentPicker];
+    });
+}
+
+
 @end

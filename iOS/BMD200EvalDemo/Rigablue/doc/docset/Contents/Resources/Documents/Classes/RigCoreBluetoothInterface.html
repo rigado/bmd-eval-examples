@@ -3,11 +3,11 @@
 <head>
 	<meta charset="utf-8">
 
-	<title></title>
+	<title>RigCoreBluetoothInterface Class Reference</title>
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
-	
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
 </head>
 <body class="appledoc">
 	<header>
@@ -45,7 +45,49 @@
 	
 
 	
+	
+	<option value="tasks">Tasks</option>
+	
+	
 
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/connectionObserver">connectionObserver</option>
+		
+		<option value="//api/name/discoveryObserver">discoveryObserver</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Class Methods">
+		
+		<option value="//api/name/sharedInstance">+ sharedInstance</option>
+		
+	</optgroup>
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/connectPeripheral:timeout:">- connectPeripheral:timeout:</option>
+		
+		<option value="//api/name/disconnectPeripheral:">- disconnectPeripheral:</option>
+		
+		<option value="//api/name/getConnectedPeripheralsWithServices:">- getConnectedPeripheralsWithServices:</option>
+		
+		<option value="//api/name/isCentralManagerReady">- isCentralManagerReady</option>
+		
+		<option value="//api/name/startDiscovery:timeout:allowDuplicates:">- startDiscovery:timeout:allowDuplicates:</option>
+		
+		<option value="//api/name/startUpCentralManager">- startUpCentralManager</option>
+		
+		<option value="//api/name/stopDiscovery">- stopDiscovery</option>
+		
+	</optgroup>
+	
 	
 </select>
 						</label>
@@ -59,22 +101,214 @@
 		<div id="overview_contents" class="container">
 			<div id="content">
 				<main role="main">
-					<h1 class="title"></h1>
+					<h1 class="title">RigCoreBluetoothInterface Class Reference</h1>
 
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Conforms to</th>
+	<td>CBCentralManagerDelegate</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RigCoreBluetoothInterface.h</td>
+</tr>
+						</tbody></table></div>
 					
 
                     
 
 					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/discoveryObserver" title="discoveryObserver"></a>
+	<h3 class="method-title"><code><a href="#//api/name/discoveryObserver">&nbsp;&nbsp;discoveryObserver</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) id&lt;RigCoreBluetoothDiscoveryObserver&gt; discoveryObserver</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectionObserver" title="connectionObserver"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectionObserver">&nbsp;&nbsp;connectionObserver</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) id&lt;RigCoreBluetoothConnectionObserver&gt; connectionObserver</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sharedInstance" title="sharedInstance"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sharedInstance">+&nbsp;sharedInstance</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>+ (id)sharedInstance</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startUpCentralManager" title="startUpCentralManager"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startUpCentralManager">&ndash;&nbsp;startUpCentralManager</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)startUpCentralManager</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isCentralManagerReady" title="isCentralManagerReady"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isCentralManagerReady">&ndash;&nbsp;isCentralManagerReady</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)isCentralManagerReady</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startDiscovery:timeout:allowDuplicates:" title="startDiscovery:timeout:allowDuplicates:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startDiscovery:timeout:allowDuplicates:">&ndash;&nbsp;startDiscovery:timeout:allowDuplicates:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)startDiscovery:(NSArray *)<em>uuidList</em> timeout:(NSNumber *)<em>timeout</em> allowDuplicates:(BOOL)<em>duplicates</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getConnectedPeripheralsWithServices:" title="getConnectedPeripheralsWithServices:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getConnectedPeripheralsWithServices:">&ndash;&nbsp;getConnectedPeripheralsWithServices:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getConnectedPeripheralsWithServices:(NSArray *)<em>serviceList</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/stopDiscovery" title="stopDiscovery"></a>
+	<h3 class="method-title"><code><a href="#//api/name/stopDiscovery">&ndash;&nbsp;stopDiscovery</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)stopDiscovery</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/connectPeripheral:timeout:" title="connectPeripheral:timeout:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/connectPeripheral:timeout:">&ndash;&nbsp;connectPeripheral:timeout:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)connectPeripheral:(CBPeripheral *)<em>peripheral</em> timeout:(NSNumber *)<em>timeout</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/disconnectPeripheral:" title="disconnectPeripheral:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/disconnectPeripheral:">&ndash;&nbsp;disconnectPeripheral:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)disconnectPeripheral:(CBPeripheral *)<em>peripheral</em></code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
 
                     
+                    
+          
 				</main>
 
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-07-07</p>
+						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-09-23</p>
 						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
 						
 					</div>
 				</footer>

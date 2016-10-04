@@ -42,25 +42,13 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getSerivceList</TokenIdentifier>
-			<Abstract type="html">@method getServiceList</Abstract>
-			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
-			
-			<Declaration>- (NSArray *)getSerivceList</Declaration>
-			
-			<ReturnValue><Abstract type="html">List of discovered services.</Abstract></ReturnValue>
-			<Anchor>//api/name/getSerivceList</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getServiceWithUuid:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">@method getServiceList</Abstract>
 			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
 			
 			<Declaration>- (CBService *)getServiceWithUuid:(CBUUID *)uuid</Declaration>
 			
-			
+			<ReturnValue><Abstract type="html">List of discovered services.</Abstract></ReturnValue>
 			<Anchor>//api/name/getServiceWithUuid:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
@@ -74,6 +62,18 @@
 			
 			
 			<Anchor>//api/name/getCharacteristicWithUuid:forService:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getServiceList</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getServiceList</Declaration>
+			
+			
+			<Anchor>//api/name/getServiceList</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		
@@ -266,78 +266,6 @@ Rigablue will forward this callback to the delete with the &lt;code&gt;didUpdate
 			
 			
 			<Anchor>//api/name/delegate</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/runDiscoveryForServices:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
-			
-			<Declaration>- (void)runDiscoveryForServices:(NSArray *)serviceList</Declaration>
-			
-			
-			<Anchor>//api/name/runDiscoveryForServices:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didDiscoverServices:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
-			
-			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error</Declaration>
-			
-			
-			<Anchor>//api/name/peripheral:didDiscoverServices:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didDiscoverCharacteristicsForService:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
-			
-			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error</Declaration>
-			
-			
-			<Anchor>//api/name/peripheral:didDiscoverCharacteristicsForService:error:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didUpdateNotificationStateForCharacteristic:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
-			
-			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
-			
-			
-			<Anchor>//api/name/peripheral:didUpdateNotificationStateForCharacteristic:error:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didWriteValueForCharacteristic:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
-			
-			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
-			
-			
-			<Anchor>//api/name/peripheral:didWriteValueForCharacteristic:error:</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didUpdateValueForCharacteristic:error:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
-			
-			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
-			
-			
-			<Anchor>//api/name/peripheral:didUpdateValueForCharacteristic:error:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		

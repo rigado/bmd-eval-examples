@@ -62,19 +62,13 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     
     
     /* TODO: Firmware list will be displayed to the user.  Provide a useful string for the name of the binary. */
-    firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMDWare200 Eval Release" @"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", @"BMDWare300 Eval Release", nil];
+    firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", nil];
     /* TODO: Create an array listing that matches the name of the firmware image added to the project.  The file must be of type .bin
      * Note: DO NOT add the file extention (e.g. bin) as it will be handled later
      */
-    firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", @"bmd-300-demo-shield-rel_1_0_4_ota", @"bmdware_rel_nrf51_s110_3_1_1_ota", @"bmdware_rel_nrf52_s132_3_1_1_ota", nil];
+    firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", nil];
 
     
-//    /* TODO: Firmware list will be displayed to the user.  Provide a useful string for the name of the binary. */
-//    firmwareList = [NSArray arrayWithObjects:@"BMD Eval Demo", @"BMD Eval Blinky Demo", @"BMDWare Eval Release", nil];
-//    /* TODO: Create an array listing that matches the name of the firmware image added to the project.  The file must be of type .bin
-//     * Note: DO NOT add the file extention (e.g. bin) as it will be handled later
-//     */
-//    firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmdware_eval_rel_2_0_5_ota", nil];
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
@@ -99,8 +93,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     if (![tbc isSearching] && ![tbc isConnected]) {
         [tbc searchForDevice];
     }
-    
-    //[_deploymentPicker reloadAllComponents];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -181,14 +173,13 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 - (void)configureDeploymentPicker {
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     if ([tbc isConnectedTo200]) {
-        firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMDWare200 Eval Release", nil];
-        firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmdware_rel_nrf51_s110_3_1_1_ota", nil];
+        firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", nil];
+        firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", nil];
     } else if ([tbc isConnectedTo300]) {
-        firmwareList = [NSArray arrayWithObjects:@"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", @"BMDWare300 Eval Release", nil];
-        firmwareBinaryList = [NSArray arrayWithObjects:@"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", @"bmdware_rel_nrf52_s132_3_1_1_ota", nil];
+        firmwareList = [NSArray arrayWithObjects:@"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", nil];
+        firmwareBinaryList = [NSArray arrayWithObjects:@"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", nil];
     }
     [self.deploymentPicker reloadAllComponents];
-    
 }
 
 - (IBAction)didTouchBeginUpdate:(id)sender

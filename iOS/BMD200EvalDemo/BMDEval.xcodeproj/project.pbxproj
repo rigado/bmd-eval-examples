@@ -807,7 +807,9 @@
 					"-ObjC",
 					"-all_load",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rigado.BMD200Eval;
 				PRODUCT_NAME = BMDEval;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -839,7 +841,9 @@
 					"-ObjC",
 					"-all_load",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rigado.BMD200Eval;
 				PRODUCT_NAME = BMDEval;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

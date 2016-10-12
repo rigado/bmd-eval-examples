@@ -218,7 +218,6 @@
 
 - (void)determineDeviceHardwareVersion {
     uint8_t cmd = EVAL_CMD_HARDWARE_VERSION;
-    NSData *data = [NSData dataWithBytes:&cmd length: 1];
     CBCharacteristic *characteristic;
     if (demoCtrlChar) {
         characteristic = demoCtrlChar;
@@ -226,10 +225,10 @@
         characteristic = blinkyCtrlChar;
     }
     if (bmdwareCtrlChar) {
-        uint8_t cmd = 0x60;
-        data = [NSData dataWithBytes:&cmd length: 1];
+        cmd = 0x60;
         characteristic = bmdwareCtrlChar;
     }
+    NSData *data = [NSData dataWithBytes:&cmd length: 1];
     if (characteristic) {
         [baseDevice.peripheral setNotifyValue:YES forCharacteristic:characteristic];
         [baseDevice.peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
@@ -344,11 +343,22 @@
         if (data[10] == 02) {
             self.is300 = YES;
             self.is200 = NO;
-        } else {
+            self.isIndeterminatableState = NO;
+        } else if (data[10] == 01) {
             self.is300 = NO;
             self.is200 = YES;
+            self.isIndeterminatableState = NO;
+        } else {
+            NSLog(@"Issue determining device. Must Reset Bluetooth");
+            self.is300 = NO;
+            self.is200 = NO;
+            self.isIndeterminatableState = YES;
+            //unableToDiscoverHardwareVersion
+            if ([_delegate respondsToSelector:@selector(unableToDiscoverHardwareVersion)]) {
+                [_delegate unableToDiscoverHardwareVersion];
+            }
         }
-        if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
+        if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)] && !self.isIndeterminatableState) {
             [_delegate didDiscoverHardwareVersion];
         }
         NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);

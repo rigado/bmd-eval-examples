@@ -17,7 +17,7 @@
 			<Abstract type="html">@method deviceRequestWithUuidList:timeout:delegate:allowDuplicates:</Abstract>
 			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
 			
-			<Declaration>+ (id)deviceRequestWithUuidList:(NSArray *)uuidList timeout:(float)timeout delegate:(id&lt;RigLeDiscoveryManagerDelegate&gt;)delegate allowDuplicates:(BOOL)allowDuplicates</Declaration>
+			<Declaration>+ (instancetype)deviceRequestWithUuidList:(NSArray *)uuidList timeout:(float)timeout delegate:(id&lt;RigLeDiscoveryManagerDelegate&gt;)delegate allowDuplicates:(BOOL)allowDuplicates</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>uuidList</Name>
@@ -27,7 +27,7 @@
 					<Abstract type="html">The length of time for which discovery should run; use 0 to run discovery indefinitely.</Abstract>
 				</Parameter><Parameter>
 					<Name>delegate</Name>
-					<Abstract type="html">The delegate object to be notified by the dicovery manager.</Abstract>
+					<Abstract type="html">The delegate object to be notified by the discovery manager.</Abstract>
 				</Parameter><Parameter>
 					<Name>allowDuplicates</Name>
 					<Abstract type="html">See {@link allowDuplicates} for more information.</Abstract>

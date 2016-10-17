@@ -90,6 +90,7 @@
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     baseDevice = [tbc getDevice];
     baseDevice.delegate = self;
+    [baseDevice determineDeviceHardwareVersion];
     PixelRGB c = [_wheelView currentRGBColor];
     RgbColor_t color = { c.r, c.g, c.b };
     [self setDeviceColor:color];
@@ -122,14 +123,6 @@
     else update();
 }
 
-- (void)didUpdateLedColor:(RgbColor_t)color {}
-
-- (void)didUpdateAccelData:(AccelData_t)accelData {}
-
-- (void)didUpdateAdcData:(uint8_t)adc {}
-
-- (void)didUpdateButtonData:(uint8_t)data {}
-
 - (void)colorWheelDidChangeColor:(ISColorWheel *)colorWheel
 {
     PixelRGB temp = [colorWheel currentRGBColor];
@@ -152,4 +145,25 @@
         [baseDevice setLedColor:off];
     }
 }
+
+#pragma mark -
+#pragma mark - BMD200EvalDemoDeviceDelegate methods
+
+- (void)didUpdateLedColor:(RgbColor_t)color {}
+
+- (void)didUpdateAccelData:(AccelData_t)accelData {}
+
+- (void)didUpdateAdcData:(uint8_t)adc {}
+
+- (void)didUpdateButtonData:(uint8_t)data {}
+
+- (void)unableToDiscoverHardwareVersion {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth", nil)] message:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth Message", nil)] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *OK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [ac addAction:OK];
+        [self presentViewController:ac animated:NO completion:nil];
+    });
+}
+
 @end

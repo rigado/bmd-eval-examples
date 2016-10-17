@@ -14,8 +14,12 @@
 #import <Foundation/Foundation.h>
 #import "Rigablue.h"
 
-#define BMDEVAL_BASE_UUID               @"50db0000-418d-4690-9589-ab7be9e22684"
-#define BMDEVAL_UUID_SERVICE            @"1523"
+#define BMDEVAL_BASE_UUID       @"50db0000-418d-4690-9589-ab7be9e22684"
+#define BMDEVAL_UUID_SERVICE    @"1523"
+#define BLINKY_SERVICE          @"6d580001-fc91-486b-82c4-86a1d2eb8f88"
+#define BLINKY_CHAR             @"6d580002-fc91-486b-82c4-86a1d2eb8f88"
+#define BMDWARE_RESET_SERVICE   @"2413B33F-707F-90BD-2045-2AB8807571B7"
+#define BMDWARE_RESET_CHAR      @"2413B43F-707F-90BD-2045-2AB8807571B7"
 
 /**
  *  Structure defining an RGB color.
@@ -39,7 +43,7 @@ typedef struct AccelData_struct
 
 @protocol BMD200EvalDemoDeviceDelegate <NSObject>
 
-@required
+@optional
 /**
  *  This function is called when the state of either button changes.
  *
@@ -69,12 +73,38 @@ typedef struct AccelData_struct
  */
 - (void)didUpdateAccelData:(AccelData_t)accelData;
 
+/**
+ *  This function is called when the app determines the hardware version.
+ */
+- (void)didDiscoverHardwareVersion;
+
+/**
+ *  This function is called if the app can not determin the hardware version.
+ */
+- (void)unableToDiscoverHardwareVersion;
+
 @end
 
 @interface BMD200EvalDemoDevice : NSObject
 
 - (id)initWithDevice:(RigLeBaseDevice*)device;
 - (RigLeBaseDevice*)getBaseDevice;
+- (void)determineDeviceHardwareVersion;
+
+/**
+*  This property reports if the device is a 200.
+*/
+@property (assign, readonly) BOOL is200;
+
+/**
+ *  This property reports if the device is a 300.
+ */
+@property (assign, readonly) BOOL is300;
+
+/**
+ *  This property reports if the device type can not be determined.
+ */
+@property (assign, readonly) BOOL isIndeterminatableState;
 
 /**
  *  This property reports if the Button is available on the demo firmware.

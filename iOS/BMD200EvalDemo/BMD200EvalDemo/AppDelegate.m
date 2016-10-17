@@ -25,7 +25,10 @@
 
     // Override point for customization after application launch.
     [[RigLeDiscoveryManager sharedInstance] startLeInterface];
+#if DEBUG
+#else
     [Fabric with:@[[Crashlytics class]]];
+#endif
     return YES;
 }
 

@@ -94,17 +94,17 @@ typedef struct AccelData_struct
 /**
 *  This property reports if the device is a 200.
 */
-@property (nonatomic) BOOL is200;
+@property (assign, readonly) BOOL is200;
 
 /**
  *  This property reports if the device is a 300.
  */
-@property (nonatomic) BOOL is300;
+@property (assign, readonly) BOOL is300;
 
 /**
  *  This property reports if the device type can not be determined.
  */
-@property (nonatomic) BOOL isIndeterminatableState;
+@property (assign, readonly) BOOL isIndeterminatableState;
 
 /**
  *  This property reports if the Button is available on the demo firmware.

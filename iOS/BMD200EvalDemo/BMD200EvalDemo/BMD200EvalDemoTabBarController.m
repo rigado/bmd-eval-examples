@@ -73,13 +73,11 @@
 
 - (BOOL)isConnectedTo200
 {
-    NSLog(@"It's a 200? %d", demoDevice.is200);
     return demoDevice.is200;
 }
 
 - (BOOL)isConnectedTo300
 {
-    NSLog(@"It's a 300? %d", demoDevice.is300);
     return demoDevice.is300;
 }
 

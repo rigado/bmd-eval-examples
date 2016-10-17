@@ -159,7 +159,7 @@
 
 - (void)unableToDiscoverHardwareVersion {
     dispatch_sync(dispatch_get_main_queue(), ^{
-        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Reset Bluetooth" message:@"Please reset Bluetooth by turning it off and back on in Settings." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth", nil)] message:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth Message", nil)] preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *OK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [ac addAction:OK];
         [self presentViewController:ac animated:NO completion:nil];

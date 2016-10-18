@@ -90,9 +90,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     [tbc registerListener:self];
-    if (![tbc isSearching] && ![tbc isConnected]) {
-        [tbc searchForDevice];
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -108,10 +105,11 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     [super viewDidAppear:animated];
     
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
-    if ([tbc isSearching]) {
-        [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
-    } else if ([tbc isConnected]) {
+    if ([tbc isConnected]) {
         [self configureDevice];
+    } else if (![tbc isSearching] && ![tbc isConnected]) {
+        [tbc searchForDevice];
+        [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
     }
 }
 

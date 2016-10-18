@@ -45,35 +45,11 @@
     _userButtonTwo.layer.cornerRadius = 5;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
-    [tbc registerListener:self];
-    if ([tbc isConnected]) {
-        [self configureDevice];
-    } else {
-        if (![tbc isSearching]) {
-            [tbc searchForDevice];
-        }
-    }
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self deconfigureDevice];
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -82,8 +58,14 @@
     plotManager = [[AccelPlotManager alloc] initWithFrame:_accelGraphView.bounds];
     [_accelGraphView addSubview:plotManager.hostView];
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
-    if ([tbc isSearching]) {
-        [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+    [tbc registerListener:self];
+    if ([tbc isConnected]) {
+        [self configureDevice];
+    } else {
+        if (![tbc isSearching]) {
+            [tbc searchForDevice];
+            [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+        }
     }
 }
 

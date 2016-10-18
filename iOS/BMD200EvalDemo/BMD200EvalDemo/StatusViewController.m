@@ -97,7 +97,7 @@
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     baseDevice = [tbc getDevice];
     baseDevice.delegate = self;
-    
+    [baseDevice determineDeviceHardwareVersion];
     [baseDevice startAmbientLightSensing];
     [NSThread sleepForTimeInterval:0.3f];
     
@@ -207,4 +207,14 @@
 {
     [plotManager addSample:accelData];
 }
+
+- (void)unableToDiscoverHardwareVersion {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Reset Bluetooth" message:@"Please reset Bluetooth by turning it off and back on in Settings." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *OK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [ac addAction:OK];
+        [self presentViewController:ac animated:NO completion:nil];
+    });
+}
+
 @end

@@ -73,7 +73,15 @@ typedef struct AccelData_struct
  */
 - (void)didUpdateAccelData:(AccelData_t)accelData;
 
+/**
+ *  This function is called when the app determines the hardware version.
+ */
 - (void)didDiscoverHardwareVersion;
+
+/**
+ *  This function is called if the app can not determin the hardware version.
+ */
+- (void)unableToDiscoverHardwareVersion;
 
 @end
 
@@ -92,6 +100,11 @@ typedef struct AccelData_struct
  *  This property reports if the device is a 300.
  */
 @property (nonatomic) BOOL is300;
+
+/**
+ *  This property reports if the device type can not be determined.
+ */
+@property (nonatomic) BOOL isIndeterminatableState;
 
 /**
  *  This property reports if the Button is available on the demo firmware.

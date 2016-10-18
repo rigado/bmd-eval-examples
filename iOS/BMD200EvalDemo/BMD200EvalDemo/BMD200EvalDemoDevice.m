@@ -323,11 +323,11 @@
         // is this check enough? would there be a time where the 9th number is 2 just by chance?
         // 1 in 16
         if (data[9] == 02) {
-            self.is300 = YES;
-            self.is200 = NO;
+            _is300 = YES;
+            _is200 = NO;
         } else {
-            self.is300 = NO;
-            self.is200 = YES;
+            _is300 = NO;
+            _is200 = YES;
         }
         if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
             [_delegate didDiscoverHardwareVersion];
@@ -341,18 +341,18 @@
         // is this check enough? would there be a time where the 9th number is 2 just by chance?
         // 1 in 16
         if (data[10] == 02) {
-            self.is300 = YES;
-            self.is200 = NO;
-            self.isIndeterminatableState = NO;
+            _is300 = YES;
+            _is200 = NO;
+            _isIndeterminatableState = NO;
         } else if (data[10] == 01) {
-            self.is300 = NO;
-            self.is200 = YES;
-            self.isIndeterminatableState = NO;
+            _is300 = NO;
+            _is200 = YES;
+            _isIndeterminatableState = NO;
         } else {
             NSLog(@"Issue determining device. Must Reset Bluetooth");
-            self.is300 = NO;
-            self.is200 = NO;
-            self.isIndeterminatableState = YES;
+            _is300 = NO;
+            _is200 = NO;
+            _isIndeterminatableState = YES;
             //unableToDiscoverHardwareVersion
             if ([_delegate respondsToSelector:@selector(unableToDiscoverHardwareVersion)]) {
                 [_delegate unableToDiscoverHardwareVersion];

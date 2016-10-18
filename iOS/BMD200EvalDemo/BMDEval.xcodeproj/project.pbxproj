@@ -15,6 +15,7 @@
 		4C65CA781D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */; };
 		4C65CA791D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */; };
 		4C65CA7B1D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */; };
+		4C83E6771DB19CE3003D2704 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4C83E6761DB19CE3003D2704 /* Localizable.strings */; };
 		5E028C7D1B580E5F001F9778 /* logo3-white.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E028C7C1B580E5F001F9778 /* logo3-white.png */; };
 		5E028C811B581838001F9778 /* logo3-white-600px.png in Resources */ = {isa = PBXBuildFile; fileRef = 5E028C801B581838001F9778 /* logo3-white-600px.png */; };
 		5E028C841B581958001F9778 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E028C831B581958001F9778 /* AboutViewController.m */; };
@@ -92,6 +93,7 @@
 		4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin; path = Firmware/bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin; sourceTree = "<group>"; };
 		4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "bmd-300-demo-shield-rel_1_0_4_ota.bin"; path = "Firmware/bmd-300-demo-shield-rel_1_0_4_ota.bin"; sourceTree = "<group>"; };
 		4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmdware_rel_nrf52_s132_3_1_1_ota.bin; path = Firmware/bmdware_rel_nrf52_s132_3_1_1_ota.bin; sourceTree = "<group>"; };
+		4C83E6761DB19CE3003D2704 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		5E028C7C1B580E5F001F9778 /* logo3-white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo3-white.png"; path = "Images/logo3-white.png"; sourceTree = "<group>"; };
 		5E028C801B581838001F9778 /* logo3-white-600px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo3-white-600px.png"; path = "Images/logo3-white-600px.png"; sourceTree = "<group>"; };
 		5E028C821B581958001F9778 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
@@ -306,6 +308,7 @@
 				5E3598731B4AEAE500416112 /* Main.storyboard */,
 				5E3598761B4AEAE500416112 /* Images.xcassets */,
 				5E3598781B4AEAE500416112 /* LaunchScreen.xib */,
+				4C83E6761DB19CE3003D2704 /* Localizable.strings */,
 				5E3598661B4AEAE500416112 /* Supporting Files */,
 			);
 			path = BMD200EvalDemo;
@@ -595,6 +598,7 @@
 				5E35987A1B4AEAE500416112 /* LaunchScreen.xib in Resources */,
 				5E25F0031B632432009CB880 /*   IOS Bar Icon 2@3x.png in Resources */,
 				5E25EFF71B63236D009CB880 /*   IOS Bar Icon 4@2x.png in Resources */,
+				4C83E6771DB19CE3003D2704 /* Localizable.strings in Resources */,
 				5E25F0041B632432009CB880 /*  IOS Bar Icon 1@3x.png in Resources */,
 				5E028C811B581838001F9778 /* logo3-white-600px.png in Resources */,
 				5E25EFF81B63236D009CB880 /*   IOS Bar Icon 4@3x.png in Resources */,

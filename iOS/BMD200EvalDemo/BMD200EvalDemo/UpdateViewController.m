@@ -167,9 +167,9 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         [ac addAction:aaNo];
         [self presentViewController:ac animated:NO completion:nil];
     } else if (demoDevice.isIndeterminatableState) {
-        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Reset Bluetooth" message:@"Please reset Bluetooth by turning it off and back on in Settings." preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *aaYes = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-        [ac addAction:aaYes];
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth", nil)] message:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth Message", nil)] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *OK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [ac addAction:OK];
         [self presentViewController:ac animated:NO completion:nil];
     }
 }

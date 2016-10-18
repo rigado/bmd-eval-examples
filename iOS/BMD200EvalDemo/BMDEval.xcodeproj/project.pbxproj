@@ -10,6 +10,8 @@
 		4C37C4C51D89FF99005B685B /* bmd200_blinky_demo_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C37C4C21D89FF99005B685B /* bmd200_blinky_demo_ota.bin */; };
 		4C37C4C61D89FF99005B685B /* bmdware_rel_nrf51_s110_3_1_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C37C4C31D89FF99005B685B /* bmdware_rel_nrf51_s110_3_1_1_ota.bin */; };
 		4C37C4C71D89FF99005B685B /* eval_demo_1_0_0_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C37C4C41D89FF99005B685B /* eval_demo_1_0_0_ota.bin */; };
+		4C5624A61DAC0D2B00A13727 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5624A41DAC0D2B00A13727 /* Fabric.framework */; };
+		4C5624A71DAC0D2B00A13727 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5624A51DAC0D2B00A13727 /* Crashlytics.framework */; };
 		4C65CA781D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */; };
 		4C65CA791D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */; };
 		4C65CA7B1D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin in Resources */ = {isa = PBXBuildFile; fileRef = 4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */; };
@@ -85,6 +87,8 @@
 		4C37C4C21D89FF99005B685B /* bmd200_blinky_demo_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmd200_blinky_demo_ota.bin; path = Firmware/bmd200_blinky_demo_ota.bin; sourceTree = "<group>"; };
 		4C37C4C31D89FF99005B685B /* bmdware_rel_nrf51_s110_3_1_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmdware_rel_nrf51_s110_3_1_1_ota.bin; path = Firmware/bmdware_rel_nrf51_s110_3_1_1_ota.bin; sourceTree = "<group>"; };
 		4C37C4C41D89FF99005B685B /* eval_demo_1_0_0_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = eval_demo_1_0_0_ota.bin; path = Firmware/eval_demo_1_0_0_ota.bin; sourceTree = "<group>"; };
+		4C5624A41DAC0D2B00A13727 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		4C5624A51DAC0D2B00A13727 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		4C65CA741D822EEF00C760BE /* bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin; path = Firmware/bmd_blinky_demo_nrf52_s132_1_0_1_ota.bin; sourceTree = "<group>"; };
 		4C65CA751D822EEF00C760BE /* bmd-300-demo-shield-rel_1_0_4_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = "bmd-300-demo-shield-rel_1_0_4_ota.bin"; path = "Firmware/bmd-300-demo-shield-rel_1_0_4_ota.bin"; sourceTree = "<group>"; };
 		4C65CA771D822EEF00C760BE /* bmdware_rel_nrf52_s132_3_1_1_ota.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = bmdware_rel_nrf52_s132_3_1_1_ota.bin; path = Firmware/bmdware_rel_nrf52_s132_3_1_1_ota.bin; sourceTree = "<group>"; };
@@ -228,8 +232,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EFE6AC81B4F2B47006CAB93 /* CoreGraphics.framework in Frameworks */,
+				4C5624A61DAC0D2B00A13727 /* Fabric.framework in Frameworks */,
 				5EFE6ABF1B4EDF70006CAB93 /* QuartzCore.framework in Frameworks */,
 				5E3598AA1B4B011500416112 /* libRigablue.a in Frameworks */,
+				4C5624A71DAC0D2B00A13727 /* Crashlytics.framework in Frameworks */,
 				5EFE6B191B4F331C006CAB93 /* libCorePlot-CocoaTouch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,6 +259,8 @@
 				5E3598651B4AEAE500416112 /* BMD200EvalDemo */,
 				5E3598821B4AEAE500416112 /* BMD200EvalDemoTests */,
 				5E3598641B4AEAE500416112 /* Products */,
+				4C5624A41DAC0D2B00A13727 /* Fabric.framework */,
+				4C5624A51DAC0D2B00A13727 /* Crashlytics.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -480,6 +488,7 @@
 				5E35985F1B4AEAE400416112 /* Sources */,
 				5E3598601B4AEAE400416112 /* Frameworks */,
 				5E3598611B4AEAE400416112 /* Resources */,
+				4C5624A31DAC0CFD00A13727 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -607,6 +616,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4C5624A31DAC0CFD00A13727 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" != \"Debug\" ]; then\nFABRIC_SECRET=$(cat ${PROJECT_DIR}/fabric_secret.txt)\nif [ -n \"${FABRIC_SECRET}\" ]; then\n${PROJECT_DIR}/Fabric.framework/run 9f68824af9ec4d2fa3070c4d2f1a0b55bdf7dc79 ${FABRIC_SECRET}\nelse\necho \"Error: Missing Fabric Secret in fabric_secret.txt\"\nexit 1\nfi\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		5E35985F1B4AEAE400416112 /* Sources */ = {
@@ -759,7 +784,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = G4HW4JEJP2;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -786,7 +816,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = G4HW4JEJP2;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

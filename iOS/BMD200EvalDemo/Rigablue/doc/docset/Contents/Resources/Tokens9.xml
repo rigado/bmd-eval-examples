@@ -55,7 +55,7 @@
 			<Abstract type="html">@method sharedInstance</Abstract>
 			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
 			
-			<Declaration>+ (id)sharedInstance</Declaration>
+			<Declaration>+ (instancetype)sharedInstance</Declaration>
 			
 			<ReturnValue><Abstract type="html">RigLeDiscoveryManager instance</Abstract></ReturnValue>
 			<Anchor>//api/name/sharedInstance</Anchor>
@@ -158,78 +158,6 @@
 			</Parameters>
 			
 			<Anchor>//api/name/removeAvailableDevice:</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/init</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
-			
-			<Declaration>- (id)init</Declaration>
-			
-			
-			<Anchor>//api/name/init</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/startDiscovery:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)startDiscovery:(RigDeviceRequest *)request</Declaration>
-			
-			
-			<Anchor>//api/name/startDiscovery:</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/didDiscoverDevice:advertisementData:rssi:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)didDiscoverDevice:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi</Declaration>
-			
-			
-			<Anchor>//api/name/didDiscoverDevice:advertisementData:rssi:</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/discoveryTimeout</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)discoveryTimeout</Declaration>
-			
-			
-			<Anchor>//api/name/discoveryTimeout</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/btPoweredOff</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)btPoweredOff</Declaration>
-			
-			
-			<Anchor>//api/name/btPoweredOff</Anchor>
-            <NodeRef refid="9"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/btReady</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
-			
-			<Declaration>- (void)btReady</Declaration>
-			
-			
-			<Anchor>//api/name/btReady</Anchor>
             <NodeRef refid="9"/>
 		</Token>
 		

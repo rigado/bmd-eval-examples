@@ -59,6 +59,16 @@
 - (BOOL)isConnectedToBmdWare;
 
 /**
+ *  @return YES if connected to 200Device, NO otherwise
+ */
+- (BOOL)isConnectedTo200;
+
+/**
+ *  @return YES if connected to 300Device, NO otherwise
+ */
+- (BOOL)isConnectedTo300;
+
+/**
  *  Instructs ths object to begin searching for an inrage evauluation board running any of the following:
  *  Eval Demo Firmware
  *  Blinky Demo Firmware

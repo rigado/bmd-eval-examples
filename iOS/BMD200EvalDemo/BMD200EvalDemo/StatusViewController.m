@@ -39,28 +39,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     accelDataList = [[NSMutableArray alloc] init];
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
-    [tbc registerListener:self];
-    if ([tbc isConnected]) {
-        [self configureDevice];
-    } else {
-        if (![tbc isSearching]) {
-            [tbc searchForDevice];
-        }
-    }
+    _userButtonOne.layer.cornerRadius = 5;
+    _userButtonTwo.layer.cornerRadius = 5;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -68,12 +50,6 @@
     [self deconfigureDevice];
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
-
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -82,8 +58,14 @@
     plotManager = [[AccelPlotManager alloc] initWithFrame:_accelGraphView.bounds];
     [_accelGraphView addSubview:plotManager.hostView];
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
-    if ([tbc isSearching]) {
-        [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+    [tbc registerListener:self];
+    if ([tbc isConnected]) {
+        [self configureDevice];
+    } else {
+        if (![tbc isSearching]) {
+            [tbc searchForDevice];
+            [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+        }
     }
 }
 
@@ -96,7 +78,7 @@
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     baseDevice = [tbc getDevice];
     baseDevice.delegate = self;
-    
+    [baseDevice determineDeviceHardwareVersion];
     [baseDevice startAmbientLightSensing];
     [NSThread sleepForTimeInterval:0.3f];
     
@@ -121,6 +103,7 @@
 - (void)updateView
 {
     _ambientLightLevelImageView.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:1.0f];
+    _ambientLightLevelImageView.layer.cornerRadius = 2;
 }
 
 #pragma mark -
@@ -163,19 +146,21 @@
      */
     void (^update)(void) = ^void(void) {
         if ((data & USER_BUTTON_2_MASK) == USER_BUTTON_2_MASK) {
-            _userButtonTwo.highlighted = YES;
-            [_userButtonTwo setNeedsDisplay];
+            _userButtonTwo.alpha = 0.5;
+            _userButtonTwo.backgroundColor = [UIColor colorWithWhite:100 alpha:.5];
+//            [_userButtonTwo setNeedsDisplay];
         } else {
-            _userButtonTwo.highlighted = NO;
-            [_userButtonTwo setNeedsDisplay];
+            _userButtonTwo.alpha = 1;
+            _userButtonTwo.backgroundColor = [UIColor clearColor];
+//            [_userButtonTwo setNeedsDisplay];
         }
         
         if ((data & USER_BUTTON_1_MASK) == USER_BUTTON_1_MASK) {
-            _userButtonOne.highlighted = YES;
-            [_userButtonOne setNeedsDisplay];
+            _userButtonOne.alpha = 0.5;
+            _userButtonOne.backgroundColor = [UIColor colorWithWhite:100 alpha:.5];
         } else {
-            _userButtonOne.highlighted = NO;
-            [_userButtonOne setNeedsDisplay];
+            _userButtonOne.alpha = 1;
+            _userButtonOne.backgroundColor = [UIColor clearColor];
         }
     };
     if (![NSThread isMainThread]) dispatch_sync(dispatch_get_main_queue(), update);
@@ -203,4 +188,14 @@
 {
     [plotManager addSample:accelData];
 }
+
+- (void)unableToDiscoverHardwareVersion {
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth", nil)] message:[NSString stringWithFormat:NSLocalizedString(@"Reset Bluetooth Message", nil)] preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *OK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [ac addAction:OK];
+        [self presentViewController:ac animated:NO completion:nil];
+    });
+}
+
 @end

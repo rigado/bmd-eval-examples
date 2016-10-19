@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -17,14 +18,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lpm-VT-MN8">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lpm-VT-MN8">
                                 <rect key="frame" x="16" y="75" width="77" height="77"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="77" id="Z84-gv-gZM"/>
                                     <constraint firstAttribute="height" constant="77" id="vU2-Jd-a2L"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ambient Light:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1qR-7u-dtY">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Ambient Light:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1qR-7u-dtY">
                                 <rect key="frame" x="16" y="157" width="118" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="118" id="suK-DI-ZEw"/>
@@ -69,38 +70,19 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="AmV-QJ-hTO">
+                            <view contentMode="scaleToFill" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AmV-QJ-hTO">
                                 <rect key="frame" x="16" y="186" width="568" height="357"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFW-Zk-OM6" customClass="HardwareButton">
-                                <rect key="frame" x="262" y="75" width="77" height="77"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="77" id="9vZ-48-GUY"/>
-                                    <constraint firstAttribute="width" constant="77" id="R2t-JK-q5R"/>
-                                </constraints>
-                                <state key="normal" title="User1">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RiK-U1-pj1" customClass="HardwareButton">
-                                <rect key="frame" x="507" y="75" width="77" height="77"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="77" id="Zda-gw-9MT"/>
-                                    <constraint firstAttribute="height" constant="77" id="sWJ-5N-QEe"/>
-                                </constraints>
-                                <state key="normal" title="User2">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3-white.png" translatesAutoresizingMaskIntoConstraints="NO" id="UH7-Pb-xUo">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="UH7-Pb-xUo">
                                 <rect key="frame" x="180" y="20" width="240" height="47"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="47" id="JsG-40-ih3"/>
                                     <constraint firstAttribute="width" constant="240" id="rkR-Dh-np1"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 mV" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQS-2D-KHB">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="0 mV" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IQS-2D-KHB">
                                 <rect key="frame" x="142" y="157" width="90" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="90" id="sDM-2h-Cg9"/>
@@ -109,6 +91,25 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kFW-Zk-OM6">
+                                <rect key="frame" x="250" y="75" width="100" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="9vZ-48-GUY"/>
+                                    <constraint firstAttribute="width" constant="100" id="R2t-JK-q5R"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title="User1"/>
+                            </button>
+                            <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RiK-U1-pj1">
+                                <rect key="frame" x="480" y="75" width="100" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Zda-gw-9MT"/>
+                                    <constraint firstAttribute="height" constant="50" id="sWJ-5N-QEe"/>
+                                </constraints>
+                                <state key="normal" title="User2"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -159,17 +160,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kDu-jG-9rd" customClass="ISColorWheel">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kDu-jG-9rd" customClass="ISColorWheel">
                                 <rect key="frame" x="16" y="75" width="568" height="418"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d8m-eq-8Ts">
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d8m-eq-8Ts">
                                 <rect key="frame" x="535" y="501" width="51" height="31"/>
                                 <connections>
                                     <action selector="didChangeLedOnOffSwitch:" destination="8rJ-Kc-sve" eventType="valueChanged" id="Ew6-t2-XmS"/>
                                 </connections>
                             </switch>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3-white.png" translatesAutoresizingMaskIntoConstraints="NO" id="l9B-xA-E95">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="l9B-xA-E95">
                                 <rect key="frame" x="180" y="20" width="240" height="47"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="O9A-UI-yRk"/>
@@ -215,7 +216,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bse-uk-jN2">
-                                <rect key="frame" x="16" y="94" width="568" height="130"/>
+                                <rect key="frame" x="20" y="94" width="560" height="130"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="130" id="hxO-MI-h21"/>
                                 </constraints>
@@ -230,7 +231,7 @@ prototype and production.</string>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s6r-Ig-klI">
-                                <rect key="frame" x="16" y="232" width="568" height="66"/>
+                                <rect key="frame" x="20" y="232" width="560" height="66"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="66" id="xjC-Ix-Zm7"/>
                                 </constraints>
@@ -241,7 +242,7 @@ ideas into reality.</string>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BNo-1a-eHi">
-                                <rect key="frame" x="16" y="306" width="568" height="149"/>
+                                <rect key="frame" x="20" y="306" width="560" height="149"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="149" id="hu0-95-WkR"/>
                                 </constraints>
@@ -256,8 +257,8 @@ www.rigado.com/modules</string>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
                             </textView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3-white-600px.png" translatesAutoresizingMaskIntoConstraints="NO" id="1Xo-tv-jYG">
-                                <rect key="frame" x="16" y="25" width="568" height="60"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="1Xo-tv-jYG">
+                                <rect key="frame" x="20" y="25" width="560" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="xDO-Ik-eld"/>
                                 </constraints>
@@ -298,7 +299,7 @@ www.rigado.com/modules</string>
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Firmware Update" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHq-GU-p7A">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Firmware Update" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHq-GU-p7A">
                                 <rect key="frame" x="16" y="323" width="568" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="SKL-dM-W2t"/>
@@ -320,7 +321,7 @@ www.rigado.com/modules</string>
                                     <action selector="didTouchBeginUpdate:" destination="EaN-Af-GPY" eventType="touchUpInside" id="1ih-72-rID"/>
                                 </connections>
                             </button>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VZV-wd-OkF">
+                            <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VZV-wd-OkF">
                                 <rect key="frame" x="16" y="75" width="568" height="162"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="162" id="Hs2-wK-Fkz"/>
@@ -330,13 +331,13 @@ www.rigado.com/modules</string>
                                     <outlet property="delegate" destination="EaN-Af-GPY" id="ral-Pq-CGz"/>
                                 </connections>
                             </pickerView>
-                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sh3-RS-JuR">
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" misplaced="YES" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sh3-RS-JuR">
                                 <rect key="frame" x="16" y="368" width="568" height="2"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="2" id="3zv-uO-LjY"/>
                                 </constraints>
                             </progressView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo3-white.png" translatesAutoresizingMaskIntoConstraints="NO" id="V1a-Cs-b6f">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="V1a-Cs-b6f">
                                 <rect key="frame" x="180" y="20" width="240" height="47"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="47" id="dEq-8z-1xL"/>
@@ -399,7 +400,6 @@ www.rigado.com/modules</string>
         <image name="  IOS Bar Icon 3.png" width="25" height="25"/>
         <image name="  IOS Bar Icon 4.png" width="25" height="25"/>
         <image name=" IOS Bar Icon 1.png" width="25" height="25"/>
-        <image name="logo3-white-600px.png" width="600" height="119"/>
-        <image name="logo3-white.png" width="302" height="60"/>
+        <image name="logo" width="200" height="36"/>
     </resources>
 </document>

@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  BMDEval
+
+  Created by Momoko Saunders on 10/14/16.
+  Copyright © 2016 Rigado,LLC. All rights reserved.
+*/
+
+"Reset Bluetooth" = "Reset Bluetooth";
+"Reset Bluetooth Message" = "Please reset Bluetooth by turning it off and back on in Settings.";

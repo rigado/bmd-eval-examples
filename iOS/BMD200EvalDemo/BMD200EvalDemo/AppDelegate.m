@@ -11,6 +11,8 @@
 
 #import "AppDelegate.h"
 #import "Rigablue.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
 
 @interface AppDelegate ()
 
@@ -23,6 +25,10 @@
 
     // Override point for customization after application launch.
     [[RigLeDiscoveryManager sharedInstance] startLeInterface];
+#if DEBUG
+#else
+    [Fabric with:@[[Crashlytics class]]];
+#endif
     return YES;
 }
 

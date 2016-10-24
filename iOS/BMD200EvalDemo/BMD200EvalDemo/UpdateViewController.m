@@ -51,6 +51,8 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     BOOL isBlinkyDemo;
     BOOL isBmdWare;
     
+    __weak IBOutlet UIButton *firmwareButton;
+    
     id<RigLeConnectionManagerDelegate> connectionManagerDelegate;
 }
 @end
@@ -59,22 +61,12 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-    /* TODO: Firmware list will be displayed to the user.  Provide a useful string for the name of the binary. */
-    firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMDWare200 Eval Release" @"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", @"BMDWare300 Eval Release", nil];
-    /* TODO: Create an array listing that matches the name of the firmware image added to the project.  The file must be of type .bin
-     * Note: DO NOT add the file extention (e.g. bin) as it will be handled later
-     */
-    firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota", @"bmd-300-demo-shield-rel_1_0_4_ota", @"bmdware_rel_nrf51_s110_3_1_1_ota", @"bmdware_rel_nrf52_s132_3_1_1_ota", nil];
 
-    
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
     connectionManagerDelegate = [RigLeConnectionManager sharedInstance].delegate;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -171,16 +163,22 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         [ac addAction:OK];
         [self presentViewController:ac animated:NO completion:nil];
     }
+    [self configureDeploymentPicker];
 }
 
 - (void)configureDeploymentPicker {
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    firmwareButton.enabled = YES;
     if ([tbc isConnectedTo200]) {
         firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMDWare 200", nil];
         firmwareBinaryList = [NSArray arrayWithObjects:@"eval_demo_1_0_0_ota", @"bmd200_blinky_demo_ota", @"bmdware_rel_nrf51_s110_3_1_1_ota", nil];
     } else if ([tbc isConnectedTo300]) {
         firmwareList = [NSArray arrayWithObjects:@"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", @"BMDWare 300", nil];
         firmwareBinaryList = [NSArray arrayWithObjects:@"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota",  @"bmdware_rel_nrf52_s132_3_1_1_ota", nil];
+    } else {
+        firmwareList = nil;
+        firmwareBinaryList = nil;
+        firmwareButton.enabled = NO;
     }
     [self.deploymentPicker reloadAllComponents];
 }
@@ -206,7 +204,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     /* Load firmware image in to local memory */
     filePath = [[NSBundle mainBundle] pathForResource:firmwareFile ofType:@"bin"];
     firmwareImageData = [NSData dataWithContentsOfFile:filePath];
-    NSLog(@"%@", firmwareFile);
+    NSLog(@"Firmware file: %@", filePath);
     
     updateManager = [[RigFirmwareUpdateManager alloc] init];
     updateManager.delegate = self;
@@ -386,8 +384,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (void)unableToDiscoverHardwareVersion {
     dispatch_sync(dispatch_get_main_queue(), ^{
-        firmwareList = nil;
-        firmwareBinaryList = nil;
         [self configureDeploymentPicker];
     });
 }

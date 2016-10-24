@@ -332,7 +332,7 @@
         if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
             [_delegate didDiscoverHardwareVersion];
         }
-        NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);
+        NSLog(@"%@ %@ is 300? %d is 200? %d", characteristic.description, characteristic.value, self.is300, self.is200);
         [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
     } else if (characteristic == bmdwareCtrlChar) {
         uint8_t * data = (uint8_t*)characteristic.value.bytes;
@@ -361,10 +361,9 @@
         if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)] && !self.isIndeterminatableState) {
             [_delegate didDiscoverHardwareVersion];
         }
-        NSLog(@"%@ %@ is 300 %d", characteristic.description, characteristic.value, self.is300);
+        NSLog(@"%@ %@ is 300? %d is 200? %d", characteristic.description, characteristic.value, self.is300, self.is200);
         [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
     }
-    
 }
 
 @end

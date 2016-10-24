@@ -95,7 +95,9 @@
     [baseDevice stopAmbientLightSensing];
     [NSThread sleepForTimeInterval:0.3f];
     [baseDevice stopAccelerometer];
-    baseDevice.delegate = nil;
+    if (baseDevice.delegate == self) {
+        baseDevice.delegate = nil;
+    }
     baseDevice = nil;
     [plotManager resetSampleCount];
 }

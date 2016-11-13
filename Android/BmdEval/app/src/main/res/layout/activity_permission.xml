@@ -1,20 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout android:id="@+id/activity_permission_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".activities.PermissionActivity"
+    style="@style/PermissionViewStyle"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <ImageView
+        android:id="@+id/permission_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="8dp"
+        app:srcCompat="@drawable/ic_info_white"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <ImageView
+        android:id="@+id/permission_bluetooth_disabled"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_bluetooth_searching"
+        android:layout_marginBottom="32dp"
+        />
 
 
     <Button
         android:id="@+id/activity_permission_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enable Location to Continue"
-        android:textColor="@color/colorGray"
-        android:background="@color/colorBlue"
+        android:text="Enable Bluetooth"
+        android:theme="@style/PermissionButton"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="32dp"
         />
 
 </LinearLayout>

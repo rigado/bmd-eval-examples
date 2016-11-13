@@ -15,28 +15,24 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.rigado.bmdeval.BmdApplication;
-import com.rigado.bmdeval.activities.MainActivity;
 import com.rigado.bmdeval.R;
-import com.rigado.bmdeval.demodevice.AccelData;
-import com.rigado.bmdeval.demodevice.AmbientLight;
-import com.rigado.bmdeval.demodevice.IBmdEvalDemoDeviceListener;
-import com.rigado.bmdeval.demodevice.BmdEvalDemoDevice;
-import com.rigado.bmdeval.demodevice.ButtonStatus;
-import com.rigado.bmdeval.demodevice.RgbColor;
-import com.rigado.bmdeval.interfaces.IBmdHardwareListener;
+import com.rigado.bmdeval.contracts.DemoContract;
+import com.rigado.bmdeval.devicedata.evaldemodevice.AccelData;
+import com.rigado.bmdeval.devicedata.evaldemodevice.AmbientLight;
+import com.rigado.bmdeval.devicedata.evaldemodevice.ButtonStatus;
+import com.rigado.bmdeval.devicedata.evaldemodevice.RgbColor;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
-import com.rigado.bmdeval.utilities.Constants;
+import com.rigado.bmdeval.presenters.DemoPresenter;
+
+import java.util.Locale;
 
 public class DemoFragment extends Fragment implements
-        IBmdEvalDemoDeviceListener,
-        BmdApplication.IConnectionListener,
-        IFragmentLifecycleListener,
-        IBmdHardwareListener {
+        DemoContract.View,
+        IFragmentLifecycleListener {
 
-    private static final int MAX_ARRAY_SIZE = 30;
     private static final String TAG = DemoFragment.class.getSimpleName();
+    private static final int MAX_ARRAY_SIZE = 30;
 
-    private BmdApplication mBmdApplication;
 
     private LineGraphSeries<DataPoint> mSeriesX;
     private LineGraphSeries<DataPoint> mSeriesY;
@@ -45,22 +41,22 @@ public class DemoFragment extends Fragment implements
     private DataPoint[] dparrayY = new DataPoint[MAX_ARRAY_SIZE];
     private DataPoint[] dparrayZ = new DataPoint[MAX_ARRAY_SIZE];
     private int mDataIndex;//used to plot against horizontal axis
-    private boolean mIsConfigured;
 
     private GraphView mGraph;
     private TextView mTextViewUser1;
     private TextView mTextViewUser2;
-    private RelativeLayout mLayoutProgressBar;
     private View mViewAmbientLight;
     private TextView mTextViewAmbientLight;
 
+    private DemoPresenter demoPresenter;
+
     //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public DemoFragment(){}
+    public DemoFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        mBmdApplication = (BmdApplication) getActivity().getApplication();
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
 
         //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_demo, container, false);
@@ -69,7 +65,6 @@ public class DemoFragment extends Fragment implements
         mGraph = (GraphView) rootView.findViewById(R.id.graph);
         mTextViewUser1 = (TextView) rootView.findViewById(R.id.tv_user1);
         mTextViewUser2 = (TextView) rootView.findViewById(R.id.tv_user2);
-        mLayoutProgressBar = (RelativeLayout) rootView.findViewById(R.id.layout_progress_bar);
         mViewAmbientLight = rootView.findViewById(R.id.view_ambient);
         mTextViewAmbientLight = (TextView) rootView.findViewById(R.id.textview_ambient_millivolt);
 
@@ -107,6 +102,8 @@ public class DemoFragment extends Fragment implements
         mGraph.addSeries(mSeriesY);
         mGraph.addSeries(mSeriesZ);
 
+        demoPresenter = new DemoPresenter(this);
+
         return rootView;
     }
 
@@ -119,102 +116,14 @@ public class DemoFragment extends Fragment implements
     @Override
     public void onPause() {
         super.onPause();
+        onPauseFragment();
     }
 
-    // ************
-    //  Concrete Implementation of IBmdEvalDemoDeviceListener
-    // ************
-    @Override
-    public void didUpdateButtonData(final ButtonStatus status) {
 
-        mTextViewUser1.post(new Runnable() {
-            @Override
-            public void run() {
-                if (status.isUser1Pressed()) {
-                    // show "USER1 PRESSED" by darkening image
-                    //mImageViewUser1.setColorFilter(Color.BLUE, PorterDuff.Mode.DARKEN);
-                    mTextViewUser1.setAlpha(1.0f);//not see-through
-                } else {
-                    // show "USER1 IDLE"
-                    //mImageViewUser1.setColorFilter(null);//null to remove the existing color filter
-                    mTextViewUser1.setAlpha(0.5f);//partially see-through
-                }
-
-                if (status.isUser2Pressed()) {
-                    // show "USER2 PRESSED"
-                    //mImageViewUser2.setColorFilter(Color.BLUE, PorterDuff.Mode.DARKEN);
-                    mTextViewUser2.setAlpha(1.0f);//not see-through
-                } else {
-                    // show "USER2 IDLE"
-                    //mImageViewUser2.setColorFilter(null);//null to remove the existing color filter
-                    mTextViewUser2.setAlpha(0.5f);//partially see-through
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public void didUpdateLedColor(RgbColor color) {
-        // not used
-    }
-
-    @Override
-    public void didUpdateAmbientLightData(final AmbientLight light) {
-        Log.d(TAG, "didUpdateAmbientLightData alpha = " + light.getAlphaLevel());
-
-        mViewAmbientLight.post(new Runnable() {
-            @Override
-            public void run() {
-                mViewAmbientLight.setAlpha(light.getAlphaLevel());
-                mTextViewAmbientLight.setText(light.getLevel() + " mV");
-            }
-        });
-
-    }
-
-    @Override
-    public void didUpdateAccelData(final AccelData data) {
-
-        final int iArraySizeMinusOne = MAX_ARRAY_SIZE -1;//optimization
-
-        //NOTE: at this point mDataIndex should always = MAX_ARRAY_SIZE -1
-        for(int i=0; i<iArraySizeMinusOne; i++)
-        {
-            // there's no way around the data shuffle because resetData() expects an array with values in sequence
-            // NOTE: DataPoint class does *not* have setters, creating new objects is the only way to set data
-            dparrayX[i] = new DataPoint(i, dparrayX[i+1].getY());
-            dparrayY[i] = new DataPoint(i, dparrayY[i+1].getY());
-            dparrayZ[i] = new DataPoint(i, dparrayZ[i+1].getY());
-        }
-
-        // store new data
-        final DataPoint dpX = new DataPoint(mDataIndex, data.getX());
-        final DataPoint dpY = new DataPoint(mDataIndex, data.getY());
-        final DataPoint dpZ = new DataPoint(mDataIndex, data.getZ());
-        dparrayX[iArraySizeMinusOne] = dpX;
-        dparrayY[iArraySizeMinusOne] = dpY;
-        dparrayZ[iArraySizeMinusOne] = dpZ;
-
-        // update graphs (this is done on the UI thread)
-        mGraph.post(new Runnable() {
-            @Override
-            public void run() {
-
-                // redraw data
-                mSeriesX.resetData(dparrayX);
-                mSeriesY.resetData(dparrayY);
-                mSeriesZ.resetData(dparrayZ);
-            }
-        });
-    }
-
-    private void initializeDataArrays()
-    {
+    private void initializeDataArrays() {
         mDataIndex = 0;
 
-        for(int i=0; i<MAX_ARRAY_SIZE; i++)
-        {
+        for(int i=0; i<MAX_ARRAY_SIZE; i++) {
             final DataPoint dpX = new DataPoint(mDataIndex, 0.0f);
             final DataPoint dpY = new DataPoint(mDataIndex, 0.0f);
             final DataPoint dpZ = new DataPoint(mDataIndex, 0.0f);
@@ -227,102 +136,88 @@ public class DemoFragment extends Fragment implements
         }
     }
 
-    private void configureDevice() {
-        mBmdApplication.getBMD200EvalDemoDevice().setObserver(this);
-        mBmdApplication.getBMD200EvalDemoDevice().startAccelerometerStream();
-        mBmdApplication.getBMD200EvalDemoDevice().startAmbientLightSensing();
-        mIsConfigured = true;
+
+    @Override
+    public void onPauseFragment() {
+        demoPresenter.onPause();
     }
 
-    // ************
-    //  Concrete Implementation of BmdApplication.IConnectionListener
-    // ************
     @Override
-    public void isNowConnected(BmdEvalDemoDevice device) {
-        mBmdApplication.getBMD200EvalDemoDevice().registerHardwareListener(this);
-        // hide the SEARCHING UI
-        mLayoutProgressBar.post(new Runnable() {
+    public void onResumeFragment() {
+        demoPresenter.onResume();
+    }
+
+    @Override
+    public void updateButtonStatus(final ButtonStatus buttonStatus) {
+        mTextViewUser1.post(new Runnable() {
             @Override
             public void run() {
-                mLayoutProgressBar.setVisibility(View.GONE);
+                if (buttonStatus.isUser1Pressed()) {
+                    // show "USER1 PRESSED" by darkening image
+                    //mImageViewUser1.setColorFilter(Color.BLUE, PorterDuff.Mode.DARKEN);
+                    mTextViewUser1.setAlpha(1.0f);//not see-through
+                } else {
+                    // show "USER1 IDLE"
+                    //mImageViewUser1.setColorFilter(null);//null to remove the existing color filter
+                    mTextViewUser1.setAlpha(0.5f);//partially see-through
+                }
+
+                if (buttonStatus.isUser2Pressed()) {
+                    // show "USER2 PRESSED"
+                    //mImageViewUser2.setColorFilter(Color.BLUE, PorterDuff.Mode.DARKEN);
+                    mTextViewUser2.setAlpha(1.0f);//not see-through
+                } else {
+                    // show "USER2 IDLE"
+                    //mImageViewUser2.setColorFilter(null);//null to remove the existing color filter
+                    mTextViewUser2.setAlpha(0.5f);//partially see-through
+                }
             }
         });
     }
 
     @Override
-    public void isNowDisconnected() {
+    public void updateAccelStream(AccelData accelData) {
+        final int iArraySizeMinusOne = MAX_ARRAY_SIZE -1;//optimization
 
-        // show the SEARCHING UI - note: BmdApplication.didDisconnectDevice() will have started searching already
-        if(this.getUserVisibleHint() == true) {
-            mLayoutProgressBar.post(new Runnable() {
-                @Override
-                public void run() {
-                    mLayoutProgressBar.setVisibility(View.VISIBLE);
-                }
-            });
-            mBmdApplication.searchForDemoDevices();
+        //NOTE: at this point mDataIndex should always = MAX_ARRAY_SIZE -1
+        for (int i=0; i<iArraySizeMinusOne; i++) {
+            // there's no way around the data shuffle because resetData() expects an array with values in sequence
+            // NOTE: DataPoint class does *not* have setters, creating new objects is the only way to set data
+            dparrayX[i] = new DataPoint(i, dparrayX[i+1].getY());
+            dparrayY[i] = new DataPoint(i, dparrayY[i+1].getY());
+            dparrayZ[i] = new DataPoint(i, dparrayZ[i+1].getY());
         }
-    }
 
-    // ************
-    //  Concrete Implementation of IFragmentLifecycleListener
-    // ************
-    @Override
-    public void onPauseFragment() {
+        // store new data
+        final DataPoint dpX = new DataPoint(mDataIndex, accelData.getX());
+        final DataPoint dpY = new DataPoint(mDataIndex, accelData.getY());
+        final DataPoint dpZ = new DataPoint(mDataIndex, accelData.getZ());
+        dparrayX[iArraySizeMinusOne] = dpX;
+        dparrayY[iArraySizeMinusOne] = dpY;
+        dparrayZ[iArraySizeMinusOne] = dpZ;
 
-        mBmdApplication.setConnectionNotificationListener(null);
-        mLayoutProgressBar.setVisibility(View.GONE);
-        if (mIsConfigured) {
-            mIsConfigured = false;
-            mBmdApplication.getBMD200EvalDemoDevice().setObserver(null);
-            mBmdApplication.getBMD200EvalDemoDevice().stopAccelerometerStream();
-            mBmdApplication.getBMD200EvalDemoDevice().stopAmbientLightSensing();
-        }
-    }
-
-
-    @Override
-    public void onResumeFragment() {
-        Log.i(TAG, "onResumeFragment");
-        // callback so we know when it's connected / disconnected
-        mBmdApplication.setConnectionNotificationListener(this);
-
-        if (mBmdApplication.isConnected()) {
-            Log.i(TAG, "isConnected");
-            // if the device is already connected, configure to stream data
-            configureDevice();
-            mLayoutProgressBar.setVisibility(View.INVISIBLE);
-
-        } else if (!mBmdApplication.isSearching()) {
-            Log.i(TAG, "!isSearching - begin search");
-            // if device is not connected, and not searching, let's search !
-            mBmdApplication.searchForDemoDevices();
-            mLayoutProgressBar.setVisibility(View.VISIBLE);
-
-        } else {
-            Log.i(TAG, "isSearching already");
-            // if device is still searching, simply show searching animation
-            mLayoutProgressBar.setVisibility(View.VISIBLE);
-        }
+        // update graphs (this is done on the UI thread)
+        mGraph.post(new Runnable() {
+            @Override
+            public void run() {
+                // redraw data
+                mSeriesX.resetData(dparrayX);
+                mSeriesY.resetData(dparrayY);
+                mSeriesZ.resetData(dparrayZ);
+            }
+        });
     }
 
     @Override
-    public void onHardwareVersionReceived() {
-        Log.i(TAG, "onHardwareVersionReceived");
-        // if the Blinky Demo fw is programmed show "UPDATE" fragment
-        final String fwname = mBmdApplication.getBMD200EvalDemoDevice().getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)))
-        {
-            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(Constants.FIRMWARE_UPDATE_FRAGMENT);
-                }
-            });
-        }
-        // otherwise, set up device for data streaming
-        else {
-            configureDevice();
-        }
+    public void updateAmbientLight(final AmbientLight ambientLight) {
+        mViewAmbientLight.post(new Runnable() {
+            @Override
+            public void run() {
+                mViewAmbientLight.setAlpha(ambientLight.getAlphaLevel());
+                mTextViewAmbientLight.setText(
+                        String.format(Locale.getDefault(),
+                                "%d mV", ambientLight.getLevel()));
+            }
+        });
     }
 }

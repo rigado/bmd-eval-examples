@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.rigado.bmdeval.R;
@@ -36,6 +37,14 @@ public class PermissionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_permission);
 
         numberOfPermissionRequests = 0;
+
+        final ImageView infoIcon = (ImageView) findViewById(R.id.permission_info);
+        infoIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertUserPermissionRequestRationale();
+            }
+        });
 
         mTryAgainButton = (Button) findViewById(R.id.activity_permission_button);
         mTryAgainButton.setOnClickListener(new View.OnClickListener() {

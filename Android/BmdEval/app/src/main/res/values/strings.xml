@@ -1,7 +1,5 @@
 <resources>
     <!-- GENERAL -->
-    <string name="app_name">BMD Eval Demo</string>
-
     <string name="title_section1">Status</string>
     <string name="title_section2">Color Wheel</string>
     <string name="title_section3">Update</string>
@@ -36,4 +34,5 @@
     <string name="link_website"><a href="http://www.rigado.com">www.rigado.com</a></string>
     <string name="label_paragraph_three">Check out Rigado\'s Bluetooth Smart Modules\nwith Secure Firmware Update</string>
     <string name="link_website_modules"><a href="http://www.rigado.com/modules">www.rigado.com/modules</a></string>
+    <string name="permission_activity">Enable Location</string>
 </resources>

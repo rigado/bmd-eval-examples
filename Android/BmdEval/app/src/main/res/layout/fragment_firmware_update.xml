@@ -1,30 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activities.MainActivity$PlaceholderFragment"
+    tools:context=".activities.MainActivity"
     android:id="@+id/background_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
-
-    <!-- LOGO -->
-    <ImageView
-        android:id="@+id/image_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/rigado_logo"
-        android:layout_marginTop="16dp"/>
+    >
 
     <!-- read-only selection -->
     <NumberPicker
         android:id="@+id/id_picker_firmware"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/image_logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
         android:textColor="@android:color/white"
-        android:descendantFocusability="blocksDescendants"/>
+        android:descendantFocusability="blocksDescendants"
+        />
 
     <Button
         android:id="@+id/id_btn_begin_deploy"

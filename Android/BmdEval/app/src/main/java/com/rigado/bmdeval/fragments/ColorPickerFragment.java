@@ -6,7 +6,6 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,244 +13,151 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.ToggleButton;
 
-import com.rigado.bmdeval.BmdApplication;
-import com.rigado.bmdeval.activities.MainActivity;
 import com.rigado.bmdeval.R;
+import com.rigado.bmdeval.contracts.ColorPickerContract;
 import com.rigado.bmdeval.customviews.CircleView;
-import com.rigado.bmdeval.demodevice.BmdEvalDemoDevice;
-import com.rigado.bmdeval.demodevice.RgbColor;
+import com.rigado.bmdeval.devicedata.evaldemodevice.RgbColor;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
-import com.rigado.bmdeval.utilities.Constants;
+import com.rigado.bmdeval.presenters.ColorPickerPresenter;
 
 public class ColorPickerFragment extends Fragment implements
         OnTouchListener,
-        BmdApplication.IConnectionListener,
-        View.OnClickListener,
-        IFragmentLifecycleListener
-{
+        ColorPickerContract.View,
+        IFragmentLifecycleListener {
+
     private final String TAG = getClass().getSimpleName();
-    private BmdApplication mBmdApplication;
 
     private ImageView mImageWheel;
     private CircleView mImageSelected;
-    private ViewPager mViewPager;
-    private RelativeLayout mLayoutProgressBar;
     private ToggleButton mToggleButton;
 
-    //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public ColorPickerFragment()
-    {}
+    private ColorPickerPresenter colorPickerPresenter;
+
+    public ColorPickerFragment() {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        mBmdApplication = (BmdApplication) getActivity().getApplication();
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
 
         //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_color_picker, container, false);
-
-        MainActivity mMainActivity = (MainActivity) getActivity();
-        mViewPager = mMainActivity.mViewPager;
 
         mImageWheel = (ImageView) rootView.findViewById(R.id.imageView1);
         mImageWheel.setOnTouchListener(this);
         mImageSelected = (CircleView) rootView.findViewById(R.id.imageColorSelected);
         mImageSelected.setFillColor(Color.WHITE);
-        mLayoutProgressBar = (RelativeLayout) rootView.findViewById(R.id.layout_progress_bar);
         mToggleButton = (ToggleButton) rootView.findViewById(R.id.toggleButton);
 
-        mToggleButton.setOnClickListener(this);
+        mToggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(TAG, "toggle button enabled " + mToggleButton.isChecked());
+                colorPickerPresenter.setLedEnabled(mToggleButton.isChecked());
+                //TODO : If off & turning on, getSelectedColor & set LED
+            }
+        });
+
+        colorPickerPresenter = new ColorPickerPresenter(this);
 
         return rootView;
     }
 
     @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+                //TODO : Prevent viewpager touch events
+                return maybeSetLedColor(v, event);
+            case MotionEvent.ACTION_CANCEL:
+                //TODO: Allow viewpager touch events
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    private boolean maybeSetLedColor(View view, MotionEvent event) {
+        if (view == mImageWheel && mImageWheel.isEnabled()) {
+            //get the x and y where imageview was touched
+            Matrix inverse = new Matrix();
+            mImageWheel.getImageMatrix().invert(inverse);
+            float[] touchPoint = new float[] {event.getX(), event.getY()};
+            inverse.mapPoints(touchPoint);
+            int x = (int) touchPoint[0];
+            int y = (int) touchPoint[1];
+
+            //x and y must be within dimensions of image
+            final Bitmap bitmap = ((BitmapDrawable)mImageWheel.getDrawable()).getBitmap();
+            if (y < bitmap.getHeight() && y >= 0 && x < bitmap.getWidth() && x >= 0) {
+                // get chosen color
+                int selectedColor = bitmap.getPixel(x, y);
+                // ignore the transparent corners
+                if (selectedColor != 0) {
+                    Log.d("TouchEvent",
+                            "Touch event at " + x + ", " + y + ", color= #"
+                                    + Integer.toHexString(selectedColor));
+
+                    // strip transparency from the selected color before
+                    // showing it in the selection circle
+                    int newcolor = Color.rgb(
+                            Color.red(selectedColor),
+                            Color.green(selectedColor),
+                            Color.blue(selectedColor));
+                    mImageSelected.setFillColor(newcolor);
+
+                    // send the chosen color to the device
+                    RgbColor rgbcolor = new RgbColor(
+                            Color.red(selectedColor),
+                            Color.green(selectedColor),
+                            Color.blue(selectedColor));
+
+                    colorPickerPresenter.setLedColor(rgbcolor);
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+        onResumeFragment();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event)
-    {
-        boolean bTouchEventHandled = false;
-
-        if((event.getAction() == MotionEvent.ACTION_DOWN) || (event.getAction() == MotionEvent.ACTION_MOVE))
-        {
-            //prevent the ViewPager from receiving these onTouch events or the screen will still switch tabs!!
-            mViewPager.requestDisallowInterceptTouchEvent(true);
-
-            if (v.getId() == mImageWheel.getId())
-            {
-                //get the x and y where imageview was touched
-                Matrix inverse = new Matrix();
-                mImageWheel.getImageMatrix().invert(inverse);
-                float[] touchPoint = new float[] {event.getX(), event.getY()};
-                inverse.mapPoints(touchPoint);
-                int x = Integer.valueOf((int)touchPoint[0]);
-                int y = Integer.valueOf((int)touchPoint[1]);
-
-                //x and y must be within dimensions of image
-                Bitmap bitmap = ((BitmapDrawable)mImageWheel.getDrawable()).getBitmap();
-                if ((y < bitmap.getHeight()) && y >= 0)
-                {
-                    if ((x < bitmap.getWidth()) && (x >= 0))
-                    {
-                        // if toggle button is enabled, echo selected color to screen and device
-                        if(mBmdApplication.getBMD200EvalDemoDevice() != null) {
-
-                            // get chosen color
-                            int selectedColor = bitmap.getPixel(x, y);
-
-                            // ignore the transparent corners
-                            if (selectedColor != 0) {
-
-                                bTouchEventHandled = true;
-
-                                Log.d("TouchEvent", "Touch event at " + x + ", " + y + ", color= #" + Integer.toHexString(selectedColor));
-
-                                // strip transparency from the selected color before showing it in the selection circle
-                                int newcolor = Color.rgb(Color.red(selectedColor), Color.green(selectedColor), Color.blue(selectedColor));
-                                mImageSelected.setFillColor(newcolor);
-
-                                // send the chosen color to the device
-                                RgbColor rgbcolor = new RgbColor(
-                                        Color.red(selectedColor),
-                                        Color.green(selectedColor),
-                                        Color.blue(selectedColor));
-
-
-
-                                mBmdApplication.getBMD200EvalDemoDevice().setLedColor(rgbcolor);//send selected color to device
-
-                                if(!mToggleButton.isChecked()) {
-                                    mToggleButton.setChecked(true);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else if (event.getAction() == MotionEvent.ACTION_CANCEL)
-        {
-            mViewPager.requestDisallowInterceptTouchEvent(false);
-        }
-
-        return bTouchEventHandled;
-    }
-
-    // ************
-    //  Concrete Implementation of BmdApplication.IConnectionListener
-    // ************
-    @Override
-    public void isNowConnected(BmdEvalDemoDevice device) {
-
-        // hide the SEARCHING UI
-        mLayoutProgressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                mLayoutProgressBar.setVisibility(View.GONE);
-            }
-        });
-
-        // if the Blinky Demo fw is programmed show "UPDATE" fragment
-        final String fwname = device.getBaseDevice().getName();
-        if ((fwname.contains(FirmwareUpdateFragment.BLINKY_DEMO_NAME_SUBSET)))
-        {
-            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(Constants.FIRMWARE_UPDATE_FRAGMENT);
-                }
-            });
-        }
-    }
-
-    @Override
-    public void isNowDisconnected() {
-        // show the SEARCHING UI
-        if(this.getUserVisibleHint() == true) {
-            mLayoutProgressBar.post(new Runnable() {
-                @Override
-                public void run() {
-                    mLayoutProgressBar.setVisibility(View.VISIBLE);
-                }
-            });
-            mBmdApplication.searchForDemoDevices();
-        }
-
-    }
-
-    // ************
-    //  Concrete Implementation of View.OnClickListener
-    // ************
-    @Override
-    public void onClick(View v) {
-        if (v == mToggleButton) {
-            if(mToggleButton.isChecked()) {
-
-                // if there is no connection to device, immediately deselect the device
-                if (mBmdApplication.getBMD200EvalDemoDevice() == null)
-                {
-                    mToggleButton.setChecked(false);
-                }
-
-                int selectedColor = mImageSelected.getFillColor();
-                // send the chosen color to the device
-                RgbColor rgbcolor = new RgbColor(
-                        Color.red(selectedColor),
-                        Color.green(selectedColor),
-                        Color.blue(selectedColor));
-                mBmdApplication.getBMD200EvalDemoDevice().setLedColor(rgbcolor);//send selected color to device
-            } else {
-                if (mBmdApplication.getBMD200EvalDemoDevice() == null) {
-                    return;
-                }
-
-                RgbColor rgbcolor = new RgbColor(0, 0, 0);
-                mBmdApplication.getBMD200EvalDemoDevice().setLedColor(rgbcolor);
-            }
-
-        }
-    }
-
-    // ************
-    //  Concrete Implementation of IFragmentLifecycleListener
-    // ************
-    @Override
-    public void onPauseFragment() {
-        mBmdApplication.setConnectionNotificationListener(null);
+        onPauseFragment();
     }
 
     @Override
     public void onResumeFragment() {
+        colorPickerPresenter.onResume();
+    }
 
-        // callback so we know when it's connected / disconnected
-        mBmdApplication.setConnectionNotificationListener(this);
+    @Override
+    public void onPauseFragment() {
+        colorPickerPresenter.onPause();
+    }
 
-        if (mBmdApplication.isConnected())
-        {
-            // nothing to configure
-            mLayoutProgressBar.setVisibility(View.INVISIBLE);
-        }
-        else if (mBmdApplication.isSearching() == false)
-        {
-            // if device is not connected, and not searching, let's search !
-            mBmdApplication.searchForDemoDevices();
-            mLayoutProgressBar.setVisibility(View.VISIBLE);
-        }
-        else if (mBmdApplication.isSearching() == true)
-        {
-            // if device is still searching, simply show searching animation
-            mLayoutProgressBar.setVisibility(View.VISIBLE);
-        }
+    @Override
+    public void updateStatusButton(boolean enabled) {
+
+    }
+
+    private RgbColor getSelectedColor() {
+        int selectedColor = mImageSelected.getFillColor();
+        RgbColor rgbcolor = new RgbColor(
+                Color.red(selectedColor),
+                Color.green(selectedColor),
+                Color.blue(selectedColor));
+        return rgbcolor;
     }
 }

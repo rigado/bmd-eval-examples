@@ -11,28 +11,22 @@ import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
 
 public class AboutFragment extends Fragment implements IFragmentLifecycleListener {
 
-    //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
     public AboutFragment(){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        //inflate the necessary layout
-        View rootView = inflater.inflate(R.layout.fragment_about, container, false);
-
-        return rootView;
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_about, container, false);
     }
 
-    // ************
-    //  Concrete Implementation of IFragmentLifecycleListener
-    // ************
     @Override
     public void onPauseFragment() {
-
+        //Noop.
     }
 
     @Override
     public void onResumeFragment() {
-
+        //Noop.
     }
 }

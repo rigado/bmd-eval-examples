@@ -2,34 +2,27 @@ package com.rigado.bmdeval.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
-import com.rigado.bmdeval.BmdApplication;
 import com.rigado.bmdeval.R;
+import com.rigado.bmdeval.adapters.SectionsPagerAdapter;
+import com.rigado.bmdeval.contracts.MainContract;
 import com.rigado.bmdeval.customviews.ControllableViewPager;
-import com.rigado.bmdeval.fragments.DemoFragment;
-import com.rigado.bmdeval.fragments.ColorPickerFragment;
-import com.rigado.bmdeval.fragments.FirmwareUpdateFragment;
-import com.rigado.bmdeval.fragments.AboutFragment;
+import com.rigado.bmdeval.devicedata.otherdevices.BleDevice;
+import com.rigado.bmdeval.devicedata.evaldemodevice.EvalDevice;
+import com.rigado.bmdeval.devicedata.otherdevices.BlinkyDevice;
+import com.rigado.bmdeval.devicedata.otherdevices.BmdwareDevice;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
-import com.rigado.bmdeval.interfaces.IPermissionsRequestListener;
-import com.rigado.bmdeval.utilities.Constants;
+import com.rigado.bmdeval.utilities.Utilities;
+import com.rigado.rigablue.RigCoreBluetooth;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+public class MainActivity extends AppCompatActivity implements MainContract.View {
 
-
-public class MainActivity extends ActionBarActivity implements
-        ActionBar.TabListener,
-        IPermissionsRequestListener {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,52 +33,50 @@ public class MainActivity extends ActionBarActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     SectionsPagerAdapter mSectionsPagerAdapter;
-    ActionBar mActionBar;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    public ControllableViewPager mViewPager;
-    private boolean mAllowTabsClicking = true;
+    private ControllableViewPager mViewPager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BmdApplication.getInstance().getBmdManager().setContext(this);
+        checkLocationPermissions();
 
-        // Set up the action bar.
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowTitleEnabled(false);//hide app title
-        mActionBar.setDisplayShowHomeEnabled(false);//hide app title
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        // Set up the toolbar.
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(
+                this,
+                getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ControllableViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);// set to 3 to keep all 4 pages alive
 
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        // Resume and Pause fragments #onPageSelected
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             private int oldPosition = 0;//by default the first tab
 
             @Override
             public void onPageSelected(int position) {
-                mActionBar.setSelectedNavigationItem(position);
-
                 // NOTE: onPauseFragment must always be called before onResumeFragment
-                IFragmentLifecycleListener fragmentToHide = (IFragmentLifecycleListener)mSectionsPagerAdapter.getItem(oldPosition);
+                IFragmentLifecycleListener fragmentToHide =
+                        (IFragmentLifecycleListener)mSectionsPagerAdapter.getItem(oldPosition);
                 fragmentToHide.onPauseFragment();
 
-                IFragmentLifecycleListener fragmentToShow = (IFragmentLifecycleListener)mSectionsPagerAdapter.getItem(position);
+                IFragmentLifecycleListener fragmentToShow =
+                        (IFragmentLifecycleListener)mSectionsPagerAdapter.getItem(position);
                 fragmentToShow.onResumeFragment();
 
                 oldPosition = position;
@@ -95,110 +86,61 @@ public class MainActivity extends ActionBarActivity implements
             public void onPageScrollStateChanged(int state) {}
 
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position,
+                                       float positionOffset,
+                                       int positionOffsetPixels) {}
         });
 
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            mActionBar.addTab(
-                    mActionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_device_tab_layout);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        BmdApplication.getInstance().getBmdManager().registerPermissionsListener(this);
+        checkLocationPermissions();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
-        BmdApplication.getInstance().getBmdManager().registerPermissionsListener(null);
-
     }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        if (mAllowTabsClicking) {
-            mViewPager.setCurrentItem(tab.getPosition());
+    private void checkLocationPermissions() {
+        boolean locationEnabled = false;
+        if (Utilities.hasLocationPermission(this)
+                && Utilities.isLocationEnabled(this)) {
+            locationEnabled = true;
+        }
+
+        if(!locationEnabled) {
+            goToPermissionsActivity();
         }
     }
 
-    @Override
-    public void onTabUnselected(final ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    public void setAllowTabsAndViewpagerSwitching(boolean toggle)
-    {
-        mViewPager.setPagingEnabled(toggle);
-        mAllowTabsClicking = toggle;
-    }
-
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    @Override
-    public void onPermissionsRequested() {
-        Log.i(TAG, "onPermissionsRequested");
+    private void goToPermissionsActivity() {
         startActivity(new Intent(this, PermissionActivity.class));
         finish();
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        private List<Fragment> mFragmentList;
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-            mFragmentList = new ArrayList<Fragment>();
-            mFragmentList.add(new DemoFragment());
-            mFragmentList.add(new ColorPickerFragment());
-            mFragmentList.add(new FirmwareUpdateFragment());
-            mFragmentList.add(new AboutFragment());
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case Constants.DEMO_STATUS_FRAGMENT:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case Constants.COLOR_WHEEL_FRAGMENT:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case Constants.FIRMWARE_UPDATE_FRAGMENT:
-                    return getString(R.string.title_section3).toUpperCase(l);
-                case Constants.ABOUT_FRAGMENT:
-                    return getString(R.string.title_section4).toUpperCase(l);
-            }
-            return null;
+    @Override
+    public void setBluetoothState(boolean enabled) {
+        if (enabled) {
+            RigCoreBluetooth.initialize(getApplicationContext());
+        } else {
+            //TODO: Set disabled state
         }
     }
 
+    @Override
+    public void onInterrogationCompleted(BleDevice deviceType) {
+        if (deviceType instanceof BlinkyDevice
+                || deviceType instanceof BmdwareDevice) {
 
+        } else if (deviceType instanceof EvalDevice) {
+
+        } else {
+            //TODO : Handle odd device connections
+        }
+    }
 }

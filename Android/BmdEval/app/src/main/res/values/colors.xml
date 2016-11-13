@@ -1,7 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBlue">#1b5b8e</color>
-    <color name="colorGray">#bcc1c5</color>
-    <color name="colorTangerine">#c04b27</color>
+    <color name="Indigo">#FF303F9F</color>
+
+    <color name="colorBurntTangerine">#C04B27</color>
+    <color name="colorRigadoBlue">#1b5b8e</color>
+    <color name="colorGrayPowder">#bcc1c5</color>
+    <color name="colorEmeraldGreen">#199a8f</color>
+    <color name="colorRigadoSky">#3889c9</color>
+
+    <color name="colorPrimary">@color/colorRigadoSky</color>
+    <color name="colorPrimaryDark">@color/colorRigadoBlue</color>
+    <color name="colorSecondary">@color/colorGrayPowder</color>
+    <color name="colorAccent">@color/colorBurntTangerine</color>
+
+    <!--https://material.google.com/style/color.html#color-text-background-colors-->
+    <color name="textColorRegular">#68000000</color>
+    <color name="textColorDisabled">#38000000</color>
+    <color name="colorDivider">#20000000</color>
+
+    <color name="item_device_background">#FAFAFA</color>
+    <color name="selected_device_background">#FFFFFFFF</color>
+
+    <color name="default_window_background">#fff3f3f3</color>
+    <color name="textColorLight">#68000000</color>
     
 </resources>

@@ -11,7 +11,7 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.rigado.bmdeval.demodevice.BmdEvalDemoDevice;
+import com.rigado.bmdeval.devicedata.evaldemodevice.EvalDevice;
 import com.rigado.rigablue.RigCoreBluetooth;
 import com.rigado.rigablue.RigFirmwareUpdateManager;
 
@@ -23,40 +23,7 @@ import java.io.InputStream;
 public class Utilities {
 
     // Constants
-    private final String TAG = getClass().getSimpleName();
-
-    public void startFirmwareUpdate(Context context, RigFirmwareUpdateManager fwManager, BmdEvalDemoDevice device, JsonFirmwareType firmwareRecord,
-                                    BluetoothGattCharacteristic bootCharacteristic, byte [] bootCommand) {
-
-        if (firmwareRecord != null){
-            String filename = "";
-            if(device.isBmd200()) {
-                filename = firmwareRecord.getProperties().getFilename200();
-            } else {
-                filename = firmwareRecord.getProperties().getFilename300();
-            }
-
-            Log.i(TAG, "filename " + filename);
-
-            // ensure that the filenames contain no extension
-            String strFilenameNoExt1;
-            if (filename.contains(".")) {
-                strFilenameNoExt1 = filename.substring(0, filename.lastIndexOf('.'));
-            } else {
-                strFilenameNoExt1 = filename;
-            }
-
-            final int deviceFWid = context.getResources().getIdentifier(strFilenameNoExt1, "raw", context.getPackageName());
-
-            InputStream fwImageInputStream = (deviceFWid != 0) ? context.getResources().openRawResource(deviceFWid) : null;
-
-            fwManager.updateFirmware(device.getBaseDevice(), fwImageInputStream, bootCharacteristic, bootCommand);
-
-        } else {
-            Log.e(TAG, "Firmware filenames are unknown - were the JSON values read correctly?");
-        }
-    }
-
+    private static final String TAG = Utilities.class.getSimpleName();
 
     //If Marshmallow or above, check if permission has been granted
     public static boolean hasPermission(Context context, String permission) {

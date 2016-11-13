@@ -1,12 +1,10 @@
 package com.rigado.bmdeval.fragments;
 
 import android.app.AlertDialog;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,64 +15,43 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.rigado.bmdeval.BmdApplication;
-import com.rigado.bmdeval.activities.MainActivity;
 import com.rigado.bmdeval.R;
-import com.rigado.bmdeval.demodevice.BmdEvalBootloaderInfo;
-import com.rigado.bmdeval.demodevice.BmdEvalDemoDevice;
+import com.rigado.bmdeval.contracts.FirmwareContract;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
-import com.rigado.bmdeval.utilities.Constants;
+import com.rigado.bmdeval.presenters.FirmwarePresenter;
 import com.rigado.bmdeval.utilities.JsonFirmwareReader;
 import com.rigado.bmdeval.utilities.JsonFirmwareType;
-import com.rigado.bmdeval.utilities.Utilities;
-import com.rigado.rigablue.IRigFirmwareUpdateManagerObserver;
-import com.rigado.rigablue.RigDfuError;
-import com.rigado.rigablue.RigFirmwareUpdateManager;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class FirmwareUpdateFragment extends Fragment implements
         IFragmentLifecycleListener,
-        View.OnClickListener,
-        BmdApplication.IConnectionListener,
-        IRigFirmwareUpdateManagerObserver {
+        FirmwareContract.View {
 
-    // Constants
-    private static final String TAG = "BMD200Eval";
-    private final String BMD_EVAL_DEMO_NAME_SUBSET = "BMD Eval";// string contained within the demo firmware name
-    public static final String BLINKY_DEMO_NAME_SUBSET = "Blinky";// string contained within the Blinky firmware name
+    private static final String TAG = FirmwareUpdateFragment.class.getSimpleName();
 
     // UI References
-    private RelativeLayout mLayoutProgressBar;
     private NumberPicker mFirmwarePicker;
     private Button mButtonDeploy;
     private ProgressBar mProgressBar;
     private TextView mTextViewStatus;
 
     // General Member Variables
-    private BmdApplication mBmdApplication;
-    private Utilities mUtilities;
-    private boolean mIsUpdateInProgress;
     private JsonFirmwareReader mJsonFirmwareReader;
     private ArrayList<JsonFirmwareType> mJsonFirmwareTypeList;
-    private RigFirmwareUpdateManager mRigFirmwareUpdateManager;
     private int mLastProgressIndication = -1;
-    private String mSelectedFirmwareName;
-    private AlertDialog alertDialog0;
-    private AlertDialog alertDialog1;
 
-    //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
+    private FirmwarePresenter firmwarePresenter;
+
     public FirmwareUpdateFragment(){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        mBmdApplication = (BmdApplication) getActivity().getApplication();
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
+                             Bundle savedInstanceState) {
 
         //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_firmware_update, container, false);
@@ -82,19 +59,18 @@ public class FirmwareUpdateFragment extends Fragment implements
         // UI references
         mFirmwarePicker = (NumberPicker) rootView.findViewById(R.id.id_picker_firmware);
         mButtonDeploy = (Button) rootView.findViewById(R.id.id_btn_begin_deploy);
-        mLayoutProgressBar = (RelativeLayout) rootView.findViewById(R.id.layout_progress_bar);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.id_progress_deployment);
         mTextViewStatus = (TextView) rootView.findViewById(R.id.id_tv_status);
 
-        mButtonDeploy.setEnabled(false);// disabled until we know it's connected
-        mButtonDeploy.setOnClickListener(this);
-        mIsUpdateInProgress = false;
 
-        // read list of available firmwares - these are listed in res/raw/firmware_descriptions.json
-        /* TODO: Update raw folder to contain your binary and update firmware_descriptions.json to have
-           the necessary information regarding the update binary.  Note: Update binaries must be
-           binary files generated using the genimage.py Python script.  See Getting Started with the
-           Rigado Secure Bootlaoder for more details.
+        /**
+         * {@link JsonFirmwareReader} reads the list of available firmwares located in
+         * res/raw/firmware_descriptions.json. Update the raw folder to contain your binary and
+         * update firmware_descriptions.json with the necessary information regarding the
+         * update binary.
+         *
+         * Note: Update binaries must be binary files generated using the genimage.py Python script.
+         * See Getting Started with the Rigado Secure Bootloader for more details.
          */
         mJsonFirmwareReader = new JsonFirmwareReader();
         mJsonFirmwareTypeList = mJsonFirmwareReader.getFirmwareList(getActivity());
@@ -118,130 +94,47 @@ public class FirmwareUpdateFragment extends Fragment implements
         });
         setNumberPickerTxtColor(mFirmwarePicker, Color.WHITE);
 
-        // initialization
-        mUtilities = new Utilities();
+        mButtonDeploy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // get selected firmware from picker
+                final int selectedIndex = mFirmwarePicker.getValue();
+                final JsonFirmwareType firmwareRecord = mJsonFirmwareTypeList.get(selectedIndex);
+
+                showFirmwareUpdateDialog(firmwareRecord);
+            }
+        });
+
+        firmwarePresenter = new FirmwarePresenter(this);
 
         return rootView;
     }
 
-    // ************
-    //  Concrete Implementation of IFragmentLifecycleListener
-    // ************
     @Override
-    public void onPauseFragment() {
-        mBmdApplication.setConnectionNotificationListener(null);
+    public void onResume() {
+        super.onResume();
+        onResumeFragment();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        onPauseFragment();
+    }
+
 
     @Override
     public void onResumeFragment() {
-        Log.i(TAG, "onResumeFragment");
-        // callback so we know when it's connected / disconnected
-        mBmdApplication.setConnectionNotificationListener(this);
-
-        checkFirmwareInstalled(mBmdApplication.getBMD200EvalDemoDevice());
-
-        if (mBmdApplication.isConnected())
-        {
-            // if the device is already connected, enable Deploy button
-            mButtonDeploy.setEnabled(true);
-            mLayoutProgressBar.setVisibility(View.INVISIBLE);
-        }
-        else if (mBmdApplication.isSearching() == false)
-        {
-            // if device is not connected, and not searching, let's search !
-            mBmdApplication.searchForDemoDevices();
-            mLayoutProgressBar.setVisibility(View.VISIBLE);
-        }
-        else if (mBmdApplication.isSearching() == true)
-        {
-            // if device is still searching, simply show searching animation
-            mLayoutProgressBar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    // ************
-    //  Concrete Implementation of View.OnClickListener
-    //  this code only runs when the button is enabled - which should only happen when device is connected
-    // ************
-    @Override
-    public void onClick(View v) {
-
-        // get selected firmware from picker
-        final int selectedIndex = mFirmwarePicker.getValue();
-        final JsonFirmwareType firmwareRecord = mJsonFirmwareTypeList.get(selectedIndex);
-
-        // save the name for later, see didFinishUpdate()
-        mSelectedFirmwareName = firmwareRecord.getFwname();
-
-        programFirmware(firmwareRecord);
-    }
-
-    private void programFirmware(JsonFirmwareType firmwareRecord) {
-        mButtonDeploy.setEnabled(false);
-        ((MainActivity) getActivity()).setAllowTabsAndViewpagerSwitching(false);
-
-        powerKeepScreenOn();
-
-        BmdEvalBootloaderInfo bmdEvalBootloaderInfo = mBmdApplication.getBMD200EvalDemoDevice().getBootloaderInfo();
-
-        BluetoothGattCharacteristic resetChar = bmdEvalBootloaderInfo.getBootloaderCharacteristic();
-
-        // initialize FW Manager
-        mRigFirmwareUpdateManager = new RigFirmwareUpdateManager();
-        mRigFirmwareUpdateManager.setObserver(this);
-
-        mUtilities.startFirmwareUpdate(
-                getActivity(),
-                mRigFirmwareUpdateManager,
-                mBmdApplication.getBMD200EvalDemoDevice(),
-                firmwareRecord,
-                resetChar,
-                bmdEvalBootloaderInfo.getBootloaderCommand());
-        mIsUpdateInProgress = true;
-    }
-
-    // ************
-    //  Concrete Implementation of BmdApplication.IConnectionListener
-    // ************
-    @Override
-    public void isNowConnected(BmdEvalDemoDevice device) {
-        //After connecting, register the hardware listener.
-
-        if (mIsUpdateInProgress == false) {
-
-            // hide the SEARCHING UI
-            mLayoutProgressBar.post(new Runnable() {
-                @Override
-                public void run() {
-                    mButtonDeploy.setEnabled(true);
-                    mLayoutProgressBar.setVisibility(View.GONE);
-                }
-            });
-
-        }
+        firmwarePresenter.onResume();
     }
 
     @Override
-    public void isNowDisconnected() {
-
-        // show the SEARCHING UI if not currently programming
-        if (mIsUpdateInProgress == false) {
-            mLayoutProgressBar.post(new Runnable() {
-                @Override
-                public void run() {
-                    mButtonDeploy.setEnabled(false);
-                    //mLayoutProgressBar.setVisibility(View.VISIBLE);
-                    //mBmdApplication.searchForDemoDevices();
-                }
-            });
-        }
+    public void onPauseFragment() {
+        firmwarePresenter.onPause();
     }
 
-    // ************
-    //  Concrete Implementation of IRigFirmwareUpdateManagerObserver
-    // ************
     @Override
-    public void updateProgress(final int progress) {
+    public void updateProgressBar(final int progress) {
         //only update progress if there really was visible progress
         if (mLastProgressIndication != progress) {
             mLastProgressIndication = progress;
@@ -257,70 +150,7 @@ public class FirmwareUpdateFragment extends Fragment implements
     }
 
     @Override
-    public void updateStatus(String status, int error) {
-        showStatus(status);
-    }
-
-    @Override
-    public void didFinishUpdate() {
-        finishUpdate();
-    }
-
-    @Override
-    public void updateFailed(final RigDfuError error) {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getActivity(), error.getErrorMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        finishUpdate();
-
-    }
-
-    private void finishUpdate() {
-        mButtonDeploy.post(new Runnable() {
-            @Override
-            public void run() {
-                mButtonDeploy.setEnabled(true);
-                powerScreenNormal();
-                ((MainActivity) getActivity()).setAllowTabsAndViewpagerSwitching(true);
-            }
-        });
-
-        // reset the UI and state for next firmware programming
-        mLastProgressIndication = -1;
-        mIsUpdateInProgress = false;
-        showStatus("Idle");
-        mProgressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                mProgressBar.setProgress(mLastProgressIndication);
-            }
-        });
-
-        mBmdApplication.disconnectDevice(); //Note: this will cause the searching to begin fresh
-
-        // if the Main Demo Firmware was programmed just now, switch to Fragment 1
-        if (mSelectedFirmwareName.contains(BMD_EVAL_DEMO_NAME_SUBSET)) {
-
-            ((MainActivity)getActivity()).mViewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    ((MainActivity) getActivity()).mViewPager.setCurrentItem(Constants.DEMO_STATUS_FRAGMENT);
-                }
-            });
-
-        }
-    }
-
-    /**
-     * Utility function: update the text on the status field (R.id.id_tv_status)
-     * @param status
-     */
-    private void showStatus(final String status) {
-        // UI widgets must be updated from UI thread
+    public void updateStatusText(final String status) {
         mTextViewStatus.post(new Runnable() {
             @Override
             public void run() {
@@ -329,16 +159,45 @@ public class FirmwareUpdateFragment extends Fragment implements
         });
     }
 
-    // Utility function: Set window to keep screen on. Benefit: does not require a permission
-    // NOTE: call from UI thread
-    protected void powerKeepScreenOn() {
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    @Override
+    public void setFirmwareUpdateCompleted() {
+        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mButtonDeploy.post(new Runnable() {
+            @Override
+            public void run() {
+                mButtonDeploy.setEnabled(true);
+            }
+        });
+
+        mLastProgressIndication = -1;
+        mProgressBar.post(new Runnable() {
+            @Override
+            public void run() {
+                mProgressBar.setProgress(mLastProgressIndication);
+            }
+        });
     }
 
-    // Utility function: Set window to resume normal power operation
-    // NOTE: call from UI thread
-    protected void powerScreenNormal() {
+    @Override
+    public void setFirmwareUpdateFailed(final String errorMessage) {
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mTextViewStatus.post(new Runnable() {
+            @Override
+            public void run() {
+                mTextViewStatus.setText(errorMessage);
+            }
+        });
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Firmware Update Failed")
+                .setMessage(errorMessage)
+                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
     }
 
     /**
@@ -348,13 +207,12 @@ public class FirmwareUpdateFragment extends Fragment implements
      * @param color the desired color
      * @return true if successfully changed the color
      */
-    public boolean setNumberPickerTxtColor(NumberPicker numberPicker, int color)
-    {
+    public boolean setNumberPickerTxtColor(NumberPicker numberPicker, int color) {
         final int count = numberPicker.getChildCount();
-        for(int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             View child = numberPicker.getChildAt(i);
-            if(child instanceof EditText){
-                try{
+            if (child instanceof EditText) {
+                try {
                     Field selectorWheelPaintField = numberPicker.getClass()
                             .getDeclaredField("mSelectorWheelPaint");
                     selectorWheelPaintField.setAccessible(true);
@@ -362,14 +220,9 @@ public class FirmwareUpdateFragment extends Fragment implements
                     ((EditText)child).setTextColor(color);
                     numberPicker.invalidate();
                     return true;
-                }
-                catch(NoSuchFieldException e){
-                    Log.w("setNumberPickerTxtColor", e);
-                }
-                catch(IllegalAccessException e){
-                    Log.w("setNumberPickerTxtColor", e);
-                }
-                catch(IllegalArgumentException e){
+                } catch (NoSuchFieldException
+                        | IllegalAccessException
+                        | IllegalArgumentException e){
                     Log.w("setNumberPickerTxtColor", e);
                 }
             }
@@ -377,100 +230,23 @@ public class FirmwareUpdateFragment extends Fragment implements
         return false;
     }
 
-    /**
-     * Utility function to check currently installed fw and show dialog if necessary
-     * Requires connected device
-     */
-    private void checkFirmwareInstalled(BmdEvalDemoDevice device)
-    {
-        Log.i(TAG, "checkFirmwareInstalled");
-        // if the Blinky Demo fw is programmed, show message to the user
-        if (device.getBaseDevice().getName().contains(BLINKY_DEMO_NAME_SUBSET))
-        {
-            showFirmwareUpdateDialog(R.string.title_blinky_dialog, R.string.message_blinky);
-        }
-    }
-
-    /**
-     * Utility function to show dialog
-     */
-    private void showFirmwareUpdateDialog(int idTitle, int idMessage)
-    {
-        Log.i(TAG, "showFirmwareUpdateDialog");
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(idTitle);
-        alertDialogBuilder.setMessage(idMessage);
-        alertDialogBuilder.setPositiveButton(R.string.txt_yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // YES BUTTON
-
-                // find the main demo firmware in the available list
-                int index;
-                for(index=0; index<mJsonFirmwareTypeList.size(); index++) {
-                    final JsonFirmwareType firmwareRecord = mJsonFirmwareTypeList.get(index);
-
-                    String strname = firmwareRecord.getFwname();
-                    Log.i(TAG, "strname " +strname);
-
-                    // check whether it's the end of the list and we still haven't found it
-                    if ((index == mJsonFirmwareTypeList.size()-1) && (!strname.contains(BMD_EVAL_DEMO_NAME_SUBSET)) )
-                    {
-                        index = -1;//impossible value indicates error
-                        break;
+    private void showFirmwareUpdateDialog(final JsonFirmwareType firmwareType) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Firmware Update")
+                .setMessage(String.format(
+                        "Program the device with %s firmware?", firmwareType.getFwname()))
+                .setPositiveButton(R.string.txt_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        firmwarePresenter.programFirmware(getActivity(), firmwareType);
                     }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                    // found a match in the list - take the index and program the fw
-                    if (strname.contains(BMD_EVAL_DEMO_NAME_SUBSET))
-                    {
-                        break;
                     }
-                }
-
-                if (index == -1)
-                {
-                    // error
-                    dialog.cancel();
-                    alertDialog0 = null;
-                    showFirmwareErrorDialog("Error", "Main Demo firmware does not exist");
-                }
-                else
-                {
-                    final JsonFirmwareType firmwareRecord = mJsonFirmwareTypeList.get(index);
-                    mSelectedFirmwareName = firmwareRecord.getFwname();
-
-                    // program the main demo (evaluation) firmware
-                    programFirmware(firmwareRecord);
-                }
-            }
-        });
-        alertDialogBuilder.setNegativeButton(R.string.txt_no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // NO BUTTON
-                dialog.cancel();
-                alertDialog0 = null;
-            }
-        });
-        alertDialog0 = alertDialogBuilder.create();
-        alertDialog0.show();
+                })
+                .show();
     }
-
-    private void showFirmwareErrorDialog(String strTitle, String strMessage)
-    {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(strTitle);
-        alertDialogBuilder.setMessage(strMessage);
-        alertDialogBuilder.setNeutralButton(R.string.txt_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                alertDialog1 = null;
-            }
-        });
-        alertDialog1 = alertDialogBuilder.create();
-        alertDialog1.show();
-    }
-
-
 }

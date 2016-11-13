@@ -1,22 +1,27 @@
 package com.rigado.bmdeval.datasource;
 
-import android.bluetooth.BluetoothProfile;
 import android.support.annotation.NonNull;
 
-import com.rigado.bmdeval.devicedata.otherdevices.DisconnectedDevice;
-import com.rigado.bmdeval.devicedata.evaldemodevice.EvalDevice;
+import com.rigado.bmdeval.demodevice.DemoDevice;
+import com.rigado.bmdeval.demodevice.DisconnectedDevice;
 import com.rigado.rigablue.RigAvailableDeviceData;
-import com.rigado.rigablue.RigCoreBluetooth;
 
 public class DeviceRepository implements DeviceSource {
 
     private static DeviceRepository sSingleton = null;
 
+    public String [] SCAN_UUID_LIST = {
+            DemoDevice.BMDWARE_SERVICE_UUID,
+            DemoDevice.BLINKY_SERVICE_UUID,
+            DemoDevice.BMDEVAL_UUID_SERVICE,
+            DemoDevice.BLINKY_ADVERTISING_SERVICE_UUID
+    };
+
     /**
      * Cached data
      */
     RigAvailableDeviceData data;
-    EvalDevice evalDevice;
+    DemoDevice demoDevice;
 
     //Prevent direct instantiation
     private DeviceRepository() {
@@ -48,30 +53,15 @@ public class DeviceRepository implements DeviceSource {
     }
 
     @Override
-    public void saveConnectedDevice(@NonNull EvalDevice device) {
-        this.evalDevice = device;
+    public void saveConnectedDevice(@NonNull DemoDevice device) {
+        this.demoDevice = device;
     }
 
     @Override
-    public EvalDevice getConnectedDevice() {
-        if (evalDevice == null) {
-            evalDevice = new DisconnectedDevice();
+    public DemoDevice getConnectedDevice() {
+        if (demoDevice == null) {
+            demoDevice = new DisconnectedDevice();
         }
-        return evalDevice;
-    }
-
-    @Override
-    public boolean isDeviceConnected() {
-        if (evalDevice == null
-                || evalDevice instanceof DisconnectedDevice
-                || evalDevice.getBaseDevice() == null) {
-            return false;
-        }
-
-        return RigCoreBluetooth.getInstance()
-                .getDeviceConnectionState(
-                        evalDevice
-                        .getBaseDevice()
-                        .getBluetoothDevice()) == BluetoothProfile.STATE_CONNECTED;
+        return demoDevice;
     }
 }

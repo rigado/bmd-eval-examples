@@ -16,6 +16,7 @@
     <!--https://material.google.com/style/color.html#color-text-background-colors-->
     <color name="textColorRegular">#68000000</color>
     <color name="textColorDisabled">#38000000</color>
+    <color name="textColorTab">#68FFFFFF</color>
     <color name="colorDivider">#20000000</color>
 
     <color name="item_device_background">#FAFAFA</color>

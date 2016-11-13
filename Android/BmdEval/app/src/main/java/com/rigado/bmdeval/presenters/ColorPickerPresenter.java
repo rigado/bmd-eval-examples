@@ -6,20 +6,20 @@ import android.bluetooth.BluetoothGattDescriptor;
 
 import com.rigado.bmdeval.contracts.ColorPickerContract;
 import com.rigado.bmdeval.datasource.DeviceRepository;
-import com.rigado.bmdeval.devicedata.IDeviceListener;
-import com.rigado.bmdeval.devicedata.evaldemodevice.EvalDevice;
-import com.rigado.bmdeval.devicedata.evaldemodevice.RgbColor;
+import com.rigado.bmdeval.demodevice.DemoDevice;
+import com.rigado.bmdeval.demodevice.IDemoDeviceListener;
+import com.rigado.bmdeval.demodevice.devicedata.RgbColor;
 
 public class ColorPickerPresenter extends BasePresenter implements
         ColorPickerContract.UserActionsListener,
-        IDeviceListener.ReadWriteListener {
+        IDemoDeviceListener.ReadWriteListener {
 
     private ColorPickerContract.View colorPickerView;
-    private EvalDevice evalDevice;
+    private DemoDevice demoDevice;
 
     public ColorPickerPresenter(ColorPickerContract.View view) {
         this.colorPickerView = view;
-        evalDevice =
+        demoDevice =
                 DeviceRepository
                         .getInstance()
                         .getConnectedDevice();
@@ -28,12 +28,12 @@ public class ColorPickerPresenter extends BasePresenter implements
 
     @Override
     public void onResume() {
-        evalDevice.addReadWriteListener(this);
+        demoDevice.addReadWriteListener(this);
     }
 
     @Override
     public void onPause() {
-        evalDevice.removeReadWriteListener(this);
+        demoDevice.removeReadWriteListener(this);
     }
 
     @Override
@@ -53,11 +53,6 @@ public class ColorPickerPresenter extends BasePresenter implements
 
     @Override
     public void setLedColor(RgbColor color) {
-        //Turn LED on if off & set color
-    }
-
-    @Override
-    public void setLedEnabled(boolean enabled) {
-        //Turn LED on or off
+        demoDevice.setLedColor(color);
     }
 }

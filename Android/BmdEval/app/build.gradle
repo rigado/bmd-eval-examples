@@ -28,12 +28,12 @@ android {
 
     productFlavors {
         demo {
-            applicationId "com.rigado.rigadotoolbox.demo"
+            applicationId "com.rigado.bmdeval.demo"
             resValue "string", "app_name", "BMD Eval DEBUG"
         }
 
         production {
-            applicationId "com.rigado.rigadotoolbox"
+            applicationId "com.rigado.bmdeval"
             resValue "string", "app_name", "BMD Eval Demo"
         }
     }

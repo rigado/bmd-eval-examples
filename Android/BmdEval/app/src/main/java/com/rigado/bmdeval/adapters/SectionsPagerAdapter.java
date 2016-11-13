@@ -4,6 +4,9 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.view.ViewGroup;
 
 import com.rigado.bmdeval.R;
 import com.rigado.bmdeval.fragments.AboutFragment;
@@ -19,22 +22,37 @@ import java.util.Locale;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding
  * to one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
-    private List<Fragment> mFragmentList;
+public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
+    private boolean isConnected;
 
     public final static int DEMO_STATUS_FRAGMENT = 0;
     public final static int COLOR_WHEEL_FRAGMENT = 1;
     public final static int FIRMWARE_UPDATE_FRAGMENT = 2;
     public final static int ABOUT_FRAGMENT = 3;
 
+    private List<Fragment> mFragmentList;
+
+    public static final String CONNECTION_STATE =
+            "com.rigado.bmdeval.SectionsPagerAdapter.CONNECT_STATE";
+
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         this.mContext = context;
-        mFragmentList = new ArrayList<Fragment>();
-        mFragmentList.add(new DemoFragment());
-        mFragmentList.add(new ColorPickerFragment());
-        mFragmentList.add(new FirmwareUpdateFragment());
+        this.isConnected = false;
+        mFragmentList = new ArrayList<>();
+        createFragments();
+    }
+
+    public void destroyCache() {
+        mFragmentList.clear();
+        createFragments();
+    }
+
+    public void createFragments() {
+        mFragmentList.add(DemoFragment.newInstance(isConnected));
+        mFragmentList.add(ColorPickerFragment.newInstance(isConnected));
+        mFragmentList.add(FirmwareUpdateFragment.newInstance(isConnected));
         mFragmentList.add(new AboutFragment());
     }
 
@@ -45,7 +63,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return mFragmentList.size();
+        return 4;
     }
 
     @Override
@@ -62,6 +80,27 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return mContext.getString(R.string.title_about_fragment).toUpperCase(l);
         }
         return null;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        if (position >= getCount()) {
+            FragmentManager fragmentManager = ((Fragment) object).getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove((Fragment) object);
+            fragmentTransaction.commitNow();
+        }
+
+        super.destroyItem(container, position, object);
+    }
+
+    public void setConnected(boolean isConnected) {
+        this.isConnected = isConnected;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
 }

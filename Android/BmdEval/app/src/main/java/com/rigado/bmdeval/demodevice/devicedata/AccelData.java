@@ -1,4 +1,4 @@
-package com.rigado.bmdeval.devicedata.evaldemodevice;
+package com.rigado.bmdeval.demodevice.devicedata;
 
 /**
  * Created by stutzenbergere on 7/27/15.

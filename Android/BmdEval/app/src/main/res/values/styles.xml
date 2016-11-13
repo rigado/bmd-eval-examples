@@ -1,19 +1,16 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <!-- Main theme colors -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+=        <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorEmeraldGreen</item>
         <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
     </style>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
         <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:actionMenuTextColor">@color/colorPrimaryDark</item>
+        <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="elevation">4dp</item>
     </style>
 
@@ -28,14 +25,14 @@
         <item name="tabPaddingStart">8dp</item>
         <item name="tabPaddingEnd">8dp</item>
         <item name="tabBackground">?attr/selectableItemBackground</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimaryDark</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
     </style>
 
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/textColorDisabled</item>
+        <item name="android:textColor">@color/textColorTab</item>
         <item name="textAllCaps">true</item>
     </style>
 

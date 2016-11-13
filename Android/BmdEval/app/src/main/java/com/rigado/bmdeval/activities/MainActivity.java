@@ -1,22 +1,24 @@
 package com.rigado.bmdeval.activities;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.rigado.bmdeval.R;
 import com.rigado.bmdeval.adapters.SectionsPagerAdapter;
 import com.rigado.bmdeval.contracts.MainContract;
 import com.rigado.bmdeval.customviews.ControllableViewPager;
-import com.rigado.bmdeval.devicedata.otherdevices.BleDevice;
-import com.rigado.bmdeval.devicedata.evaldemodevice.EvalDevice;
-import com.rigado.bmdeval.devicedata.otherdevices.BlinkyDevice;
-import com.rigado.bmdeval.devicedata.otherdevices.BmdwareDevice;
+import com.rigado.bmdeval.demodevice.DemoDevice;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
+import com.rigado.bmdeval.presenters.MainPresenter;
 import com.rigado.bmdeval.utilities.Utilities;
 import com.rigado.rigablue.RigCoreBluetooth;
 
@@ -24,22 +26,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    public ControllableViewPager mViewPager;
+    private ProgressDialog mDiscoveryDialog;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ControllableViewPager mViewPager;
+    private int oldPosition = 0;//by default the first tab
 
-
+    public MainPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         setContentView(R.layout.activity_main);
 
         checkLocationPermissions();
+
+        mDiscoveryDialog = new ProgressDialog(this);
+        mDiscoveryDialog.setIndeterminate(true);
+        mDiscoveryDialog.setIndeterminateDrawable(
+                ContextCompat.getDrawable(this, R.drawable.progressbar));
+        mDiscoveryDialog.setCancelable(false);
 
         // Set up the toolbar.
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,10 +62,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3);// set to 3 to keep all 4 pages alive
 
-        // Resume and Pause fragments #onPageSelected
+        /** Resume and Pause fragments in {@link #onPageSelected} */
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            private int oldPosition = 0;//by default the first tab
 
             @Override
             public void onPageSelected(int position) {
@@ -80,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 fragmentToShow.onResumeFragment();
 
                 oldPosition = position;
+
             }
 
             @Override
@@ -93,17 +91,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_device_tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mainPresenter = new MainPresenter(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         checkLocationPermissions();
+        mainPresenter.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        mainPresenter.onPause();
     }
 
     private void checkLocationPermissions() {
@@ -133,14 +135,103 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void onInterrogationCompleted(BleDevice deviceType) {
-        if (deviceType instanceof BlinkyDevice
-                || deviceType instanceof BmdwareDevice) {
+    public void onInterrogationCompleted(final DemoDevice deviceType) {
+        Log.d(TAG, "onInterrogationCompleted");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mDiscoveryDialog.dismiss();
+                mSectionsPagerAdapter.setConnected(true);
+                mSectionsPagerAdapter.destroyCache();
+                mSectionsPagerAdapter.notifyDataSetChanged();
+                if (deviceType.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Update to demo firmware?")
+                            .setMessage("The device is currently running "
+                                    + deviceType.getFirmwareType().getDescription()
+                                    + " firmware. Would you like to update to the"
+                                    + " main demo firmware?")
+                            .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    mViewPager.setCurrentItem(
+                                            SectionsPagerAdapter.FIRMWARE_UPDATE_FRAGMENT);
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    // Noop.
+                                }
+                            })
+                            .show();
+                }
 
-        } else if (deviceType instanceof EvalDevice) {
-
-        } else {
-            //TODO : Handle odd device connections
-        }
+            }
+        });
     }
+
+    @Override
+    public void onInterrogationFailed(DemoDevice demoDevice) {
+        new AlertDialog.Builder(this)
+                .setTitle("Interrogation Failed!")
+                .setMessage("Failed to find device hardware version. Try resetting your bluetooth and restarting the app.")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Noop
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void updateDialog(final String message) {
+        Log.i(TAG, "updateDialog");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (!mDiscoveryDialog.isShowing()) {
+                    mDiscoveryDialog.show();
+                }
+
+                mDiscoveryDialog.setMessage(message);
+            }
+
+        });
+    }
+
+    @Override
+    public void deviceDisconnected(final String reason) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+            // Only allow reconnect attempts if a firmware update is not in progress or
+            // has not been successfully completed.
+            mSectionsPagerAdapter.setConnected(false);
+            mSectionsPagerAdapter.destroyCache();
+            mSectionsPagerAdapter.notifyDataSetChanged();
+
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Device Disconnected")
+                    .setMessage("Try Reconnecting?")
+                    .setPositiveButton("Reconnect", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            mainPresenter.requestReconnect();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                           mainPresenter.maybeStartScanning();
+                        }
+                    })
+                    .show();
+            }
+
+        });
+    }
+
 }

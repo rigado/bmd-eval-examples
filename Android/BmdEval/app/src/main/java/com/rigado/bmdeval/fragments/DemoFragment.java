@@ -1,6 +1,5 @@
 package com.rigado.bmdeval.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -8,21 +7,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
-import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.rigado.bmdeval.BmdApplication;
 import com.rigado.bmdeval.R;
+import com.rigado.bmdeval.adapters.SectionsPagerAdapter;
 import com.rigado.bmdeval.contracts.DemoContract;
-import com.rigado.bmdeval.devicedata.evaldemodevice.AccelData;
-import com.rigado.bmdeval.devicedata.evaldemodevice.AmbientLight;
-import com.rigado.bmdeval.devicedata.evaldemodevice.ButtonStatus;
-import com.rigado.bmdeval.devicedata.evaldemodevice.RgbColor;
+import com.rigado.bmdeval.demodevice.devicedata.AccelData;
+import com.rigado.bmdeval.demodevice.devicedata.AmbientLight;
+import com.rigado.bmdeval.demodevice.devicedata.ButtonStatus;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmdeval.presenters.DemoPresenter;
 
@@ -52,13 +48,29 @@ public class DemoFragment extends Fragment implements
 
     private DemoPresenter demoPresenter;
 
-    //Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-    public DemoFragment() {}
+    private boolean isConnected;
+
+    public static DemoFragment newInstance(boolean isConnected) {
+        DemoFragment demoFragment = new DemoFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(SectionsPagerAdapter.CONNECTION_STATE, isConnected);
+        demoFragment.setArguments(args);
+        return demoFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        super.onCreate(savedState);
+        isConnected = getArguments()
+                .getBoolean(SectionsPagerAdapter.CONNECTION_STATE, false);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.i(TAG, "DemoFragment " + isConnected);
 
         //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_demo, container, false);
@@ -115,6 +127,13 @@ public class DemoFragment extends Fragment implements
         demoPresenter = new DemoPresenter(this);
 
         return rootView;
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        Log.i(TAG, "onHiddenChanged " +hidden);
     }
 
     @Override
@@ -190,7 +209,7 @@ public class DemoFragment extends Fragment implements
         final int iArraySizeMinusOne = MAX_ARRAY_SIZE -1;//optimization
 
         //NOTE: at this point mDataIndex should always = MAX_ARRAY_SIZE -1
-        for (int i=0; i<iArraySizeMinusOne; i++) {
+        for (int i = 0 ; i < iArraySizeMinusOne; i++) {
             // there's no way around the data shuffle because resetData() expects an array with values in sequence
             // NOTE: DataPoint class does *not* have setters, creating new objects is the only way to set data
             dparrayX[i] = new DataPoint(i, dparrayX[i+1].getY());

@@ -1,8 +1,8 @@
 package com.rigado.bmdeval.contracts;
 
-import com.rigado.bmdeval.devicedata.evaldemodevice.AccelData;
-import com.rigado.bmdeval.devicedata.evaldemodevice.AmbientLight;
-import com.rigado.bmdeval.devicedata.evaldemodevice.ButtonStatus;
+import com.rigado.bmdeval.demodevice.devicedata.AccelData;
+import com.rigado.bmdeval.demodevice.devicedata.AmbientLight;
+import com.rigado.bmdeval.demodevice.devicedata.ButtonStatus;
 
 public interface DemoContract {
 

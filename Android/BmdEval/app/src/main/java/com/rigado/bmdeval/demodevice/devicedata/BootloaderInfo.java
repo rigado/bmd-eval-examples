@@ -1,4 +1,4 @@
-package com.rigado.bmdeval.devicedata;
+package com.rigado.bmdeval.demodevice.devicedata;
 
 import android.support.annotation.NonNull;
 
@@ -69,7 +69,7 @@ public class BootloaderInfo {
 
     //Hardware Support
     private static final int HARDWARE_SUPPORT_NRF51 = 1;
-    private static final int HARDWARE_SUPPORT_NRF52 = 2;
+    public static final int HARDWARE_SUPPORT_NRF52 = 2;
 
     //Bootloader value indices
     private static final int INFO_INDEX = 0;
@@ -83,6 +83,10 @@ public class BootloaderInfo {
     private static final int PROTOCOL_INDEX = 11;
 
     private static final int BUILD_NUMBER_DATA_SIZE = 4;
+
+    public static final int SIZE = 20;
+    public static final int LEGACY_SIZE = 12;
+    public static final int LEGACY_HARDWARE_INDEX = 9;
 
 
     public enum VersionType {
@@ -129,7 +133,7 @@ public class BootloaderInfo {
             this.valDescription = valDescription;
         }
 
-        int getType() {
+        public int getType() {
             return this.valType;
         }
 
@@ -159,7 +163,7 @@ public class BootloaderInfo {
             this.valDescription = valDescription;
         }
 
-        int getType() {
+        public int getType() {
             return this.valType;
         }
 
@@ -217,6 +221,10 @@ public class BootloaderInfo {
     }
 
     private int parseBuildNumber(@NonNull byte [] bytes) {
+        if (bytes.length < (BUILD_NUMBER_START_INDEX + 1 + BUILD_NUMBER_DATA_SIZE)) {
+            return 0;
+        }
+
         final byte[] data = new byte[BUILD_NUMBER_DATA_SIZE];
         System.arraycopy(bytes, BUILD_NUMBER_START_INDEX, data, 0, BUILD_NUMBER_DATA_SIZE);
         int value = ByteBuffer.wrap(data).getInt();
@@ -225,20 +233,36 @@ public class BootloaderInfo {
     }
 
     private VersionType parseVersionType(@NonNull byte[] bytes) {
+        if (bytes.length < (VERSION_TYPE_INDEX + 1)) {
+            return null;
+        }
+
         return VersionType.versionTypeFromByte(bytes[VERSION_TYPE_INDEX]);
     }
 
     private SoftDeviceSupport parseSoftDeviceSupport(@NonNull byte [] bytes) {
+        if (bytes.length < (SOFT_DEVICE_INDEX + 1)) {
+            return null;
+        }
+
         return SoftDeviceSupport.softDeviceSupportFromByte(bytes[SOFT_DEVICE_INDEX]);
     }
 
     private HardwareSupport parseHardwareSupport(@NonNull byte [] bytes) {
+        if (bytes.length < (HARDWARE_INDEX + 1)) {
+            return null;
+        }
+
         return HardwareSupport.hardwareTypeFromByte(bytes[HARDWARE_INDEX]);
     }
 
     // RigDfu has its own Protocol Version. This is different from
     // BMDware's protocol version.
     private int parseProtocolVer(@NonNull byte [] bytes) {
+        if (bytes.length < (PROTOCOL_INDEX + 1)) {
+            return 0;
+        }
+
         return bytes[PROTOCOL_INDEX];
     }
 

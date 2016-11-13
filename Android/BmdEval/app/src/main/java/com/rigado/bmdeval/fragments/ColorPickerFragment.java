@@ -1,5 +1,6 @@
 package com.rigado.bmdeval.fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -16,9 +17,12 @@ import android.widget.ImageView;
 import android.widget.ToggleButton;
 
 import com.rigado.bmdeval.R;
+import com.rigado.bmdeval.activities.MainActivity;
+import com.rigado.bmdeval.adapters.SectionsPagerAdapter;
 import com.rigado.bmdeval.contracts.ColorPickerContract;
 import com.rigado.bmdeval.customviews.CircleView;
-import com.rigado.bmdeval.devicedata.evaldemodevice.RgbColor;
+import com.rigado.bmdeval.customviews.ControllableViewPager;
+import com.rigado.bmdeval.demodevice.devicedata.RgbColor;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmdeval.presenters.ColorPickerPresenter;
 
@@ -32,17 +36,41 @@ public class ColorPickerFragment extends Fragment implements
     private ImageView mImageWheel;
     private CircleView mImageSelected;
     private ToggleButton mToggleButton;
+    private ControllableViewPager mViewPager;
 
     private ColorPickerPresenter colorPickerPresenter;
 
-    public ColorPickerFragment() {}
+    private boolean isConnected;
+
+    public static ColorPickerFragment newInstance(boolean isConnected) {
+        ColorPickerFragment colorPickerFragment = new ColorPickerFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(SectionsPagerAdapter.CONNECTION_STATE, isConnected);
+        colorPickerFragment.setArguments(args);
+        return colorPickerFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        super.onCreate(savedState);
+        isConnected = getArguments()
+                .getBoolean(SectionsPagerAdapter.CONNECTION_STATE, false);
+    }
+
+    //TODO : Refactor legacy code
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mViewPager = ((MainActivity) getActivity()).mViewPager;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_color_picker, container, false);
 
         mImageWheel = (ImageView) rootView.findViewById(R.id.fragment_color_picker_wheel_image);
@@ -54,13 +82,29 @@ public class ColorPickerFragment extends Fragment implements
         mToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(TAG, "toggle button enabled " + mToggleButton.isChecked());
-                colorPickerPresenter.setLedEnabled(mToggleButton.isChecked());
-                //TODO : If off & turning on, getSelectedColor & set LED
+                RgbColor rgbColor;
+
+                if (mToggleButton.isChecked()) {
+                    final int selectedColor = mImageSelected.getFillColor();
+                    rgbColor = new RgbColor(
+                        Color.red(selectedColor),
+                        Color.green(selectedColor),
+                        Color.blue(selectedColor));
+                } else {
+                    rgbColor = new RgbColor(0, 0, 0);
+                }
+
+                colorPickerPresenter.setLedColor(rgbColor);
             }
         });
 
         colorPickerPresenter = new ColorPickerPresenter(this);
+
+        if (!isConnected) {
+            mToggleButton.setEnabled(false);
+            mImageWheel.setEnabled(false);
+            mImageSelected.setEnabled(false);
+        }
 
         return rootView;
     }
@@ -70,10 +114,10 @@ public class ColorPickerFragment extends Fragment implements
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
-                //TODO : Prevent viewpager touch events
+                mViewPager.requestDisallowInterceptTouchEvent(true);
                 return maybeSetLedColor(v, event);
             case MotionEvent.ACTION_CANCEL:
-                //TODO: Allow viewpager touch events
+                mViewPager.requestDisallowInterceptTouchEvent(false);
                 return false;
             default:
                 return false;
@@ -82,7 +126,9 @@ public class ColorPickerFragment extends Fragment implements
 
     private boolean maybeSetLedColor(View view, MotionEvent event) {
         if (view == mImageWheel && mImageWheel.isEnabled()) {
-            //get the x and y where imageview was touched
+            /**
+             * Get positions X and Y where {@code mImageWheel} was touched
+             */
             Matrix inverse = new Matrix();
             mImageWheel.getImageMatrix().invert(inverse);
             float[] touchPoint = new float[] {event.getX(), event.getY()};
@@ -116,6 +162,11 @@ public class ColorPickerFragment extends Fragment implements
                             Color.blue(selectedColor));
 
                     colorPickerPresenter.setLedColor(rgbcolor);
+
+                    if (!mToggleButton.isChecked()) {
+                        mToggleButton.setChecked(true);
+                    }
+
                     return true;
                 }
             }
@@ -145,19 +196,5 @@ public class ColorPickerFragment extends Fragment implements
     @Override
     public void onPauseFragment() {
         colorPickerPresenter.onPause();
-    }
-
-    @Override
-    public void updateStatusButton(boolean enabled) {
-
-    }
-
-    private RgbColor getSelectedColor() {
-        int selectedColor = mImageSelected.getFillColor();
-        RgbColor rgbcolor = new RgbColor(
-                Color.red(selectedColor),
-                Color.green(selectedColor),
-                Color.blue(selectedColor));
-        return rgbcolor;
     }
 }

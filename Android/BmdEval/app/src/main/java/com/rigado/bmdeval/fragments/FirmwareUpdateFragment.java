@@ -2,7 +2,6 @@ package com.rigado.bmdeval.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +18,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.rigado.bmdeval.R;
+import com.rigado.bmdeval.activities.MainActivity;
+import com.rigado.bmdeval.adapters.SectionsPagerAdapter;
 import com.rigado.bmdeval.contracts.FirmwareContract;
+import com.rigado.bmdeval.demodevice.DemoDevice;
 import com.rigado.bmdeval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmdeval.presenters.FirmwarePresenter;
 import com.rigado.bmdeval.utilities.JsonFirmwareReader;
@@ -40,14 +42,28 @@ public class FirmwareUpdateFragment extends Fragment implements
     private ProgressBar mProgressBar;
     private TextView mTextViewStatus;
 
-    // General Member Variables
     private JsonFirmwareReader mJsonFirmwareReader;
     private ArrayList<JsonFirmwareType> mJsonFirmwareTypeList;
     private int mLastProgressIndication = -1;
 
     private FirmwarePresenter firmwarePresenter;
 
-    public FirmwareUpdateFragment(){}
+    private boolean isConnected;
+
+    public static FirmwareUpdateFragment newInstance(boolean isConnected) {
+        FirmwareUpdateFragment firmwareUpdateFragment = new FirmwareUpdateFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(SectionsPagerAdapter.CONNECTION_STATE, isConnected);
+        firmwareUpdateFragment.setArguments(args);
+        return firmwareUpdateFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        super.onCreate(savedState);
+        isConnected = getArguments()
+                .getBoolean(SectionsPagerAdapter.CONNECTION_STATE, false);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -89,7 +105,9 @@ public class FirmwareUpdateFragment extends Fragment implements
             @Override
             public void run() {
                 if (mJsonFirmwareTypeList.size() > 1) {
-                    mFirmwarePicker.setValue(1);// auto select the 2nd item in the list to make the UI more identifiable to the user
+                    // auto select the 2nd item in the list to
+                    // make the UI more identifiable to the user
+                    mFirmwarePicker.setValue(1);
                 }
             }
         });
@@ -110,6 +128,10 @@ public class FirmwareUpdateFragment extends Fragment implements
         });
 
         firmwarePresenter = new FirmwarePresenter(this);
+
+        if (!isConnected) {
+            mButtonDeploy.setEnabled(false);
+        }
 
         return rootView;
     }
@@ -139,23 +161,29 @@ public class FirmwareUpdateFragment extends Fragment implements
 
     @Override
     public void updateProgressBar(final int progress) {
-        //only update progress if there really was visible progress
-        if (mLastProgressIndication != progress) {
-            mLastProgressIndication = progress;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //only update progress if there really was visible progress
+                if (mLastProgressIndication != progress) {
+                    mLastProgressIndication = progress;
 
-            // UI widgets must be updated from UI thread
-            mProgressBar.post(new Runnable() {
-                @Override
-                public void run() {
-                    mProgressBar.setProgress(progress);
+                    // UI widgets must be updated from UI thread
+                    mProgressBar.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mProgressBar.setProgress(progress);
+                        }
+                    });
                 }
-            });
-        }
+            }
+        });
+
     }
 
     @Override
     public void updateStatusText(final String status) {
-        mTextViewStatus.post(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mTextViewStatus.setText(status);
@@ -164,44 +192,49 @@ public class FirmwareUpdateFragment extends Fragment implements
     }
 
     @Override
-    public void setFirmwareUpdateCompleted() {
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mButtonDeploy.post(new Runnable() {
-            @Override
-            public void run() {
-                mButtonDeploy.setEnabled(true);
-            }
-        });
-
+    public void setFirmwareUpdateCompleted(final DemoDevice demoDevice) {
+        getActivity().getWindow()
+                .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mLastProgressIndication = -1;
-        mProgressBar.post(new Runnable() {
-            @Override
-            public void run() {
-                mProgressBar.setProgress(mLastProgressIndication);
-            }
-        });
+        mProgressBar.setProgress(mLastProgressIndication);
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Firmware Update Completed")
+                .setMessage("To complete the firmware update, please reset your bluetooth and restart the app.")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .setCancelable(false)
+                .show();
+
+        mProgressBar.setProgress(mLastProgressIndication);
     }
 
     @Override
     public void setFirmwareUpdateFailed(final String errorMessage) {
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mTextViewStatus.post(new Runnable() {
-            @Override
-            public void run() {
-                mTextViewStatus.setText(errorMessage);
-            }
-        });
+        mTextViewStatus.setText(errorMessage);
 
         new AlertDialog.Builder(getActivity())
                 .setTitle("Firmware Update Failed")
                 .setMessage(errorMessage)
-                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        ((MainActivity) getActivity()).mainPresenter.maybeStartScanning();
                     }
                 })
+                .setCancelable(false)
                 .show();
+
+
+    }
+
+    @Override
+    public void setButtonEnabled(boolean enabled) {
+        mButtonDeploy.setEnabled(enabled);
     }
 
     /**

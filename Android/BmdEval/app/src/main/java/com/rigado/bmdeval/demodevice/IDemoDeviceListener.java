@@ -1,12 +1,12 @@
-package com.rigado.bmdeval.devicedata;
+package com.rigado.bmdeval.demodevice;
 
 
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 
-import com.rigado.rigablue.RigDfuError;
+import com.rigado.rigablue.RigLeBaseDevice;
 
-public interface IDeviceListener {
+public interface IDemoDeviceListener {
 
     interface BluetoothStateListener {
         void onBluetoothPowerStateChange(boolean enabled);
@@ -25,15 +25,7 @@ public interface IDeviceListener {
         void onCharacteristicStateChange(BluetoothGattCharacteristic characteristic);
     }
 
-    interface FirmwareUpdateListener {
-        void onReceiveProgress(int progress);
-        void onReceiveStatus(String status);
-        void onUpdateCompleted();
-        void onUpdateFailed(RigDfuError error);
-
-    }
-
     interface DiscoveryListener {
-        void onServicesDiscovered();
+        void onServicesDiscovered(RigLeBaseDevice device);
     }
 }

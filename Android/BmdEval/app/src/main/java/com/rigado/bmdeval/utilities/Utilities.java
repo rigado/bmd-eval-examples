@@ -2,20 +2,14 @@ package com.rigado.bmdeval.utilities;
 
 import android.Manifest;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
-import com.rigado.bmdeval.devicedata.evaldemodevice.EvalDevice;
 import com.rigado.rigablue.RigCoreBluetooth;
-import com.rigado.rigablue.RigFirmwareUpdateManager;
-
-import java.io.InputStream;
 
 /**
  * BTLE Sample app useful methods and functions

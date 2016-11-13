@@ -1,21 +1,31 @@
 [
   {
-    "fwname": "BMD Eval Demo",
-    "properties": {
-      "version": 1.0,
-      "build": 0,
-      "filename_200": "eval_demo_1_0_0_ota",
-      "filename_300": "bmd_300_demo_shield_rel_1_0_4_ota",
-      "comment": "in the fw filename above, the .bin extension is not necessary"
-    }
-  },
-  {
     "fwname": "Blinky Demo",
     "properties": {
       "version": 1.0,
       "build": 0,
-      "filename_200": "bmd200_blinky_demo_ota",
-      "filename_300": "bmd_blinky_demo_nrf52_s132_1_0_1_ota",
+      "filename_200": "bmd_200_blinky_demo_ota",
+      "filename_300": "bmd_300_blinky_demo_ota",
+      "comment": "in the fw filename above, the .bin extension is not necessary"
+    }
+  },
+  {
+    "fwname": "BMD Eval Demo",
+    "properties": {
+      "version": 1.0,
+      "build": 0,
+      "filename_200": "bmd_200_eval_demo_ota",
+      "filename_300": "bmd_300_eval_demo_ota",
+      "comment": "in the fw filename above, the .bin extension is not necessary"
+    }
+  },
+  {
+    "fwname": "Bmdware",
+    "properties": {
+      "version": 1.0,
+      "build": 0,
+      "filename_200": "bmd_200_bmdware_ota",
+      "filename_300": "bmd_300_bmdware_ota",
       "comment": "in the fw filename above, the .bin extension is not necessary"
     }
   }

@@ -45,11 +45,11 @@ public class ColorPickerFragment extends Fragment implements
         //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_color_picker, container, false);
 
-        mImageWheel = (ImageView) rootView.findViewById(R.id.imageView1);
+        mImageWheel = (ImageView) rootView.findViewById(R.id.fragment_color_picker_wheel_image);
         mImageWheel.setOnTouchListener(this);
-        mImageSelected = (CircleView) rootView.findViewById(R.id.imageColorSelected);
+        mImageSelected = (CircleView) rootView.findViewById(R.id.fragment_color_picker_circleview);
         mImageSelected.setFillColor(Color.WHITE);
-        mToggleButton = (ToggleButton) rootView.findViewById(R.id.toggleButton);
+        mToggleButton = (ToggleButton) rootView.findViewById(R.id.fragment_color_picker_button);
 
         mToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override

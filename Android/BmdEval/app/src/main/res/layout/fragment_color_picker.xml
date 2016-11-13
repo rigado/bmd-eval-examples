@@ -1,19 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:circleview="http://schemas.android.com/apk/res-auto"
-    tools:context=".activities.MainActivity"
+<RelativeLayout
     android:id="@+id/background_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:circleview="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.MainActivity"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="16dp"
     >
 
     <!-- Selected Color -->
     <com.rigado.bmdeval.customviews.CircleView
-        android:id="@+id/imageColorSelected"
+        android:id="@+id/fragment_color_picker_circleview"
         android:layout_width="@dimen/selected_color_size"
         android:layout_height="@dimen/selected_color_size"
-        android:layout_marginStart="10dp"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
         circleview:cFillColor="#DDaa99"
         circleview:cStrokeColor="@android:color/white"
         circleview:cRadius="0"
@@ -23,11 +29,11 @@
 
     <!-- Color Wheel -->
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/fragment_color_picker_wheel_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="32dp"
         android:padding="10dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
@@ -36,56 +42,15 @@
         android:layout_alignParentTop="true"
         />
 
-
-    <!-- this is a hack: put a light background under the Togglebutton
-    since the toggleButton is slightly transparent by default -->
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/toggleButton"
-        android:layout_alignLeft="@id/toggleButton"
-        android:layout_alignBottom="@id/toggleButton"
-        android:layout_alignRight="@id/toggleButton"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:background="@android:color/background_light"/>
-
     <ToggleButton
-        android:id="@+id/toggleButton"
+        android:id="@+id/fragment_color_picker_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:theme="@style/PrimaryButton"
+        android:textColor="@android:color/white"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="20dp"/>
-
-    <!-- Indeterminate Progress Bar -->
-    <RelativeLayout
-        android:id="@+id/layout_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/shape_background_white_stroked"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/textview_searching"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_searching"
-            android:textSize="12pt"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true" />
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_below="@id/textview_searching"
-            android:indeterminate="true"/>
-
-    </RelativeLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        />
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.rigado.bmdeval.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -72,13 +74,20 @@ public class DemoFragment extends Fragment implements
         mTextViewUser1.setAlpha(0.5f);
         mTextViewUser2.setAlpha(0.5f);
 
+        final int textColorRegular = ContextCompat.getColor(getActivity(), R.color.textColorRegular);
+        final int colorPrimary = ContextCompat.getColor(getActivity(), R.color.colorPrimary);
+        final int colorAccent = ContextCompat.getColor(getActivity(), R.color.colorAccent);
+        final int colorSecondary = ContextCompat.getColor(getActivity(), R.color.colorSecondary);
+
         // set graph title
         mGraph.setTitle("Accelerometer Data");
+        mGraph.setTitleColor(textColorRegular);
 
         // hide the x-axis labels
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(mGraph);
         staticLabelsFormatter.setHorizontalLabels(new String[]{" ", " "});
         mGraph.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+        mGraph.getGridLabelRenderer().setGridColor(textColorRegular);
 
         // set Y bounds
         mGraph.getViewport().setYAxisBoundsManual(true);
@@ -92,12 +101,13 @@ public class DemoFragment extends Fragment implements
 
         // initialize data
         initializeDataArrays();
+
         mSeriesX = new LineGraphSeries<DataPoint>();
         mSeriesY = new LineGraphSeries<DataPoint>();
         mSeriesZ = new LineGraphSeries<DataPoint>();
-        mSeriesX.setColor(Color.RED);
-        mSeriesY.setColor(Color.BLUE);
-        mSeriesZ.setColor(Color.GREEN);
+        mSeriesX.setColor(colorAccent);
+        mSeriesY.setColor(colorPrimary);
+        mSeriesZ.setColor(colorSecondary);
         mGraph.addSeries(mSeriesX);
         mGraph.addSeries(mSeriesY);
         mGraph.addSeries(mSeriesZ);

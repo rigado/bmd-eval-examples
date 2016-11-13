@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.MainActivity"
     android:id="@+id/background_layout"
@@ -12,9 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
         android:layout_alignParentTop="true"
-        android:textColor="@android:color/white"
         android:descendantFocusability="blocksDescendants"
         />
 
@@ -23,6 +23,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/label_btn_deploy"
+        android:theme="@style/PrimaryButton"
+        android:textColor="@android:color/white"
         android:layout_below="@+id/id_picker_firmware"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp" />
@@ -35,48 +37,21 @@
         android:layout_below="@+id/id_btn_begin_deploy"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/id_tv_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/label_tv_status_idle"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_below="@+id/id_progress_deployment"
         android:layout_centerHorizontal="true"
-        android:textColor="@android:color/white"
-        android:layout_marginTop="20dp"/>
-
-    <!-- Indeterminate Progress Bar -->
-    <RelativeLayout
-        android:id="@+id/layout_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/shape_background_white_stroked"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/textview_searching"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_searching"
-            android:textSize="12pt"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="16dp"/>
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_below="@id/textview_searching"
-            android:indeterminate="true"/>
-
-    </RelativeLayout>
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        />
 
 </RelativeLayout>
 

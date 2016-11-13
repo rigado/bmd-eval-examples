@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.rigado.bmdeval.R;
-import com.rigado.bmdeval.devicedata.otherdevices.BleDevice;
 import com.rigado.bmdeval.fragments.AboutFragment;
 import com.rigado.bmdeval.fragments.ColorPickerFragment;
 import com.rigado.bmdeval.fragments.DemoFragment;
@@ -54,13 +53,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Locale l = Locale.getDefault();
         switch (position) {
             case DEMO_STATUS_FRAGMENT:
-                return mContext.getString(R.string.title_section1).toUpperCase(l);
+                return mContext.getString(R.string.title_demo_fragment).toUpperCase(l);
             case COLOR_WHEEL_FRAGMENT:
-                return mContext.getString(R.string.title_section2).toUpperCase(l);
+                return mContext.getString(R.string.title_color_fragment).toUpperCase(l);
             case FIRMWARE_UPDATE_FRAGMENT:
-                return mContext.getString(R.string.title_section3).toUpperCase(l);
+                return mContext.getString(R.string.title_firmware_fragment).toUpperCase(l);
             case ABOUT_FRAGMENT:
-                return mContext.getString(R.string.title_section4).toUpperCase(l);
+                return mContext.getString(R.string.title_about_fragment).toUpperCase(l);
         }
         return null;
     }

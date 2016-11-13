@@ -10,7 +10,7 @@
 
     <color name="colorPrimary">@color/colorRigadoSky</color>
     <color name="colorPrimaryDark">@color/colorRigadoBlue</color>
-    <color name="colorSecondary">@color/colorGrayPowder</color>
+    <color name="colorSecondary">@color/colorEmeraldGreen</color>
     <color name="colorAccent">@color/colorBurntTangerine</color>
 
     <!--https://material.google.com/style/color.html#color-text-background-colors-->

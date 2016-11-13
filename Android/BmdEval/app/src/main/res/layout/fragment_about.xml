@@ -1,101 +1,101 @@
-<LinearLayout
-    android:layout_width="match_parent"
+<ScrollView android:id="@+id/fragment_about_scrollview"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="4.5"
-    android:gravity="center_horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Paragraph 1 -->
-    <TextView
-        android:id="@+id/tv_para_1"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1.5"
-        android:text="@string/label_paragraph_one"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:gravity="center_vertical|center_horizontal" />
-
-    <!-- Paragraph 2 -->
-    <TextView
-        android:id="@+id/tv_para_2"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="@string/label_paragraph_two"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:gravity="center_vertical|center_horizontal" />
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_vertical|center_horizontal">
+        android:padding="16dp"
+        android:gravity="center|top"
+        >
 
-        <!-- Link phone number -->
-        <TextView
-            android:id="@+id/textView1"
+        <ImageView
+            android:id="@+id/activity_about_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/rigado_logo"
+            app:srcCompat="@drawable/rigado_logo_blue"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            />
+
+        <TextView
+            android:id="@+id/activity_about_main_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_paragraph_one"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:textIsSelectable="true"
+            />
+
+        <TextView
+            android:id="@+id/activity_about_secondary_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_paragraph_two"
+            android:gravity="center"
+            android:textIsSelectable="true"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif"
+            />
+
+        <TextView
+            android:id="@+id/activity_about_tertiary_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_paragraph_three"
+            android:gravity="center"
+            android:textIsSelectable="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="72dp"
+            />
+
+        <TextView
+            android:id="@+id/activity_about_phone_number"
             android:text="@string/link_phone_number"
             android:autoLink="phone"
-            android:textSize="16sp"/>
-
-        <!-- Link email -->
-        <TextView
-            android:id="@+id/textView2"
+            android:textIsSelectable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/link_email"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            />
+
+        <TextView
+            android:id="@+id/activity_about_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:autoLink="email"
-            android:textSize="16sp"/>
+            android:text="@string/link_email"
+            android:textIsSelectable="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            />
 
-        <!-- Link website -->
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/activity_about_website"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:autoLink="web"
             android:text="@string/link_website"
-            android:layout_marginTop="5dp"
-            android:autoLink="web"
-            android:textSize="16sp"/>
+            android:textIsSelectable="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            />
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="center_vertical|center_horizontal">
-
-        <!-- Paragraph 3 -->
-        <TextView
-            android:id="@+id/tv_para_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_paragraph_three"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:gravity="center_vertical|center_horizontal" />
-
-        <!-- Link modules -->
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/link_website_modules"
-            android:autoLink="web"
-            android:textSize="16sp"
-            android:gravity="center_vertical" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

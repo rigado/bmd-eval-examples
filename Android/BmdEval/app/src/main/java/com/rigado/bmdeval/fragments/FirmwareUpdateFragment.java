@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,7 +80,7 @@ public class FirmwareUpdateFragment extends Fragment implements
         final String[] arrayFirmwareNames = new String[mJsonFirmwareTypeList.size()];
         for(int index=0; index<mJsonFirmwareTypeList.size(); index++) {
             final JsonFirmwareType firmwareRecord = mJsonFirmwareTypeList.get(index);
-            arrayFirmwareNames[index] = firmwareRecord.getFwname() + " v" + firmwareRecord.getProperties().getVersion();
+            arrayFirmwareNames[index] = firmwareRecord.getFwname();
         }
         mFirmwarePicker.setMinValue(0);
         mFirmwarePicker.setMaxValue(mJsonFirmwareTypeList.size() - 1);
@@ -92,7 +93,10 @@ public class FirmwareUpdateFragment extends Fragment implements
                 }
             }
         });
-        setNumberPickerTxtColor(mFirmwarePicker, Color.WHITE);
+
+        final int rigadoBlue = ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark);
+
+        setNumberPickerTxtColor(mFirmwarePicker, rigadoBlue);
 
         mButtonDeploy.setOnClickListener(new View.OnClickListener() {
             @Override

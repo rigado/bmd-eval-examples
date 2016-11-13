@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/background_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.MainActivity"
-    android:id="@+id/background_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -12,17 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp">
+        android:padding="16dp"
+        >
 
         <View
             android:id="@+id/view_ambient"
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:background="@drawable/shape_square_ambient"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            />
+
+        <View
+            android:id="@+id/view_ambient_background"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:background="@drawable/shape_ambient_background"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            />
 
         <TextView
             android:id="@+id/tv_user1"
@@ -31,7 +41,8 @@
             android:background="@drawable/shape_green_rectangle"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="@string/label_user_one"
+            android:text="@string/label_button_one"
+            android:textColor="@android:color/white"
             android:gravity="center" />
 
         <TextView
@@ -39,9 +50,10 @@
             android:layout_width="90dp"
             android:layout_height="90dp"
             android:background="@drawable/shape_green_rectangle"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="@string/label_user_two"
+            android:text="@string/label_button_two"
+            android:textColor="@android:color/white"
             android:gravity="center"/>
 
     </RelativeLayout>
@@ -53,23 +65,22 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@id/layout_user_feedback_images"
-        android:layout_marginLeft="20dp">
+        android:layout_marginStart="16dp"
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_ambient_light"
-            android:textColor="@android:color/white"
-            android:textSize="10pt"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginEnd="10dp"
+            />
 
         <TextView
             android:id="@+id/textview_ambient_millivolt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0 mV"
-            android:textColor="@android:color/white"
-            android:textSize="10pt"/>
+            />
 
     </LinearLayout>
 
@@ -80,34 +91,7 @@
         android:layout_below="@id/layout_user_feedback_labels"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:background="@android:color/white"/>
-
-    <!-- Indeterminate Progress Bar -->
-    <RelativeLayout
-        android:id="@+id/layout_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/shape_background_white_stroked"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/textview_searching"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_searching"
-            android:textSize="12pt"
-            android:textColor="@android:color/black"
-            android:gravity="center_horizontal"
-            android:layout_centerHorizontal="true" />
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_below="@id/textview_searching"
-            android:indeterminate="true"/>
-
-    </RelativeLayout>
+        android:background="@android:color/transparent"
+        />
 
 </RelativeLayout>

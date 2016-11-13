@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BmdEval.iml" filepath="$PROJECT_DIR$/BmdEval.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libs/rigablue/rigablue.iml" filepath="$PROJECT_DIR$/libs/rigablue/rigablue.iml" />
+      <module fileurl="file://$PROJECT_DIR$/libs/rigablue/Android/rigablue/rigablue.iml" filepath="$PROJECT_DIR$/libs/rigablue/Android/rigablue/rigablue.iml" />
     </modules>
   </component>
 </project>

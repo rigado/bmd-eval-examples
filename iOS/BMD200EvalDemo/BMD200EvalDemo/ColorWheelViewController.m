@@ -50,7 +50,7 @@
     } else {
         if (![tbc isSearching]) {
             [tbc searchForDevice];
-            [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+            //[SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
         }
     }
 }
@@ -109,7 +109,7 @@
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     [tbc searchForDevice];
     void (^update)(void) = ^void(void) {
-        [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+        [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
     };
     if (![NSThread isMainThread]) dispatch_sync(dispatch_get_main_queue(), update);
     else update();

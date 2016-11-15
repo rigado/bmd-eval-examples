@@ -64,7 +64,7 @@
     } else {
         if (![tbc isSearching]) {
             [tbc searchForDevice];
-            [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+            [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
         }
     }
 }

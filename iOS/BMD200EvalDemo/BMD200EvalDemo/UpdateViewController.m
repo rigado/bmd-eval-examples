@@ -102,7 +102,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
     if (![tbc isSearching] && ![tbc isConnected]) {
         [tbc searchForDevice];
-        [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];
+        [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
     }
 }
 

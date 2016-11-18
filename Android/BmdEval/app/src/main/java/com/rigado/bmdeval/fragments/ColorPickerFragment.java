@@ -91,6 +91,7 @@ public class ColorPickerFragment extends Fragment implements
                         Color.green(selectedColor),
                         Color.blue(selectedColor));
                 } else {
+                    //Sending RgbColor with all values set to 0 turns off the LED
                     rgbColor = new RgbColor(0, 0, 0);
                 }
 

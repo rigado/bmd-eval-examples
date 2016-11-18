@@ -1,11 +1,9 @@
 package com.rigado.bmdeval.demodevice;
 
 
-import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothProfile;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -24,7 +22,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * //make notes about how this controls the eval demo device
+ * Convenience object used to interact with the main eval demo firmware
+ * as well as provide secure updates to {@link FirmwareType#Blinky} and
+ * {@link FirmwareType#EvalDemo}. See {@link DisconnectedDevice} for
+ * the Null Object Pattern implementation.
  */
 public class DemoDevice implements
         IDemoDeviceActions,

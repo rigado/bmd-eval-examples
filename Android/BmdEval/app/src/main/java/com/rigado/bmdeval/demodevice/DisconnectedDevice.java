@@ -15,6 +15,8 @@ import java.io.InputStream;
  */
 public class DisconnectedDevice extends DemoDevice implements IDemoDeviceActions {
 
+    private static final String TAG = DisconnectedDevice.class.getSimpleName();
+
     public DisconnectedDevice(RigLeBaseDevice device) {
         super(device);
     }
@@ -116,7 +118,7 @@ public class DisconnectedDevice extends DemoDevice implements IDemoDeviceActions
 
     @Override
     public void startFirmwareUpdate(RigFirmwareUpdateManager manager, InputStream inputStream) {
-
+        Log.i(TAG, "startFirmwareUpdate");
     }
 
     @Override
@@ -126,12 +128,12 @@ public class DisconnectedDevice extends DemoDevice implements IDemoDeviceActions
 
     @Override
     public void setUpdatingStatus(boolean isUpdating) {
-
+        Log.i(TAG, "setUpdatingStatus " + isUpdating);
     }
 
     @Override
     public void setLedColor(RgbColor color) {
-
+        Log.i(TAG, "setLedColor " + color);
     }
 
     @Override
@@ -141,37 +143,37 @@ public class DisconnectedDevice extends DemoDevice implements IDemoDeviceActions
 
     @Override
     public void setAmbLightNotificationsEnabled(boolean enabled) {
-
+        Log.i(TAG, "setAmbientLightNotificationsEnabled " + enabled);
     }
 
     @Override
     public void startAmbientLightSensing() {
-
+        Log.i(TAG, "startAmbientLightSensing");
     }
 
     @Override
     public void stopAmbientLightSensing() {
-
+        Log.i(TAG, "stopAmbientLightSensing");
     }
 
     @Override
     public void setAccelNotificationsEnabled(boolean enabled) {
-
+        Log.i(TAG, "setAccelNotificationsEnabled " + enabled);
     }
 
     @Override
     public void startAccelerometerStream() {
-
+        Log.i(TAG, "startAccelerometerStream");
     }
 
     @Override
     public void stopAccelerometerStream() {
-
+        Log.i(TAG, "stopAccelerometerStream");
     }
 
     @Override
     public void setButtonNotificationsEnabled(boolean enable) {
-
+        Log.i(TAG, "setButtonNotificationsEnabled " + enable);
     }
 
 }

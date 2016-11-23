@@ -12,6 +12,7 @@ public class DeviceRepository implements DeviceSource {
 
     public String [] SCAN_UUID_LIST = {
             DemoDevice.BMDWARE_SERVICE_UUID,
+            DemoDevice.BMDWARE_CONTROL_SERVICE_UUID,
             DemoDevice.BLINKY_SERVICE_UUID,
             DemoDevice.BMDEVAL_UUID_SERVICE,
             DemoDevice.BLINKY_ADVERTISING_SERVICE_UUID

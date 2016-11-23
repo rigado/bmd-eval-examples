@@ -13,6 +13,7 @@ public interface FirmwareContract {
         void setFirmwareUpdateCompleted(DemoDevice demoDevice);
         void setFirmwareUpdateFailed(String errorMessage);
         void setButtonEnabled(boolean enabled);
+        void setWindowFlagEnabled(boolean enabled);
     }
 
     interface UserActionsListener {

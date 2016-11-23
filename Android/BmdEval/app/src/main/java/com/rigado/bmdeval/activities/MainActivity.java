@@ -180,9 +180,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Noop
+                        mDiscoveryDialog.dismiss();
                     }
                 })
+                .setCancelable(false)
                 .show();
     }
 
@@ -228,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                            mainPresenter.maybeStartScanning();
                         }
                     })
+                    .setCancelable(false)
                     .show();
             }
 

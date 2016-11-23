@@ -193,8 +193,6 @@ public class FirmwareUpdateFragment extends Fragment implements
 
     @Override
     public void setFirmwareUpdateCompleted(final DemoDevice demoDevice) {
-        getActivity().getWindow()
-                .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mLastProgressIndication = -1;
         mProgressBar.setProgress(mLastProgressIndication);
 
@@ -214,7 +212,6 @@ public class FirmwareUpdateFragment extends Fragment implements
 
     @Override
     public void setFirmwareUpdateFailed(final String errorMessage) {
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mTextViewStatus.setText(errorMessage);
 
         new AlertDialog.Builder(getActivity())
@@ -235,6 +232,17 @@ public class FirmwareUpdateFragment extends Fragment implements
     @Override
     public void setButtonEnabled(boolean enabled) {
         mButtonDeploy.setEnabled(enabled);
+    }
+
+    @Override
+    public void setWindowFlagEnabled(boolean enabled) {
+        if (enabled) {
+            getActivity().getWindow()
+                    .addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getActivity().getWindow()
+                    .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
     }
 
     /**

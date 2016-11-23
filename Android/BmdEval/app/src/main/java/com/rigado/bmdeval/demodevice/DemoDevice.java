@@ -36,14 +36,14 @@ public class DemoDevice implements
 
     /**
      * There are three different firmwares used in this demo.
-     * {@code EvalDemo} is the main demo firmware.
-     * {@code Blinky} is a simple firmware that causes the RGB Led to blink
+     * {@link #EvalDemo} is the main demo firmware.
+     * {@link #Blinky} is a simple firmware that causes the RGB Led to blink
      * while advertising. Advertisement stops after 20 seconds.
-     * {@code Bmdware} is the firmware shipped on all Rigado boards. It is included
+     * {@link #Bmdware} is the firmware shipped on all Rigado boards. It is included
      * so that the user has the option to revert back after using the demo firmware.
      *
-     * On connection, if the firmware is type {@code Blinky} or type {@code Bmdware},
-     * the user is given the option to update to {@code EvalDemo}
+     * On connection, if the firmware is type {@link #Blinky} or type {@link #Bmdware},
+     * the user is given the option to update to {@link #EvalDemo}
      */
     public enum FirmwareType {
         EvalDemo("BMD Eval Demo"),
@@ -126,6 +126,7 @@ public class DemoDevice implements
     /**
      * BMDware UUIDs
      */
+    public static final String BMDWARE_CONTROL_SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
     public static final String BMDWARE_SERVICE_UUID = "2413B33F-707F-90BD-2045-2AB8807571B7";
     public static final String BMDWARE_CTRL_POINT_UUID = "2413B43F-707F-90BD-2045-2AB8807571B7";
 
@@ -377,7 +378,7 @@ public class DemoDevice implements
      *
      * The following steps detail how to get the hardware support {@code value} by device type :
      *
-     * {@link com.rigado.bmdeval.demodevice.DemoDevice.FirmwareType#EvalDemo} :
+     * {@link FirmwareType#EvalDemo} :
      * - Enable Notifications for {@link DemoDevice#BMDWARE_CTRL_POINT_UUID}
      * - After receiving the state change notification, Call {@link #requestBootloaderInformation()}
      * - Type 200 returns {@link DemoDevice#INVALID_DATA}
@@ -387,7 +388,7 @@ public class DemoDevice implements
      * - If {@link BootloaderInfo.HardwareSupport} is >= 2, it is a
      *   300 board.
      *
-     * {@link com.rigado.bmdeval.demodevice.DemoDevice.FirmwareType#Blinky} :
+     * {@link FirmwareType#Blinky} :
      * - After {@link #initServices()}, check to see if {@link #BLINKY_UUID_CTRL_CHAR} has
      *   {@link BluetoothGattCharacteristic#PROPERTY_NOTIFY} by calling
      *   {@link #hasNotifyProperty()}. If not, it is type 200. Do nothing, type 200 is the default.
@@ -399,7 +400,7 @@ public class DemoDevice implements
      *   [3, 2, 0, 42, 0, 0, 0, 1, 1, 2, 3, 0]
      * - If position [9] is >= 2, it is a 300 board.
      *
-     * {@link com.rigado.bmdeval.demodevice.DemoDevice.FirmwareType#Bmdware} :
+     * {@link FirmwareType#Bmdware} :
      * - Enable notifications for {@link DemoDevice#BMDEVAL_UUID_CTRL_CHAR}
      * - After receiving the state change notification, Call {@link #requestBootloaderInformation()}
      * - Type 200 returns a value of [0]
@@ -451,11 +452,11 @@ public class DemoDevice implements
 
     //region FIRMWARE_UPDATE
     /**
-     * Performs a firmware update. Internally, rigablue checks if any of these paramenters are null.
+     * Performs a firmware update. Internally, Rigablue checks if any of these parameters are null.
      * If null, {@link IRigFirmwareUpdateManagerObserver#updateFailed(RigDfuError)} is
      * called with {@link RigDfuError#INVALID_PARAMETER}.
      *
-     * @param manager An new instance of {@link RigFirmwareUpdateManager}. A new instance is
+     * @param manager A new instance of {@link RigFirmwareUpdateManager}. A new instance is
      *                required for each firmware update.
      * @param inputStream The firmware image
      */

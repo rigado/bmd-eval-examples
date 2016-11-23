@@ -77,9 +77,11 @@ public class FirmwarePresenter extends BasePresenter implements
         uiThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                firmwareView.setWindowFlagEnabled(true);
                 firmwareView.setButtonEnabled(false);
             }
         });
+
 
         rigFirmwareUpdateManager = new RigFirmwareUpdateManager();
         rigFirmwareUpdateManager.setObserver(this);
@@ -113,6 +115,8 @@ public class FirmwarePresenter extends BasePresenter implements
         uiThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                firmwareView.updateStatusText("To complete the firmware update, please reset your bluetooth and restart the app.");
+                firmwareView.setWindowFlagEnabled(false);
                 firmwareView.setFirmwareUpdateCompleted(demoDevice);
             }
         });
@@ -125,6 +129,7 @@ public class FirmwarePresenter extends BasePresenter implements
         uiThreadHandler.post(new Runnable() {
             @Override
             public void run() {
+                firmwareView.setWindowFlagEnabled(false);
                 firmwareView.setButtonEnabled(true);
                 firmwareView.setFirmwareUpdateFailed(error.getErrorMessage());
             }

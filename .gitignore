@@ -3,7 +3,6 @@
 *.dep
 JLink*
 *.bak
-
 *.hex
 /pca10028/s110/arm5/_build/
 /pca10028/s130/arm5/_build/
@@ -241,7 +240,6 @@ local.properties
 .signing/
 
 # User-specific configurations
-/.idea/
 .idea/libraries/
 .idea/workspace.xml
 .idea/tasks.xml
@@ -253,7 +251,6 @@ local.properties
 .idea/modules.xml
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
-*.iml
 
 # OS-specific files
 .DS_Store

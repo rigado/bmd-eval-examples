@@ -1,0 +1,39 @@
+<resources>
+    <!-- GENERAL -->
+    <string name="title_demo_fragment">Eval Demo</string>
+    <string name="title_color_fragment">Color Wheel</string>
+    <string name="title_firmware_fragment">Firmware Update</string>
+    <string name="title_about_fragment">About</string>
+
+    <string name="label_searching">Searching</string>
+    <string name="txt_yes">Yes</string>
+    <string name="txt_no">No</string>
+    <string name="txt_ok">OK</string>
+    <string name="permission_activity">Enable Bluetooth</string>
+
+    <!-- SCREEN 1-->
+    <string name="label_ambient_light">Ambient Light:</string>
+    <string name="label_button_one">Button 1</string>
+    <string name="label_button_two">Button 2</string>
+
+    <!-- SCREEN 3 -->
+    <string name="label_default_device_name">Unknown Device</string>
+    <string name="label_default_mfg_name">Unknown Mfg</string>
+    <string name="label_btn_deploy">Begin Deployment</string>
+    <string name="label_tv_status_idle">Idle</string>
+    <string name="message_blinky">The Blinky demo is currently programmed.\nWould you like to revert to the main demo firmware?</string>
+    <string name="title_blinky_dialog">Blinky Connected</string>
+    <string name="message_bmdware">BMDWare is installed to this evaluation board.\nIf you would like to use its features, download the Rigado Toolbox app from the Google Play store.\nWould you like to program the Evaluation demo firmware?</string>
+    <string name="title_bmdware">BMDware Installed</string>
+
+
+    <!-- SCREEN 4 -->
+    <string name="about_paragraph_one">Rigado provides smart wireless solutions for a connected world.</string>
+    <string name="about_paragraph_two">Our certified wireless modules and tools accelerate development for BLE &amp; Thread, and our DeviceOps platform enables secure, scalable over-the-air updating.</string>
+    <string name="link_phone_number"><a href="tel:9712089870">971.208.9870</a></string>
+    <string name="link_email"><a href="mailto:contact@rigado.com">contact@rigado.com</a></string>
+    <string name="link_website"><a href="http://www.rigado.com">www.rigado.com</a></string>
+    <string name="about_paragraph_three">Your partner for IoT Product Development</string>
+    <string name="title_activity_activity_about">About</string>
+    <string name="rigado_logo">Rigado Logo</string>
+</resources>

@@ -1,0 +1,3 @@
+[submodule "Android/BmdEval/libs/rigablue"]
+	path = Android/BmdEval/libs/rigablue
+	url = git@git.rigado.com:modules/rigablue.git

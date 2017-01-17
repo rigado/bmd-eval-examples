@@ -14,6 +14,7 @@ public interface FirmwareContract {
         void setFirmwareUpdateFailed(String errorMessage);
         void setButtonEnabled(boolean enabled);
         void setWindowFlagEnabled(boolean enabled);
+        void reset();
     }
 
     interface UserActionsListener {

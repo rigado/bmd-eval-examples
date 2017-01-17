@@ -40,12 +40,19 @@ public class FirmwarePresenter extends BasePresenter implements
         if (rigFirmwareUpdateManager != null) {
             rigFirmwareUpdateManager.setObserver(this);
         }
+
+        if (!demoDevice.isUpdating()) {
+            firmwareView.reset();
+        }
     }
 
     @Override
     public void onPause() {
         if (rigFirmwareUpdateManager != null) {
+            Log.i(TAG, "onPause");
             rigFirmwareUpdateManager.setObserver(null);
+            demoDevice.setUpdatingStatus(false);
+            rigFirmwareUpdateManager.cancelUpdate();
         }
     }
 

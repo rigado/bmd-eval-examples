@@ -48,8 +48,6 @@ public class FirmwareUpdateFragment extends Fragment implements
 
     private FirmwarePresenter firmwarePresenter;
 
-    private boolean isConnected;
-
     public static FirmwareUpdateFragment newInstance() {
         FirmwareUpdateFragment firmwareUpdateFragment = new FirmwareUpdateFragment();
         return firmwareUpdateFragment;
@@ -227,6 +225,13 @@ public class FirmwareUpdateFragment extends Fragment implements
             getActivity().getWindow()
                     .clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+    }
+
+    @Override
+    public void reset() {
+        mLastProgressIndication = -1;
+        mProgressBar.setProgress(mLastProgressIndication);
+        mTextViewStatus.setText("Idle");
     }
 
     /**

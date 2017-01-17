@@ -12,7 +12,7 @@
     >
 
     <!-- Selected Color -->
-    <com.rigado.bmdeval.customviews.CircleView
+    <com.rigado.bmd200eval.customviews.CircleView
         android:id="@+id/fragment_color_picker_circleview"
         android:layout_width="@dimen/selected_color_size"
         android:layout_height="@dimen/selected_color_size"

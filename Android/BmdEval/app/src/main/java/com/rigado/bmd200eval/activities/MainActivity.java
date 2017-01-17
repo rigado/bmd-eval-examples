@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.MainContract;
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
@@ -20,6 +19,7 @@ import com.rigado.bmd200eval.demodevice.DemoDevice;
 import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmd200eval.presenters.MainPresenter;
 import com.rigado.bmd200eval.utilities.Utilities;
+import com.rigado.bmd200eval.R;
 import com.rigado.rigablue.RigCoreBluetooth;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {

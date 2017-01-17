@@ -5,6 +5,7 @@ import android.app.Application;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 
+import com.rigado.bmd200eval.BuildConfig;
 import com.rigado.rigablue.RigCoreBluetooth;
 
 import io.fabric.sdk.android.Fabric;

@@ -110,6 +110,7 @@ public class MainPresenter extends BasePresenter implements
         Log.i(TAG, "didConnectDevice " + device.getBluetoothDevice().getAddress());
         demoDevice.setConnected(true);
         demoDevice = new DemoDevice(device);
+        DeviceRepository.getInstance().saveConnectedDevice(demoDevice);
         demoDevice.addDiscoveryListener(this);
         demoDevice.addReadWriteListener(this);
         demoDevice.addNotifyListener(this);

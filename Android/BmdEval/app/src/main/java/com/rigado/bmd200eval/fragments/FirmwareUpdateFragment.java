@@ -206,12 +206,12 @@ public class FirmwareUpdateFragment extends Fragment implements
                 })
                 .setCancelable(false)
                 .show();
-
-        mProgressBar.setProgress(mLastProgressIndication);
     }
 
     @Override
     public void setFirmwareUpdateFailed(final String errorMessage) {
+        mLastProgressIndication = -1;
+        mProgressBar.setProgress(mLastProgressIndication);
         mTextViewStatus.setText(errorMessage);
 
         new AlertDialog.Builder(getActivity())

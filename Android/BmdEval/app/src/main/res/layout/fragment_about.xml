@@ -68,9 +68,9 @@
             android:textIsSelectable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
             />
 
         <TextView
@@ -80,9 +80,21 @@
             android:autoLink="email"
             android:text="@string/link_email"
             android:textIsSelectable="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            />
+
+        <TextView
+            android:id="@+id/activity_about_support_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="email"
+            android:text="@string/link_support_email"
+            android:textIsSelectable="true"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
             />
 
         <TextView
@@ -92,9 +104,20 @@
             android:autoLink="web"
             android:text="@string/link_website"
             android:textIsSelectable="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            />
+
+        <TextView
+            android:id="@+id/fragment_about_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/version"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textIsSelectable="true"
             />
 
     </LinearLayout>

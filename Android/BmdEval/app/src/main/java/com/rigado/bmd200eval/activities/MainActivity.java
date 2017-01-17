@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_device_tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
-
+        mBluetoothEnabled = true;
         mainPresenter = new MainPresenter(this);
+
     }
 
     @Override

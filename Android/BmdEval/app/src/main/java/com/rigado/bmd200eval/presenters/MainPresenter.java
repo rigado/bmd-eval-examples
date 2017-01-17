@@ -94,16 +94,12 @@ public class MainPresenter extends BasePresenter implements
         Log.i(TAG, "didConnectDevice " + device.getBluetoothDevice().getAddress());
         demoDevice.setConnected(true);
         demoDevice = new DemoDevice(device);
+        updateDialog("Interrogating " + device.getName() + "...");
         DeviceRepository.getInstance().saveConnectedDevice(demoDevice);
         demoDevice.setDiscoveryListener(this);
         demoDevice.setPasswordListener(this);
         demoDevice.runDiscovery();
-        uiThreadHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                mainView.updateDialog("Interrogating " + device.getName() + "...");
-            }
-        });
+
     }
 
     @Override

@@ -33,6 +33,10 @@ public class DemoPresenter extends BasePresenter implements
     @Override
     public void onResume() {
         Log.i(TAG, "onResume");
+        if (demoDevice.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
+            return;
+        }
+
         demoDevice.setDemoListener(this);
         demoDevice.startDemo();
     }
@@ -40,6 +44,10 @@ public class DemoPresenter extends BasePresenter implements
     @Override
     public void onPause() {
         Log.i(TAG, "onPause");
+        if (demoDevice.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
+            return;
+        }
+
         demoDevice.setDemoListener(null);
         demoDevice.stopDemo();
     }
@@ -83,6 +91,9 @@ public class DemoPresenter extends BasePresenter implements
     @Override
     public void onDemoInitialized() {
         Log.i(TAG, "onDemoInitialized");
+        if (demoDevice.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
+            return;
+        }
         demoDevice.startDemo();
     }
 }

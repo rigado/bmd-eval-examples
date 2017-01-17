@@ -12,4 +12,6 @@ public interface DeviceSource {
 
     void saveConnectedDevice(@NonNull DemoDevice device);
     DemoDevice getConnectedDevice();
+
+    boolean isDeviceConnected();
 }

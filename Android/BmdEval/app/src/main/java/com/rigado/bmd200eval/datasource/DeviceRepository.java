@@ -1,10 +1,12 @@
 package com.rigado.bmd200eval.datasource;
 
+import android.bluetooth.BluetoothProfile;
 import android.support.annotation.NonNull;
 
 import com.rigado.bmd200eval.demodevice.DemoDevice;
 import com.rigado.bmd200eval.demodevice.DisconnectedDevice;
 import com.rigado.rigablue.RigAvailableDeviceData;
+import com.rigado.rigablue.RigCoreBluetooth;
 
 public class DeviceRepository implements DeviceSource {
 
@@ -64,5 +66,18 @@ public class DeviceRepository implements DeviceSource {
             demoDevice = new DisconnectedDevice();
         }
         return demoDevice;
+    }
+
+    @Override
+    public boolean isDeviceConnected() {
+        if (demoDevice == null
+                || demoDevice instanceof DisconnectedDevice
+                || demoDevice.getBaseDevice() == null) {
+            return false;
+        }
+
+        return RigCoreBluetooth.getInstance()
+                .getDeviceConnectionState(demoDevice.getBaseDevice().getBluetoothDevice())
+                == BluetoothProfile.STATE_CONNECTED;
     }
 }

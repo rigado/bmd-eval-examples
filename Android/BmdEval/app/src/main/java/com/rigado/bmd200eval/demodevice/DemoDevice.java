@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothGattService;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.devicedata.BootloaderInfo;
 import com.rigado.bmd200eval.demodevice.devicedata.RgbColor;
 import com.rigado.rigablue.IRigFirmwareUpdateManagerObserver;
@@ -18,6 +19,7 @@ import com.rigado.rigablue.RigLeBaseDevice;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -255,17 +257,17 @@ public class DemoDevice implements
             return;
         }
 
-        baseDevice.setCharacteristicNotification(controlPointCharacteristic, enabled);
+        setCharacteristicNotification(controlPointCharacteristic, enabled);
     }
 
     @Override
     public void requestBootloaderInformation() {
-        if (controlPointCharacteristic == null) {
+        if (controlPointCharacteristic == null || hardwareVersionCommand == null) {
             Log.e(TAG, "controlPointCharacteristic was null!");
             return;
         }
 
-        baseDevice.writeCharacteristic(controlPointCharacteristic, hardwareVersionCommand);
+        writeCharacteristic(controlPointCharacteristic, hardwareVersionCommand);
     }
 
     @Override
@@ -359,7 +361,39 @@ public class DemoDevice implements
 
     @Override
     public synchronized void readCharacteristic(BluetoothGattCharacteristic characteristic) {
+        if (!DeviceRepository.getInstance().isDeviceConnected()) {
+            Log.w(TAG, "Device is disconnected! Aborting read request for "
+                    + characteristic.getUuid());
+            return;
+        }
+
         baseDevice.readCharacteristic(characteristic);
+    }
+
+    @Override
+    public synchronized void writeCharacteristic(
+            BluetoothGattCharacteristic characteristic, byte[] value) {
+
+        if (!DeviceRepository.getInstance().isDeviceConnected()) {
+            Log.w(TAG, "Device is disconnected! Aborting write request for "
+                    + characteristic.getUuid().toString() + " " + Arrays.toString(value));
+            return;
+        }
+
+        baseDevice.writeCharacteristic(characteristic, value);
+    }
+
+    @Override
+    public synchronized void setCharacteristicNotification(
+            BluetoothGattCharacteristic characteristic, boolean enable) {
+
+        if (!DeviceRepository.getInstance().isDeviceConnected()) {
+            Log.w(TAG, "Device is disconnected! Aborting notification request for "
+                    + characteristic.getUuid().toString() + " " + enable);
+            return;
+        }
+
+        baseDevice.setCharacteristicNotification(characteristic, enable);
     }
     //endregion
 
@@ -496,7 +530,7 @@ public class DemoDevice implements
 
         byte [] data = new byte[] { color.getRed(), color.getGreen(), color.getBlue() };
 
-        baseDevice.writeCharacteristic(ledChar, data);
+        writeCharacteristic(ledChar, data);
     }
 
     @Override
@@ -530,7 +564,7 @@ public class DemoDevice implements
             return;
         }
 
-        baseDevice.setCharacteristicNotification(abmChar, enabled);
+        setCharacteristicNotification(abmChar, enabled);
     }
 
     @Override
@@ -547,7 +581,7 @@ public class DemoDevice implements
         }
 
         byte [] command = new byte[] { ADC_STREAM_START };
-        baseDevice.writeCharacteristic(adcChar, command);
+        writeCharacteristic(adcChar, command);
     }
 
     @Override
@@ -564,7 +598,7 @@ public class DemoDevice implements
         }
 
         byte [] command = new byte[] { ADC_STREAM_STOP };
-        baseDevice.writeCharacteristic(adcChar, command);
+        writeCharacteristic(adcChar, command);
     }
 
     @Override
@@ -580,7 +614,7 @@ public class DemoDevice implements
             return;
         }
 
-        baseDevice.setCharacteristicNotification(accelChar, enabled);
+        setCharacteristicNotification(accelChar, enabled);
     }
 
     @Override
@@ -597,7 +631,7 @@ public class DemoDevice implements
         }
 
         byte [] command = new byte[] { ACCEL_STREAM_START };
-        baseDevice.writeCharacteristic(accelChar, command);
+        writeCharacteristic(accelChar, command);
     }
 
     @Override
@@ -613,7 +647,7 @@ public class DemoDevice implements
         }
 
         byte [] command = new byte[] { ACCEL_STREAM_STOP };
-        baseDevice.writeCharacteristic(accelChar, command);
+        writeCharacteristic(accelChar, command);
     }
 
     @Override
@@ -629,6 +663,6 @@ public class DemoDevice implements
             return;
         }
 
-        baseDevice.setCharacteristicNotification(buttonChar, enable);
+        setCharacteristicNotification(buttonChar, enable);
     }
 }

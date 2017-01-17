@@ -19,6 +19,8 @@ public interface IDemoDeviceActions {
     void removeDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener);
 
     void readCharacteristic(BluetoothGattCharacteristic characteristic);
+    void writeCharacteristic(BluetoothGattCharacteristic characteristic, byte [] value);
+    void setCharacteristicNotification(BluetoothGattCharacteristic characteristic, boolean enable);
 
     void initServices();
     void runDiscovery();

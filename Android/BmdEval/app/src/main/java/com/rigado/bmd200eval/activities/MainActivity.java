@@ -97,12 +97,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         finish();
     }
 
+    private boolean mBluetoothEnabled;
+
     @Override
     public void setBluetoothState(boolean enabled) {
+        mBluetoothEnabled = enabled;
         if (enabled) {
             RigCoreBluetooth.initialize(getApplicationContext());
+            mainPresenter.maybeStartScanning();
         } else {
-            //TODO: Set disabled state
+            dismissDiscoveryDialog();
         }
     }
 
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (!mDiscoveryDialog.isShowing()) {
+                if (!mDiscoveryDialog.isShowing() && mBluetoothEnabled) {
                     mDiscoveryDialog.show();
                 }
 

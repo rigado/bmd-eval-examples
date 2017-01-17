@@ -13,8 +13,8 @@ android {
         applicationId "com.rigado.bmd200eval"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 7
-        versionName "2.0.1-alpha"
+        versionCode 8
+        versionName "2.1.0"
         vectorDrawables.useSupportLibrary = true
     }
 

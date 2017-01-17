@@ -14,21 +14,20 @@ import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.rigado.bmd200eval.R;
-import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.DemoContract;
 import com.rigado.bmd200eval.demodevice.devicedata.AccelData;
 import com.rigado.bmd200eval.demodevice.devicedata.AmbientLight;
 import com.rigado.bmd200eval.demodevice.devicedata.ButtonStatus;
-import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmd200eval.presenters.DemoPresenter;
 
 import java.util.Locale;
 
 public class DemoFragment extends Fragment implements
-        DemoContract.View,
-        IFragmentLifecycleListener {
+        DemoContract.View {
 
     private static final String TAG = DemoFragment.class.getSimpleName();
+    public static final String TITLE = "Eval Demo";
+
     private static final int MAX_ARRAY_SIZE = 30;
 
 
@@ -48,21 +47,14 @@ public class DemoFragment extends Fragment implements
 
     private DemoPresenter demoPresenter;
 
-    private boolean isConnected;
-
-    public static DemoFragment newInstance(boolean isConnected) {
+    public static DemoFragment newInstance() {
         DemoFragment demoFragment = new DemoFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(SectionsPagerAdapter.CONNECTION_STATE, isConnected);
-        demoFragment.setArguments(args);
         return demoFragment;
     }
 
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        isConnected = getArguments()
-                .getBoolean(SectionsPagerAdapter.CONNECTION_STATE, false);
     }
 
     @Override
@@ -70,7 +62,7 @@ public class DemoFragment extends Fragment implements
                              ViewGroup container,
                              Bundle savedInstanceState) {
 
-        Log.i(TAG, "DemoFragment " + isConnected);
+        Log.i(TAG, "onCreateView");
 
         //inflate the necessary layout
         View rootView = inflater.inflate(R.layout.fragment_demo, container, false);
@@ -133,19 +125,24 @@ public class DemoFragment extends Fragment implements
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        Log.i(TAG, "onHiddenChanged " +hidden);
+        Log.i(TAG, "onHiddenChanged " + hidden);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        onResumeFragment();
+        demoPresenter.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        onPauseFragment();
+        demoPresenter.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -163,17 +160,6 @@ public class DemoFragment extends Fragment implements
 
             mDataIndex++;// this is important
         }
-    }
-
-
-    @Override
-    public void onPauseFragment() {
-        demoPresenter.onPause();
-    }
-
-    @Override
-    public void onResumeFragment() {
-        demoPresenter.onResume();
     }
 
     @Override

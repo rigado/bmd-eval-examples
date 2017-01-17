@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,7 +15,6 @@ import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.MainContract;
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
 import com.rigado.bmd200eval.demodevice.DemoDevice;
-import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmd200eval.presenters.MainPresenter;
 import com.rigado.bmd200eval.utilities.Utilities;
 import com.rigado.bmd200eval.R;
@@ -54,40 +52,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(
-                this,
                 getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ControllableViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mViewPager.setOffscreenPageLimit(3);// set to 3 to keep all 4 pages alive
-
-        /** Resume and Pause fragments in {@link #onPageSelected} */
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageSelected(int position) {
-                // NOTE: onPauseFragment must always be called before onResumeFragment
-                IFragmentLifecycleListener fragmentToHide =
-                        (IFragmentLifecycleListener)mSectionsPagerAdapter.getItem(oldPosition);
-                fragmentToHide.onPauseFragment();
-
-                IFragmentLifecycleListener fragmentToShow =
-                        (IFragmentLifecycleListener)mSectionsPagerAdapter.getItem(position);
-                fragmentToShow.onResumeFragment();
-
-                oldPosition = position;
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {}
-
-            @Override
-            public void onPageScrolled(int position,
-                                       float positionOffset,
-                                       int positionOffsetPixels) {}
-        });
+        mViewPager.setOffscreenPageLimit(2);// set to 3 to keep all 4 pages alive
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.activity_device_tab_layout);
         tabLayout.setupWithViewPager(mViewPager);
@@ -137,38 +107,31 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void onInterrogationCompleted(final DemoDevice deviceType) {
         Log.d(TAG, "onInterrogationCompleted");
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mDiscoveryDialog.dismiss();
-                mSectionsPagerAdapter.setConnected(true);
-                mSectionsPagerAdapter.destroyCache();
-                mSectionsPagerAdapter.notifyDataSetChanged();
-                if (deviceType.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
-                    new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Update to demo firmware?")
-                            .setMessage("The device is currently running "
-                                    + deviceType.getFirmwareType().getDescription()
-                                    + " firmware. Would you like to update to the"
-                                    + " main demo firmware?")
-                            .setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    mViewPager.setCurrentItem(
-                                            SectionsPagerAdapter.FIRMWARE_UPDATE_FRAGMENT);
-                                }
-                            })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    // Noop.
-                                }
-                            })
-                            .show();
-                }
-
+            mDiscoveryDialog.dismiss();
+            mSectionsPagerAdapter.notifyDataSetChanged();
+            if (deviceType.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Update to demo firmware?")
+                        .setMessage("The device is currently running "
+                                + deviceType.getFirmwareType().getDescription()
+                                + " firmware. Would you like to update to the"
+                                + " main demo firmware?")
+                        .setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mViewPager.setCurrentItem(
+                                        SectionsPagerAdapter.FIRMWARE_UPDATE_FRAGMENT);
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // Noop.
+                            }
+                        })
+                        .show();
             }
-        });
+
     }
 
     @Override
@@ -205,35 +168,27 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void deviceDisconnected(final String reason) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-            // Only allow reconnect attempts if a firmware update is not in progress or
-            // has not been successfully completed.
-            mSectionsPagerAdapter.setConnected(false);
-            mSectionsPagerAdapter.destroyCache();
-            mSectionsPagerAdapter.notifyDataSetChanged();
+        // Only allow reconnect attempts if a firmware update is not in progress or
+        // has not been successfully completed.
+        mSectionsPagerAdapter.notifyDataSetChanged();
 
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Device Disconnected")
-                    .setMessage("Try Reconnecting?")
-                    .setPositiveButton("Reconnect", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            mainPresenter.requestReconnect();
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                           mainPresenter.maybeStartScanning();
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
-            }
-
-        });
-    }
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Device Disconnected")
+                .setMessage("Try Reconnecting?")
+                .setPositiveButton("Reconnect", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mainPresenter.requestReconnect();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                       mainPresenter.maybeStartScanning();
+                    }
+                })
+                .setCancelable(false)
+                .show();
+        }
 
 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.devicedata.BootloaderInfo;
 import com.rigado.bmd200eval.demodevice.devicedata.RgbColor;
+import com.rigado.bmd200eval.interfaces.IDeviceListener;
 import com.rigado.rigablue.IRigFirmwareUpdateManagerObserver;
 import com.rigado.rigablue.IRigLeBaseDeviceObserver;
 import com.rigado.rigablue.IRigLeDescriptorObserver;
@@ -30,9 +31,7 @@ import java.util.UUID;
  * the Null Object Pattern implementation.
  */
 public class DemoDevice implements
-        IDemoDeviceActions,
-        IRigLeBaseDeviceObserver,
-        IRigLeDescriptorObserver {
+        IDemoDeviceActions {
 
     private static final String TAG = DemoDevice.class.getSimpleName();
 
@@ -142,11 +141,24 @@ public class DemoDevice implements
      */
     public static final byte [] BMDWARE_ENTER_BOOTLOADER_COMMAND = { 0x03, 0x56, 0x30, 0x57 };
 
+
+    /**
+     * {@link #BMDWARE_CTRL_POINT_UUID} Command Response Codes
+     */
+    public static final byte [] COMMAND_SUCCESS = { 0x00 };
+    public static final byte [] DEVICE_LOCKED = { 0x01 };
+    public static final byte [] COMMAND_INVALID_LENGTH = { 0x02 };
+    public static final byte [] UNLOCK_FAILED = { 0x03 };
+    public static final byte [] UPDATE_PIN_FAILED = { 0x04 };
     /**
      * Return value if BMDware protocol version is < 2.
      * See {@link #setType200(byte[])}
      */
     public static final byte [] INVALID_DATA = { 0x05 };
+    public static final byte [] INVALID_STATE = { 0x06 };
+    public static final byte [] INVALID_PARAMETER = { 0x07 };
+    public static final byte [] INVALID_COMMAND = { 0x08 };
+
 
     private FirmwareType firmwareType;
     private RigLeBaseDevice baseDevice;
@@ -163,9 +175,130 @@ public class DemoDevice implements
     private byte [] enterBootloaderCommand;
     private BluetoothGattCharacteristic controlPointCharacteristic;
 
-    private List<IDemoDeviceListener.ReadWriteListener> readWriteListeners;
-    private List<IDemoDeviceListener.DiscoveryListener> discoveryListeners;
-    private List<IDemoDeviceListener.NotifyListener> notifyListeners;
+    private int numberOfEnabledNotifs;
+
+    private IDeviceListener.DemoData deviceListener;
+    private IDeviceListener.DiscoveryListener discoveryListener;
+    private IDeviceListener.PasswordListener passwordListener;
+
+    private IRigLeBaseDeviceObserver baseDeviceObserver = new IRigLeBaseDeviceObserver() {
+
+        @Override
+        public void didUpdateValue(RigLeBaseDevice device,
+                                   BluetoothGattCharacteristic characteristic) {
+            if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_BUTTON_CHAR))) {
+                if (deviceListener != null) {
+                    deviceListener.onReceiveButtonData(characteristic.getValue());
+                }
+            } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_ADC_CHAR))) {
+                if (deviceListener != null) {
+                    deviceListener.onReceiveAmbientLightData(characteristic.getValue());
+                }
+            } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_ACCEL_CHAR))) {
+                if (deviceListener != null) {
+                    deviceListener.onReceiveAccelerometerData(characteristic.getValue());
+                }
+            } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_CTRL_CHAR))
+                    || characteristic.getUuid().equals(UUID.fromString(BMDWARE_CTRL_POINT_UUID))
+                    || characteristic.getUuid().equals(UUID.fromString(BLINKY_UUID_CTRL_CHAR))) {
+                final byte [] maybeBootloaderInfo = characteristic.getValue();
+                setType200(maybeBootloaderInfo);
+                if (firmwareType == FirmwareType.EvalDemo) {
+                    setButtonNotificationsEnabled(true);
+                    setAccelNotificationsEnabled(true);
+                    setAmbLightNotificationsEnabled(true);
+                }
+                if (discoveryListener != null) {
+                    discoveryListener.onInterrogationCompleted(DemoDevice.this, true);
+                }
+            }
+        }
+
+        @Override
+        public void didUpdateNotifyState(RigLeBaseDevice device,
+                                         BluetoothGattCharacteristic characteristic) {
+            Log.i(TAG, "didUpdateNotifyState");
+
+            if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_BUTTON_CHAR))) {
+                maybeStartDemo();
+            } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_ADC_CHAR))) {
+                maybeStartDemo();
+            } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_ACCEL_CHAR))) {
+                maybeStartDemo();
+            } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_CTRL_CHAR))
+                    || characteristic.getUuid().equals(UUID.fromString(BMDWARE_CTRL_POINT_UUID))
+                    || characteristic.getUuid().equals(UUID.fromString(BLINKY_UUID_CTRL_CHAR))) {
+                requestBootloaderInformation();
+            }
+        }
+
+        @Override
+        public void didWriteValue(RigLeBaseDevice device,
+                                  BluetoothGattCharacteristic characteristic) {
+        }
+
+        /**
+         * Get the hardware version. See {@link DemoDevice#setType200(byte[])}
+         *
+         * @param device An instance of {@link RigLeBaseDevice} after services have been discovered.
+         */
+        @Override
+        public void discoveryDidComplete(RigLeBaseDevice device) {
+            Log.i(TAG, "discoveryDidComplete");
+
+            for (BluetoothGattService service : device.getServiceList()) {
+                Log.i(TAG, "Found Service : " + service.getUuid().toString());
+                for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                    Log.i(TAG, "Found Characteristic : " + characteristic.getUuid().toString());
+                }
+            }
+
+            initServices();
+            if (getFirmwareType() == DemoDevice.FirmwareType.Bmdware
+                    || getFirmwareType() == DemoDevice.FirmwareType.EvalDemo) {
+                setControlPointNotificationsEnabled(true);
+
+                // If the control point does not have PROPERTY_NOTIFY,
+                // it is a 200 board running Blinky firmware -->
+                // set Interrogation completed!
+            } else if (getFirmwareType()
+                    == DemoDevice.FirmwareType.Blinky) {
+                if (hasNotifyProperty()) {
+                    setControlPointNotificationsEnabled(true);
+                } else {
+                    Log.i(TAG, "Found Blinky 200!");
+                    if (discoveryListener != null) {
+                        discoveryListener.onInterrogationCompleted(DemoDevice.this, true);
+                    }
+                }
+
+            } else {
+                Log.w(TAG, "Failed to find hardware version");
+                if (discoveryListener != null) {
+                    discoveryListener.onInterrogationCompleted(DemoDevice.this, false);
+                }
+            }
+
+            DeviceRepository.getInstance().saveConnectedDevice(DemoDevice.this);
+        }
+    };
+
+    private void maybeStartDemo() {
+        Log.i(TAG, "maybeStartDemo");
+        numberOfEnabledNotifs += 1;
+        Log.i(TAG, "enabledNotifs " + numberOfEnabledNotifs);
+        if (numberOfEnabledNotifs >= 3 && deviceListener != null) {
+            deviceListener.onDemoInitialized();
+        }
+    }
+
+    private IRigLeDescriptorObserver descriptorObserver = new IRigLeDescriptorObserver() {
+
+        @Override
+        public void didReadDescriptor(RigLeBaseDevice device, BluetoothGattDescriptor descriptor) {
+            Log.i(TAG, "didReadDescriptor");
+        }
+    };
 
     public DemoDevice(RigLeBaseDevice device) {
         if (device == null) {
@@ -179,12 +312,8 @@ public class DemoDevice implements
         this.isUpdating = false;
 
         this.baseDevice = device;
-        baseDevice.setDescriptorObserver(this);
-        baseDevice.setObserver(this);
-
-        readWriteListeners = new ArrayList<>();
-        notifyListeners = new ArrayList<>();
-        discoveryListeners = new ArrayList<>();
+        baseDevice.setDescriptorObserver(descriptorObserver);
+        baseDevice.setObserver(baseDeviceObserver);
     }
 
     @Override
@@ -262,6 +391,7 @@ public class DemoDevice implements
 
     @Override
     public void requestBootloaderInformation() {
+        Log.i(TAG, "requestBootloaderInformation");
         if (controlPointCharacteristic == null || hardwareVersionCommand == null) {
             Log.e(TAG, "controlPointCharacteristic was null!");
             return;
@@ -275,90 +405,36 @@ public class DemoDevice implements
         return this.firmwareType;
     }
 
-    //region DEVICE_LISTENERS
-
     @Override
-    public synchronized void didUpdateValue(RigLeBaseDevice device,
-                               BluetoothGattCharacteristic characteristic) {
-        for (IDemoDeviceListener.ReadWriteListener listener : readWriteListeners) {
-            listener.onCharacteristicUpdate(characteristic);
-        }
+    public void setDemoListener(IDeviceListener.DemoData listener) {
+        this.deviceListener = listener;
     }
 
     @Override
-    public synchronized void didUpdateNotifyState(RigLeBaseDevice device,
-                                     BluetoothGattCharacteristic characteristic) {
-        for (IDemoDeviceListener.NotifyListener listener : notifyListeners) {
-            listener.onCharacteristicStateChange(characteristic);
-        }
+    public void setDiscoveryListener(IDeviceListener.DiscoveryListener listener) {
+        this.discoveryListener = listener;
     }
 
     @Override
-    public synchronized void didWriteValue(RigLeBaseDevice device,
-                              BluetoothGattCharacteristic characteristic) {
-        for (IDemoDeviceListener.ReadWriteListener listener : readWriteListeners) {
-            listener.onCharacteristicWrite(characteristic);
-        }
+    public void setPasswordListener(IDeviceListener.PasswordListener listener) {
+        this.passwordListener = listener;
     }
 
     @Override
-    public synchronized void discoveryDidComplete(RigLeBaseDevice device) {
-        for (IDemoDeviceListener.DiscoveryListener listener : discoveryListeners) {
-            listener.onServicesDiscovered(device);
-        }
+    public void startDemo() {
+        Log.i(TAG, "startDemo");
+        startAmbientLightSensing();
+        startAccelerometerStream();
     }
 
     @Override
-    public synchronized void didReadDescriptor(RigLeBaseDevice device, BluetoothGattDescriptor descriptor) {
-        for (IDemoDeviceListener.ReadWriteListener listener : readWriteListeners) {
-            listener.onDescriptorUpdate(descriptor);
-        }
+    public void stopDemo() {
+        Log.i(TAG, "stopDemo");
+        stopAmbientLightSensing();
+        stopAccelerometerStream();
     }
 
-    @Override
-    public synchronized void addReadWriteListener(
-            @NonNull IDemoDeviceListener.ReadWriteListener readWriteListener) {
-        if (!readWriteListeners.contains(readWriteListener)) {
-            readWriteListeners.add(readWriteListener);
-        }
-    }
-
-    @Override
-    public synchronized void removeReadWriteListener(
-            @NonNull IDemoDeviceListener.ReadWriteListener readWriteListener) {
-        if (readWriteListeners.contains(readWriteListener)) {
-            readWriteListeners.remove(readWriteListener);
-        }
-    }
-
-    @Override
-    public synchronized void addNotifyListener(@NonNull IDemoDeviceListener.NotifyListener notifyListener) {
-        if (!notifyListeners.contains(notifyListener)) {
-            notifyListeners.add(notifyListener);
-        }
-    }
-
-    @Override
-    public synchronized void removeNotifyListener(@NonNull IDemoDeviceListener.NotifyListener notifyListener) {
-        if (notifyListeners.contains(notifyListener)) {
-            notifyListeners.remove(notifyListener);
-        }
-    }
-
-    @Override
-    public synchronized void addDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener) {
-        if (!discoveryListeners.contains(listener)) {
-            discoveryListeners.add(listener);
-        }
-    }
-
-    @Override
-    public synchronized void removeDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener) {
-        if (discoveryListeners.contains(listener)) {
-            discoveryListeners.remove(listener);
-        }
-    }
-
+    //region DEVICE
     @Override
     public synchronized void readCharacteristic(BluetoothGattCharacteristic characteristic) {
         if (!DeviceRepository.getInstance().isDeviceConnected()) {
@@ -451,7 +527,17 @@ public class DemoDevice implements
             return;
         }
 
+        final byte [] maybeLockedCommand = { value[0] };
         boolean is200 = true;
+
+        if (Arrays.equals(maybeLockedCommand, DEVICE_LOCKED)) {
+            if (passwordListener != null) {
+                passwordListener.onDeviceLocked();
+            }
+            Log.w(TAG, "Device Locked!");
+            return;
+        }
+
         // Legacy firmware reports the hardware version in a different structure
         if (value.length == BootloaderInfo.LEGACY_SIZE
                 && value[BootloaderInfo.LEGACY_HARDWARE_INDEX]
@@ -597,6 +683,7 @@ public class DemoDevice implements
             return;
         }
 
+        Log.i(TAG, "stopAmbientLightSensing");
         byte [] command = new byte[] { ADC_STREAM_STOP };
         writeCharacteristic(adcChar, command);
     }
@@ -646,6 +733,7 @@ public class DemoDevice implements
             return;
         }
 
+        Log.i(TAG, "stopAccelerometerStream");
         byte [] command = new byte[] { ACCEL_STREAM_STOP };
         writeCharacteristic(accelChar, command);
     }

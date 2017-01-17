@@ -30,39 +30,6 @@ public class DisconnectedDevice extends DemoDevice implements IDemoDeviceActions
         Log.i("DisconnectedDevice", "new DisconnectedDevice");
     }
 
-    //region DEVICE_LISTENERS
-    @Override
-    public void addReadWriteListener(
-            @NonNull IDemoDeviceListener.ReadWriteListener readWriteListener) {
-    }
-
-    @Override
-    public void removeReadWriteListener(
-            @NonNull IDemoDeviceListener.ReadWriteListener readWriteListener) {
-    }
-
-    @Override
-    public void addNotifyListener(@NonNull IDemoDeviceListener.NotifyListener notifyListener) {
-
-    }
-
-    @Override
-    public void removeNotifyListener(@NonNull IDemoDeviceListener.NotifyListener notifyListener) {
-
-    }
-
-    @Override
-    public void addDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener) {
-
-    }
-
-    @Override
-    public void removeDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener) {
-
-    }
-    //endregion
-
-
     @Override
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
 

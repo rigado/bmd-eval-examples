@@ -21,8 +21,8 @@ import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.activities.MainActivity;
 import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.FirmwareContract;
+import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.DemoDevice;
-import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmd200eval.presenters.FirmwarePresenter;
 import com.rigado.bmd200eval.utilities.JsonFirmwareReader;
 import com.rigado.bmd200eval.utilities.JsonFirmwareType;
@@ -31,10 +31,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class FirmwareUpdateFragment extends Fragment implements
-        IFragmentLifecycleListener,
         FirmwareContract.View {
 
     private static final String TAG = FirmwareUpdateFragment.class.getSimpleName();
+    public static final String TITLE = "Firmware Update";
 
     // UI References
     private NumberPicker mFirmwarePicker;
@@ -50,19 +50,14 @@ public class FirmwareUpdateFragment extends Fragment implements
 
     private boolean isConnected;
 
-    public static FirmwareUpdateFragment newInstance(boolean isConnected) {
+    public static FirmwareUpdateFragment newInstance() {
         FirmwareUpdateFragment firmwareUpdateFragment = new FirmwareUpdateFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(SectionsPagerAdapter.CONNECTION_STATE, isConnected);
-        firmwareUpdateFragment.setArguments(args);
         return firmwareUpdateFragment;
     }
 
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        isConnected = getArguments()
-                .getBoolean(SectionsPagerAdapter.CONNECTION_STATE, false);
     }
 
     @Override
@@ -129,7 +124,7 @@ public class FirmwareUpdateFragment extends Fragment implements
 
         firmwarePresenter = new FirmwarePresenter(this);
 
-        if (!isConnected) {
+        if (!DeviceRepository.getInstance().isDeviceConnected()) {
             mButtonDeploy.setEnabled(false);
         }
 
@@ -139,23 +134,12 @@ public class FirmwareUpdateFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        onResumeFragment();
+        firmwarePresenter.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        onPauseFragment();
-    }
-
-
-    @Override
-    public void onResumeFragment() {
-        firmwarePresenter.onResume();
-    }
-
-    @Override
-    public void onPauseFragment() {
         firmwarePresenter.onPause();
     }
 

@@ -1,27 +1,25 @@
 package com.rigado.bmd200eval.presenters;
 
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.rigado.bmd200eval.contracts.DemoContract;
 import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.DemoDevice;
-import com.rigado.bmd200eval.demodevice.IDemoDeviceListener;
 import com.rigado.bmd200eval.demodevice.devicedata.AccelData;
 import com.rigado.bmd200eval.demodevice.devicedata.AmbientLight;
 import com.rigado.bmd200eval.demodevice.devicedata.ButtonStatus;
-
-import java.util.UUID;
+import com.rigado.bmd200eval.interfaces.IDeviceListener;
 
 public class DemoPresenter extends BasePresenter implements
-        IDemoDeviceListener.ReadWriteListener,
-        IDemoDeviceListener.NotifyListener {
+        IDeviceListener.DemoData {
 
     private static final String TAG = DemoPresenter.class.getSimpleName();
 
     private DemoContract.View demoView;
     private DemoDevice demoDevice;
+    private Handler uiThreadHandler;
 
     public DemoPresenter(DemoContract.View view) {
         this.demoView = view;
@@ -29,80 +27,60 @@ public class DemoPresenter extends BasePresenter implements
                 DeviceRepository
                 .getInstance()
                 .getConnectedDevice();
+        uiThreadHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
     public void onResume() {
-        Log.i(TAG, "onResume");
-        demoDevice.addReadWriteListener(this);
-        demoDevice.addNotifyListener(this);
-        demoDevice.setButtonNotificationsEnabled(true);
-        demoDevice.setAccelNotificationsEnabled(true);
-        demoDevice.setAmbLightNotificationsEnabled(true);
+        demoDevice.setDemoListener(this);
+        demoDevice.startDemo();
     }
 
     @Override
     public void onPause() {
-        Log.i(TAG, "onPause");
-        demoDevice.removeReadWriteListener(this);
-        demoDevice.removeNotifyListener(this);
-        demoDevice.setButtonNotificationsEnabled(false);
-        demoDevice.setAccelNotificationsEnabled(false);
-        demoDevice.setAmbLightNotificationsEnabled(false);
+        demoDevice.setDemoListener(null);
+        demoDevice.stopDemo();
     }
 
     @Override
-    public void onCharacteristicWrite(BluetoothGattCharacteristic characteristic) {
+    public void onReceiveButtonData(byte[] data) {
+        final ButtonStatus status = new ButtonStatus(data[0]);
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                demoView.updateButtonStatus(status);
+            }
+        });
     }
 
     @Override
-    public void onCharacteristicUpdate(BluetoothGattCharacteristic characteristic) {
-        final byte [] value = characteristic.getValue();
-
-        if (value == null) {
-            return;
-        }
-
-        if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_BUTTON_CHAR))) {
-            ButtonStatus status = new ButtonStatus(value[0]);
-            demoView.updateButtonStatus(status);
-
-        } else if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_ADC_CHAR))) {
-            AmbientLight lightLevel = new AmbientLight(value[0]);
-            demoView.updateAmbientLight(lightLevel);
-
-        } else if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_ACCEL_CHAR))) {
-            AccelData accelData = new AccelData(value[0], value[1], value[2]);
-            demoView.updateAccelStream(accelData);
-        } else if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_LED_CHAR))) {
-            //RgbColor color = new RgbColor(value)
-        }
+    public void onReceiveAmbientLightData(byte[] data) {
+        final AmbientLight lightLevel = new AmbientLight(data[0]);
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                demoView.updateAmbientLight(lightLevel);
+            }
+        });
     }
 
     @Override
-    public void onDescriptorUpdate(BluetoothGattDescriptor descriptor) {
-
+    public void onReceiveAccelerometerData(byte[] data) {
+        final AccelData accelData = new AccelData(data[0], data[1], data[2]);
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                demoView.updateAccelStream(accelData);
+            }
+        });
     }
 
+    //don't actually need this if enabling notifs becomes part of interrogation.
+    //on interrogation completed, refresh all views
+    // and on resume will call startDemo();
     @Override
-    public void onCharacteristicStateChange(BluetoothGattCharacteristic characteristic) {
-        if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_BUTTON_CHAR))) {
-            Log.i(TAG, "Button notifications enabled");
-
-        } else if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_ACCEL_CHAR))) {
-            Log.i(TAG, "Accel notifications enabled");
-            demoDevice.startAccelerometerStream();
-
-        } else if (characteristic.getUuid().equals(UUID.fromString(
-                DemoDevice.BMDEVAL_UUID_ADC_CHAR))) {
-            Log.i(TAG, "Ambient Light notifications enabled");
-            demoDevice.startAmbientLightSensing();
-        }
+    public void onDemoInitialized() {
+        Log.i(TAG, "onDemoInitialized");
+        demoDevice.startDemo();
     }
 }

@@ -5,18 +5,19 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.support.annotation.NonNull;
 
 import com.rigado.bmd200eval.demodevice.devicedata.RgbColor;
+import com.rigado.bmd200eval.interfaces.IDeviceListener;
 import com.rigado.rigablue.RigFirmwareUpdateManager;
 import com.rigado.rigablue.RigLeBaseDevice;
 
 import java.io.InputStream;
 
 public interface IDemoDeviceActions {
-    void addReadWriteListener(@NonNull IDemoDeviceListener.ReadWriteListener readWriteListener);
-    void removeReadWriteListener(@NonNull IDemoDeviceListener.ReadWriteListener readWriteListener);
-    void addNotifyListener(@NonNull IDemoDeviceListener.NotifyListener notifyListener);
-    void removeNotifyListener(@NonNull IDemoDeviceListener.NotifyListener notifyListener);
-    void addDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener);
-    void removeDiscoveryListener(@NonNull IDemoDeviceListener.DiscoveryListener listener);
+    void setDemoListener(IDeviceListener.DemoData listener);
+    void setDiscoveryListener(IDeviceListener.DiscoveryListener listener);
+    void setPasswordListener(IDeviceListener.PasswordListener listener);
+
+    void startDemo();
+    void stopDemo();
 
     void readCharacteristic(BluetoothGattCharacteristic characteristic);
     void writeCharacteristic(BluetoothGattCharacteristic characteristic, byte [] value);

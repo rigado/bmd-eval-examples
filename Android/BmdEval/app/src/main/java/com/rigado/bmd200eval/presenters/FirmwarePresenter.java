@@ -37,12 +37,16 @@ public class FirmwarePresenter extends BasePresenter implements
 
     @Override
     public void onResume() {
-
+        if (rigFirmwareUpdateManager != null) {
+            rigFirmwareUpdateManager.setObserver(this);
+        }
     }
 
     @Override
     public void onPause() {
-
+        if (rigFirmwareUpdateManager != null) {
+            rigFirmwareUpdateManager.setObserver(null);
+        }
     }
 
     //Keep reference if we decide to cancel firmware update
@@ -50,8 +54,6 @@ public class FirmwarePresenter extends BasePresenter implements
 
     @Override
     public void programFirmware(Context context, JsonFirmwareType firmwareRecord) {
-        Log.i(TAG, "firmware record name " + firmwareRecord.getFwname());
-
         if (firmwareRecord == null) {
             return;
         }

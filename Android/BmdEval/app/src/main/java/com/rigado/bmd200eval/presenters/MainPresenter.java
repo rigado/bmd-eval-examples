@@ -2,9 +2,6 @@ package com.rigado.bmd200eval.presenters;
 
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -12,8 +9,8 @@ import android.util.Log;
 import com.rigado.bmd200eval.contracts.MainContract;
 import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.DisconnectedDevice;
-import com.rigado.bmd200eval.demodevice.IDemoDeviceListener;
 import com.rigado.bmd200eval.demodevice.DemoDevice;
+import com.rigado.bmd200eval.interfaces.IDeviceListener;
 import com.rigado.rigablue.IRigLeConnectionManagerObserver;
 import com.rigado.rigablue.IRigLeDiscoveryManagerObserver;
 import com.rigado.rigablue.RigAvailableDeviceData;
@@ -22,22 +19,19 @@ import com.rigado.rigablue.RigLeBaseDevice;
 import com.rigado.rigablue.RigLeConnectionManager;
 import com.rigado.rigablue.RigLeDiscoveryManager;
 
-import java.util.UUID;
 
 public class MainPresenter extends BasePresenter implements
         MainContract.UserActionsListener,
         IRigLeDiscoveryManagerObserver,
         IRigLeConnectionManagerObserver,
-        IDemoDeviceListener.NotifyListener,
-        IDemoDeviceListener.ReadWriteListener,
-        IDemoDeviceListener.DiscoveryListener {
+        IDeviceListener.PasswordListener,
+        IDeviceListener.DiscoveryListener {
 
     private static final String TAG = MainPresenter.class.getSimpleName();
 
     private MainContract.View mainView;
     private DemoDevice demoDevice;
     private Handler uiThreadHandler;
-    private boolean isConnected;
     private RigLeDiscoveryManager discoveryManager =
             RigLeDiscoveryManager.getInstance();
     private RigLeConnectionManager connectionManager =
@@ -53,23 +47,21 @@ public class MainPresenter extends BasePresenter implements
 
     @Override
     public void onResume() {
-        discoveryManager.setObserver(this);
         connectionManager.setObserver(this);
-        if (!demoDevice.isConnected()) {
+        if (!DeviceRepository.getInstance().isDeviceConnected()) {
             maybeStartScanning();
         }
     }
 
     @Override
     public void onPause() {
-        discoveryManager.setObserver(null);
         connectionManager.setObserver(null);
         if (discoveryManager.isDiscoveryRunning()) {
             stopScanning();
         }
     }
 
-    private static final int CONNECTION_TIMEOUT = 8000;
+    private static final int CONNECTION_TIMEOUT = 20000;
 
     @Override
     public void didDiscoverDevice(final RigAvailableDeviceData device) {
@@ -77,17 +69,9 @@ public class MainPresenter extends BasePresenter implements
         discoveryManager.stopDiscoveringDevices();
         discoveryManager.clearAvailableDevices();
 
-        final Handler handler = new Handler(Looper.getMainLooper());
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                connectionManager.setObserver(MainPresenter.this);
-                connectionManager.connectDevice(device, CONNECTION_TIMEOUT);
-                mainView.updateDialog("Connecting to " + device.getUncachedName() + "...");
-            }
-        };
-
-        handler.postDelayed(runnable, 1000);
+        connectionManager.setObserver(MainPresenter.this);
+        connectionManager.connectDevice(device, CONNECTION_TIMEOUT);
+        updateDialog("Connecting to " + device.getUncachedName() + "...");
     }
 
     @Override
@@ -111,16 +95,15 @@ public class MainPresenter extends BasePresenter implements
         demoDevice.setConnected(true);
         demoDevice = new DemoDevice(device);
         DeviceRepository.getInstance().saveConnectedDevice(demoDevice);
-        demoDevice.addDiscoveryListener(this);
-        demoDevice.addReadWriteListener(this);
-        demoDevice.addNotifyListener(this);
+        demoDevice.setDiscoveryListener(this);
+        demoDevice.setPasswordListener(this);
+        demoDevice.runDiscovery();
         uiThreadHandler.post(new Runnable() {
             @Override
             public void run() {
                 mainView.updateDialog("Interrogating " + device.getName() + "...");
             }
         });
-        demoDevice.runDiscovery();
     }
 
     @Override
@@ -181,104 +164,18 @@ public class MainPresenter extends BasePresenter implements
     }
 
     @Override
-    public void onCharacteristicStateChange(BluetoothGattCharacteristic characteristic) {
-        if (characteristic.getUuid().equals(
-                UUID.fromString(DemoDevice.BMDEVAL_UUID_CTRL_CHAR))
-                || characteristic.getUuid().equals(
-                UUID.fromString(DemoDevice.BMDWARE_CTRL_POINT_UUID))
-                || characteristic.getUuid().equals(
-                UUID.fromString(DemoDevice.BLINKY_UUID_CTRL_CHAR))) {
-            Log.i(TAG, "enabled control point notifications for " + characteristic.getUuid().toString());
-            demoDevice.requestBootloaderInformation();
-        }
-    }
-
-    @Override
-    public void onCharacteristicWrite(BluetoothGattCharacteristic characteristic) {
-
-    }
-
-    @Override
-    public void onCharacteristicUpdate(BluetoothGattCharacteristic characteristic) {
-        Log.i(TAG, "onCharacteristicUpdate " + characteristic.getUuid().toString());
-        if (characteristic.getUuid().equals(
-                UUID.fromString(DemoDevice.BMDWARE_CTRL_POINT_UUID))
-            || (characteristic.getUuid().equals(
-                UUID.fromString(DemoDevice.BLINKY_UUID_CTRL_CHAR)))
-            || (characteristic.getUuid().equals(
-                UUID.fromString(DemoDevice.BMDEVAL_UUID_CTRL_CHAR)))) {
-
-            final byte [] maybeBootloaderInfo = characteristic.getValue();
-
-            demoDevice.setType200(maybeBootloaderInfo);
-
-            uiThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i(TAG, "onInterrogationCompleted called");
-                    mainView.onInterrogationCompleted(demoDevice);
-                }
-            });
-
-        }
-    }
-
-    @Override
-    public void onDescriptorUpdate(BluetoothGattDescriptor descriptor) {
-
-    }
-
-    /**
-     * Get the hardware version. See {@link DemoDevice#setType200(byte[])}
-     *
-     * @param device An instance of {@link RigLeBaseDevice} after services have been discovered.
-     */
-    @Override
     public void onServicesDiscovered(RigLeBaseDevice device) {
-        Log.i(TAG, "onServicesDiscovered");
+        //Noop
+    }
 
-        for (BluetoothGattService service : device.getServiceList()) {
-            Log.i(TAG, "Found Service : " + service.getUuid().toString());
-            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                Log.i(TAG, "Found Characteristic : " + characteristic.getUuid().toString());
+    @Override
+    public void onInterrogationCompleted(final DemoDevice demoDevice, boolean foundHwVersion) {
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mainView.onInterrogationCompleted(demoDevice);
             }
-        }
-
-        demoDevice.initServices();
-        if (demoDevice.getFirmwareType() == DemoDevice.FirmwareType.Bmdware
-                || demoDevice.getFirmwareType() == DemoDevice.FirmwareType.EvalDemo) {
-            demoDevice.setControlPointNotificationsEnabled(true);
-
-            // If the control point does not have PROPERTY_NOTIFY,
-            // it is a 200 board running Blinky firmware -->
-            // set Interrogation completed!
-        } else if (demoDevice.getFirmwareType()
-                == DemoDevice.FirmwareType.Blinky) {
-            if (demoDevice.hasNotifyProperty()) {
-                demoDevice.setControlPointNotificationsEnabled(true);
-            } else {
-                Log.i(TAG, "Found Blinky 200!");
-
-                uiThreadHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i(TAG, "onInterrogationCompleted called");
-                        mainView.onInterrogationCompleted(demoDevice);
-                    }
-                });
-            }
-
-        } else {
-            Log.w(TAG, "Failed to find hardware version");
-            uiThreadHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mainView.onInterrogationFailed(demoDevice);
-                }
-            });
-        }
-
-        DeviceRepository.getInstance().saveConnectedDevice(demoDevice);
+        });
     }
 
     @Override
@@ -295,6 +192,25 @@ public class MainPresenter extends BasePresenter implements
         }
 
         connectionManager.connectDevice(data, CONNECTION_TIMEOUT);
-        mainView.updateDialog("Attempting to reconnect to " + data.getUncachedName());
+        updateDialog("Attempting to reconnect to " + data.getUncachedName());
+    }
+
+    private void updateDialog(final String title) {
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mainView.updateDialog(title);
+            }
+        });
+    }
+
+    @Override
+    public void onDeviceLocked() {
+
+    }
+
+    @Override
+    public void onDeviceUnlocked() {
+
     }
 }

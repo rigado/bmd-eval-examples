@@ -57,6 +57,8 @@ public class BootloaderInfo {
     // These values correspond directly to the byte values
     // received from the bootloader. Do not! Change!
 
+    private static final int TYPE_UNKNOWN = 0;
+
     // Version Type
     private static final int VERSION_TYPE_RELEASE = 1;
     private static final int VERSION_TYPE_DEBUG = 2;
@@ -91,7 +93,8 @@ public class BootloaderInfo {
 
     public enum VersionType {
         Release (VERSION_TYPE_RELEASE, "Release"),
-        Debug   (VERSION_TYPE_DEBUG, "Debug");
+        Debug   (VERSION_TYPE_DEBUG, "Debug"),
+        Unknown (TYPE_UNKNOWN, "Unknown");
 
         private final int valType;
         private final String valDescription;
@@ -115,7 +118,7 @@ public class BootloaderInfo {
                     return versionType;
                 }
             }
-            return null;
+            return Unknown;
         }
     }
 
@@ -123,7 +126,8 @@ public class BootloaderInfo {
         S110    (SOFTDEVICE_SUPPORT_S110, "S110"),
         S120    (SOFTDEVICE_SUPPORT_S120, "S120"),
         S130    (SOFTDEVICE_SUPPORT_S130, "S130"),
-        S132    (SOFTDEVICE_SUPPORT_S132, "S132");
+        S132    (SOFTDEVICE_SUPPORT_S132, "S132"),
+        Unknown (TYPE_UNKNOWN, "Unknown");
 
         private final int valType;
         private final String valDescription;
@@ -147,13 +151,14 @@ public class BootloaderInfo {
                     return softDevice;
                 }
             }
-            return null;
+            return Unknown;
         }
     }
 
     public enum HardwareSupport {
         NRF51   (HARDWARE_SUPPORT_NRF51, "NRF51"),
-        NRF52   (HARDWARE_SUPPORT_NRF52, "NRF52");
+        NRF52   (HARDWARE_SUPPORT_NRF52, "NRF52"),
+        Unknown (TYPE_UNKNOWN, "Unknown");
 
         private final int valType;
         private final String valDescription;
@@ -177,7 +182,7 @@ public class BootloaderInfo {
                     return hardwareType;
                 }
             }
-            return null;
+            return Unknown;
         }
     }
 

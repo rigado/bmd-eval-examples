@@ -1,85 +1,62 @@
 package com.rigado.bmd200eval.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 
-import com.rigado.bmd200eval.R;
 import com.rigado.bmd200eval.fragments.AboutFragment;
 import com.rigado.bmd200eval.fragments.ColorPickerFragment;
 import com.rigado.bmd200eval.fragments.DemoFragment;
 import com.rigado.bmd200eval.fragments.FirmwareUpdateFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 /**
- * A {@link FragmentPagerAdapter} that returns a fragment corresponding
+ * A {@link FragmentStatePagerAdapter} that returns a fragment corresponding
  * to one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-    private Context mContext;
-    private boolean isConnected;
 
-    public final static int DEMO_STATUS_FRAGMENT = 0;
-    public final static int COLOR_WHEEL_FRAGMENT = 1;
-    public final static int FIRMWARE_UPDATE_FRAGMENT = 2;
-    public final static int ABOUT_FRAGMENT = 3;
+    private final String[] tabTitles = {
+            DemoFragment.TITLE,
+            ColorPickerFragment.TITLE,
+            FirmwareUpdateFragment.TITLE,
+            AboutFragment.TITLE
+    };
 
-    private List<Fragment> mFragmentList;
+    public static final int DEMO_FRAGMENT = 0;
+    public static final int COLOR_PICKER_FRAGMENT = 1;
+    public static final int FIRMWARE_UPDATE_FRAGMENT = 2;
+    public static final int ABOUT_FRAGMENT = 3;
 
-    public static final String CONNECTION_STATE =
-            "com.rigado.bmdeval.SectionsPagerAdapter.CONNECT_STATE";
-
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+    public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.mContext = context;
-        this.isConnected = false;
-        mFragmentList = new ArrayList<>();
-        createFragments();
-    }
-
-    public void destroyCache() {
-        mFragmentList.clear();
-        createFragments();
-    }
-
-    public void createFragments() {
-        mFragmentList.add(DemoFragment.newInstance(isConnected));
-        mFragmentList.add(ColorPickerFragment.newInstance(isConnected));
-        mFragmentList.add(FirmwareUpdateFragment.newInstance(isConnected));
-        mFragmentList.add(new AboutFragment());
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return mFragmentList.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return 4;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        Locale l = Locale.getDefault();
+        return tabTitles[position];
+    }
+
+    @Override
+    public Fragment getItem(int position) {
         switch (position) {
-            case DEMO_STATUS_FRAGMENT:
-                return mContext.getString(R.string.title_demo_fragment).toUpperCase(l);
-            case COLOR_WHEEL_FRAGMENT:
-                return mContext.getString(R.string.title_color_fragment).toUpperCase(l);
+            case DEMO_FRAGMENT:
+                return DemoFragment.newInstance();
+            case COLOR_PICKER_FRAGMENT:
+                return ColorPickerFragment.newInstance();
             case FIRMWARE_UPDATE_FRAGMENT:
-                return mContext.getString(R.string.title_firmware_fragment).toUpperCase(l);
+                return FirmwareUpdateFragment.newInstance();
             case ABOUT_FRAGMENT:
-                return mContext.getString(R.string.title_about_fragment).toUpperCase(l);
+                return new AboutFragment();
         }
+
         return null;
+    }
+
+    @Override
+    public int getCount() {
+        return tabTitles.length;
     }
 
     @Override
@@ -92,10 +69,6 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         }
 
         super.destroyItem(container, position, object);
-    }
-
-    public void setConnected(boolean isConnected) {
-        this.isConnected = isConnected;
     }
 
     @Override

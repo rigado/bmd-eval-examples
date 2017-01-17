@@ -22,16 +22,17 @@ import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.ColorPickerContract;
 import com.rigado.bmd200eval.customviews.CircleView;
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
+import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.devicedata.RgbColor;
-import com.rigado.bmd200eval.interfaces.IFragmentLifecycleListener;
 import com.rigado.bmd200eval.presenters.ColorPickerPresenter;
 
 public class ColorPickerFragment extends Fragment implements
         OnTouchListener,
-        ColorPickerContract.View,
-        IFragmentLifecycleListener {
+        ColorPickerContract.View {
 
     private final String TAG = getClass().getSimpleName();
+    public static final String TITLE = "Color Wheel";
+
 
     private ImageView mImageWheel;
     private CircleView mImageSelected;
@@ -40,21 +41,14 @@ public class ColorPickerFragment extends Fragment implements
 
     private ColorPickerPresenter colorPickerPresenter;
 
-    private boolean isConnected;
-
-    public static ColorPickerFragment newInstance(boolean isConnected) {
+    public static ColorPickerFragment newInstance() {
         ColorPickerFragment colorPickerFragment = new ColorPickerFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(SectionsPagerAdapter.CONNECTION_STATE, isConnected);
-        colorPickerFragment.setArguments(args);
         return colorPickerFragment;
     }
 
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        isConnected = getArguments()
-                .getBoolean(SectionsPagerAdapter.CONNECTION_STATE, false);
     }
 
     //TODO : Refactor legacy code
@@ -72,6 +66,7 @@ public class ColorPickerFragment extends Fragment implements
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_color_picker, container, false);
+        colorPickerPresenter = new ColorPickerPresenter(this);
 
         mImageWheel = (ImageView) rootView.findViewById(R.id.fragment_color_picker_wheel_image);
         mImageWheel.setOnTouchListener(this);
@@ -99,9 +94,7 @@ public class ColorPickerFragment extends Fragment implements
             }
         });
 
-        colorPickerPresenter = new ColorPickerPresenter(this);
-
-        if (!isConnected) {
+        if (!DeviceRepository.getInstance().isDeviceConnected()) {
             mToggleButton.setEnabled(false);
             mImageWheel.setEnabled(false);
             mImageSelected.setEnabled(false);
@@ -111,7 +104,26 @@ public class ColorPickerFragment extends Fragment implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+        mViewPager = ((MainActivity) getActivity()).mViewPager;
+        mImageWheel.setOnTouchListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
+        mImageWheel.setOnTouchListener(null);
+    }
+
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (mViewPager == null) {
+            Log.w(TAG, "ViewPager was null!");
+            return false;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
@@ -175,27 +187,5 @@ public class ColorPickerFragment extends Fragment implements
         }
 
         return false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        onResumeFragment();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        onPauseFragment();
-    }
-
-    @Override
-    public void onResumeFragment() {
-        colorPickerPresenter.onResume();
-    }
-
-    @Override
-    public void onPauseFragment() {
-        colorPickerPresenter.onPause();
     }
 }

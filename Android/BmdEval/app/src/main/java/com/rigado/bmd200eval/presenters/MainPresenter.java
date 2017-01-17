@@ -48,7 +48,7 @@ public class MainPresenter extends BasePresenter implements
     @Override
     public void onResume() {
         connectionManager.setObserver(this);
-        if (!DeviceRepository.getInstance().isDeviceConnected()) {
+        if (!DeviceRepository.getInstance().isDeviceConnected() && !demoDevice.isUpdating()) {
             maybeStartScanning();
         }
     }
@@ -195,6 +195,11 @@ public class MainPresenter extends BasePresenter implements
         updateDialog("Attempting to reconnect to " + data.getUncachedName());
     }
 
+    @Override
+    public void unlockDevice(String password) {
+        demoDevice.unlockDevice(password);
+    }
+
     private void updateDialog(final String title) {
         uiThreadHandler.post(new Runnable() {
             @Override
@@ -206,11 +211,26 @@ public class MainPresenter extends BasePresenter implements
 
     @Override
     public void onDeviceLocked() {
-
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mainView.updateDeviceLocked("Device Locked!");
+            }
+        });
     }
 
     @Override
     public void onDeviceUnlocked() {
+        demoDevice.requestBootloaderInformation();
+    }
 
+    @Override
+    public void onDeviceUnlockFailed() {
+        uiThreadHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                mainView.updateDeviceLocked("Unlock Device Failed!");
+            }
+        });
     }
 }

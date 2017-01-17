@@ -32,12 +32,14 @@ public class DemoPresenter extends BasePresenter implements
 
     @Override
     public void onResume() {
+        Log.i(TAG, "onResume");
         demoDevice.setDemoListener(this);
         demoDevice.startDemo();
     }
 
     @Override
     public void onPause() {
+        Log.i(TAG, "onPause");
         demoDevice.setDemoListener(null);
         demoDevice.stopDemo();
     }

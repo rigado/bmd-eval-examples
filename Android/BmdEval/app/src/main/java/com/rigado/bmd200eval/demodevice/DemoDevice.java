@@ -19,6 +19,7 @@ import com.rigado.rigablue.RigFirmwareUpdateManager;
 import com.rigado.rigablue.RigLeBaseDevice;
 
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -166,6 +167,7 @@ public class DemoDevice implements
     private boolean is200Device;
     private boolean isUpdating;
     private boolean isConnected;
+    private boolean isLocked;
 
     /**
      * Store a reference after receiving device type
@@ -186,6 +188,9 @@ public class DemoDevice implements
         @Override
         public void didUpdateValue(RigLeBaseDevice device,
                                    BluetoothGattCharacteristic characteristic) {
+            if (deviceListener == null) {
+                Log.w(TAG, "deviceListener was null!");
+            }
             if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_BUTTON_CHAR))) {
                 if (deviceListener != null) {
                     deviceListener.onReceiveButtonData(characteristic.getValue());
@@ -201,7 +206,27 @@ public class DemoDevice implements
             } else if (characteristic.getUuid().equals(UUID.fromString(BMDEVAL_UUID_CTRL_CHAR))
                     || characteristic.getUuid().equals(UUID.fromString(BMDWARE_CTRL_POINT_UUID))
                     || characteristic.getUuid().equals(UUID.fromString(BLINKY_UUID_CTRL_CHAR))) {
+
                 final byte [] maybeBootloaderInfo = characteristic.getValue();
+                Log.i(TAG, "maybeBootloaderInfo " + Arrays.toString(characteristic.getValue()));
+                final byte [] command = { maybeBootloaderInfo[0] };
+
+                if (Arrays.equals(command, COMMAND_SUCCESS)
+                        && isDeviceLocked()
+                        && passwordListener != null) {
+                    Log.i(TAG, "Unlocked device!");
+                    setDeviceLocked(false);
+                    passwordListener.onDeviceUnlocked();
+                    return;
+                }
+
+                if (Arrays.equals(command, DEVICE_LOCKED) && passwordListener != null) {
+                    Log.w(TAG, "Device Locked!");
+                    setDeviceLocked(true);
+                    passwordListener.onDeviceLocked();
+                    return;
+                }
+
                 setType200(maybeBootloaderInfo);
                 if (firmwareType == FirmwareType.EvalDemo) {
                     setButtonNotificationsEnabled(true);
@@ -305,6 +330,7 @@ public class DemoDevice implements
             return;
         }
 
+        this.isLocked = false;
         this.isConnected = false;
         //Assume we have a 200 board until notified otherwise
         this.is200Device = true;
@@ -314,6 +340,14 @@ public class DemoDevice implements
         this.baseDevice = device;
         baseDevice.setDescriptorObserver(descriptorObserver);
         baseDevice.setObserver(baseDeviceObserver);
+    }
+
+    public boolean isDeviceLocked() {
+        return this.isLocked;
+    }
+
+    public void setDeviceLocked(boolean isLocked) {
+        this.isLocked = isLocked;
     }
 
     @Override
@@ -650,6 +684,7 @@ public class DemoDevice implements
             return;
         }
 
+        Log.i(TAG, "DEBUG - setAmbLightNotificationsEnabled");
         setCharacteristicNotification(abmChar, enabled);
     }
 
@@ -665,7 +700,7 @@ public class DemoDevice implements
         if(adcChar == null) {
             return;
         }
-
+        Log.i(TAG, "DEBUG - startAmbientLightSensing");
         byte [] command = new byte[] { ADC_STREAM_START };
         writeCharacteristic(adcChar, command);
     }
@@ -701,6 +736,7 @@ public class DemoDevice implements
             return;
         }
 
+        Log.i(TAG, "DEBUG - setAccelNotificationsEnabled");
         setCharacteristicNotification(accelChar, enabled);
     }
 
@@ -717,6 +753,7 @@ public class DemoDevice implements
             return;
         }
 
+        Log.i(TAG, "DEBUG - startAccelerometerStream");
         byte [] command = new byte[] { ACCEL_STREAM_START };
         writeCharacteristic(accelChar, command);
     }
@@ -751,6 +788,30 @@ public class DemoDevice implements
             return;
         }
 
+        Log.i(TAG, "DEBUG - setButtonNotificationsEnabled");
         setCharacteristicNotification(buttonChar, enable);
     }
+
+    public static final int MAX_ARRAY_LENGTH = 20;
+    public static final int MAX_PASSWORD_LENGTH = 19;
+    public static final byte [] PASSWORD_UNLOCK_DEVICE = { (byte) 0xF8 };
+
+    @Override
+    public void unlockDevice(@NonNull String password) {
+        if (password.toCharArray().length > MAX_PASSWORD_LENGTH
+                || gattService == null
+                || controlPointCharacteristic == null) {
+            return;
+        }
+
+        final byte [] passwordBytes = password.getBytes(Charset.forName("UTF-8"));
+        byte [] data = new byte[MAX_ARRAY_LENGTH];
+        data[0] = PASSWORD_UNLOCK_DEVICE[0];
+        System.arraycopy(passwordBytes, 0, data, 1, passwordBytes.length);
+        Log.i(TAG, "unlockDevice password bytes " + Arrays.toString(data));
+
+        writeCharacteristic(controlPointCharacteristic, data);
+    }
+
+
 }

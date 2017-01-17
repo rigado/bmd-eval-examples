@@ -52,4 +52,6 @@ public interface IDemoDeviceActions {
     void stopAccelerometerStream();
 
     void setButtonNotificationsEnabled(boolean enable);
+
+    void unlockDevice(@NonNull final String password);
 }

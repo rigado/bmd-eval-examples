@@ -24,5 +24,6 @@ public interface IDeviceListener {
     interface PasswordListener {
         void onDeviceLocked();
         void onDeviceUnlocked();
+        void onDeviceUnlockFailed();
     }
 }

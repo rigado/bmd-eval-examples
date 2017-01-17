@@ -5,11 +5,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.MainContract;
@@ -27,8 +31,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private SectionsPagerAdapter mSectionsPagerAdapter;
     public ControllableViewPager mViewPager;
     private ProgressDialog mDiscoveryDialog;
-
-    private int oldPosition = 0;//by default the first tab
 
     public MainPresenter mainPresenter;
 
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void onInterrogationCompleted(final DemoDevice deviceType) {
         Log.d(TAG, "onInterrogationCompleted");
-            mDiscoveryDialog.dismiss();
+            dismissDiscoveryDialog();
             mSectionsPagerAdapter.notifyDataSetChanged();
             if (deviceType.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
                 new AlertDialog.Builder(MainActivity.this)
@@ -132,22 +134,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                         .show();
             }
 
-    }
-
-    @Override
-    public void onInterrogationFailed(DemoDevice demoDevice) {
-        new AlertDialog.Builder(this)
-                .setTitle("Interrogation Failed!")
-                .setMessage("Failed to find device hardware version. Try resetting your bluetooth and restarting the app.")
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mDiscoveryDialog.dismiss();
-                    }
-                })
-                .setCancelable(false)
-                .show();
     }
 
     @Override
@@ -190,5 +176,49 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .setCancelable(false)
                 .show();
         }
+
+    private AlertDialog mDeviceLockedDialog;
+
+    @Override
+    public void updateDeviceLocked(String title) {
+        if (mDeviceLockedDialog != null && mDeviceLockedDialog.isShowing()) {
+            return;
+        }
+
+        dismissDiscoveryDialog();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_password, null);
+        final TextInputEditText passwordEditText =
+                (TextInputEditText) dialogView.findViewById(R.id.dialog_password_edit_text);
+        mDeviceLockedDialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setView(dialogView)
+                .setPositiveButton("Unlock", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final String maybePassword = passwordEditText.getText().toString();
+                        if (TextUtils.isEmpty(maybePassword)
+                                || !Utilities.isValidPassword(maybePassword)) {
+                            Log.i(TAG, "Invalid password!");
+                            return;
+                        }
+                        mainPresenter.unlockDevice(maybePassword);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //Noop
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    private void dismissDiscoveryDialog() {
+        if (mDiscoveryDialog != null && mDiscoveryDialog.isShowing()) {
+            mDiscoveryDialog.dismiss();
+        }
+    }
 
 }

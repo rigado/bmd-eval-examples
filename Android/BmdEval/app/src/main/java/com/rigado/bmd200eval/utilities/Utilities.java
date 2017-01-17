@@ -56,4 +56,8 @@ public class Utilities {
     public static boolean isDeviceConnected(BluetoothDevice device) {
         return RigCoreBluetooth.getInstance().getDeviceConnectionState(device) == BluetoothProfile.STATE_CONNECTED;
     }
+
+    public static boolean isValidPassword(String input) {
+        return input.matches("[!-~]+");
+    }
 }

@@ -32,7 +32,7 @@
         style="@style/TabLayoutStyle"
         />
 
-    <com.rigado.bmdeval.customviews.ControllableViewPager
+    <com.rigado.bmd200eval.customviews.ControllableViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -10,14 +10,18 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.rigado.bmdeval"
+        applicationId "com.rigado.bmd200eval"
         minSdkVersion 18
         targetSdkVersion 25
-        versionCode 3
-        versionName "2"
+        versionCode 7
+        versionName "2.0.1-alpha"
         vectorDrawables.useSupportLibrary = true
-
     }
+
+    ext.APP_NAME_DEBUG = "BMD Eval DEBUG"
+    ext.APP_NAME_RELEASE = "BMD Eval Demo"
+    ext.VERSION_NAME_DEBUG =  APP_NAME_DEBUG + " " + defaultConfig.versionName
+    ext.VERSION_NAME_RELEASE = APP_NAME_RELEASE + " " + defaultConfig.versionName
 
     buildTypes {
         release {
@@ -28,14 +32,20 @@ android {
 
     productFlavors {
         demo {
-            applicationId "com.rigado.bmdeval.demo"
-            resValue "string", "app_name", "BMD Eval DEBUG"
+            applicationId "com.rigado.bmd200eval.demo"
+            resValue "string", "app_name", APP_NAME_DEBUG
+            resValue "string", "version", VERSION_NAME_DEBUG
         }
 
         production {
-            applicationId "com.rigado.bmdeval"
-            resValue "string", "app_name", "BMD Eval Demo"
+            applicationId "com.rigado.bmd200eval"
+            resValue "string", "app_name", APP_NAME_RELEASE
+            resValue "string", "version", VERSION_NAME_RELEASE
         }
+    }
+
+    lintOptions {
+        disable 'NamespaceTypo'
     }
 }
 

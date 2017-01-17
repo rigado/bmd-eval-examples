@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rigado.bmdeval" >
+    package="com.rigado.bmd200eval" >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- application requires and cannot function without the bluetooth feature -->
     <uses-feature
@@ -17,7 +18,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name="com.rigado.bmdeval.BmdApplication">
+        android:name="com.rigado.bmd200eval.BmdApplication">
 
         <activity
             android:name=".activities.SplashScreenActivity"
@@ -30,11 +31,11 @@
         </activity>
 
         <activity
-            android:name="com.rigado.bmdeval.activities.MainActivity"
+            android:name="com.rigado.bmd200eval.activities.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
 
-        <activity android:name="com.rigado.bmdeval.activities.PermissionActivity"
+        <activity android:name="com.rigado.bmd200eval.activities.PermissionActivity"
             android:label="@string/permission_activity"
             android:screenOrientation="portrait"/>
 

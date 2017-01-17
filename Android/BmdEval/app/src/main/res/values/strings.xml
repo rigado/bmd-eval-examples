@@ -36,4 +36,6 @@
     <string name="about_paragraph_three">Your partner for IoT Product Development</string>
     <string name="title_activity_activity_about">About</string>
     <string name="rigado_logo">Rigado Logo</string>
+    <string name="link_support_email">support@rigado.com</string>
+    <string name="dialog_unlock_device_description">Please enter the password to perform a firmware update.</string>
 </resources>

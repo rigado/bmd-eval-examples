@@ -36,6 +36,16 @@
         <item name="textAllCaps">true</item>
     </style>
 
+    <style name="SettingsHintText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="SettingsEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorGrayPowder</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

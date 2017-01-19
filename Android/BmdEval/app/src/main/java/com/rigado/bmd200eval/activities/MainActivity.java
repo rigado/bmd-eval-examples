@@ -220,9 +220,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .show();
     }
 
+    @Override
+    public void dismissDialogs() {
+        dismissDiscoveryDialog();
+    }
+
     private void dismissDiscoveryDialog() {
         if (mDiscoveryDialog != null && mDiscoveryDialog.isShowing()) {
             mDiscoveryDialog.dismiss();
+        }
+
+        if (mDeviceLockedDialog != null && mDeviceLockedDialog.isShowing()) {
+            mDeviceLockedDialog.dismiss();
         }
     }
 

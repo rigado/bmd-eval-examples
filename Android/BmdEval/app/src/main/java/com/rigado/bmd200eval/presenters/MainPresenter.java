@@ -51,11 +51,16 @@ public class MainPresenter extends BasePresenter implements
         if (!DeviceRepository.getInstance().isDeviceConnected() && !demoDevice.isUpdating()) {
             maybeStartScanning();
         }
+        /**
+         * Re-request to trigger device locked view
+         */
+        demoDevice.requestBootloaderInformation();
     }
 
     @Override
     public void onPause() {
         connectionManager.setObserver(null);
+        mainView.dismissDialogs();
         if (discoveryManager.isDiscoveryRunning()) {
             stopScanning();
         }

@@ -10,6 +10,7 @@ public interface MainContract {
         void updateDialog(String message);
         void deviceDisconnected(final String reason);
         void updateDeviceLocked(final String title);
+        void dismissDialogs();
     }
 
     interface UserActionsListener {

@@ -138,7 +138,9 @@ public class FirmwareUpdateFragment extends Fragment implements
     @Override
     public void onPause() {
         super.onPause();
+        reset();
         firmwarePresenter.onPause();
+
     }
 
     @Override

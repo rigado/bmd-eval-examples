@@ -1,8 +1,11 @@
 package com.rigado.bmd200eval.activities;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TextInputEditText;
@@ -13,11 +16,14 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.rigado.bmd200eval.adapters.SectionsPagerAdapter;
 import com.rigado.bmd200eval.contracts.MainContract;
 import com.rigado.bmd200eval.customviews.ControllableViewPager;
+import com.rigado.bmd200eval.datasource.DeviceRepository;
 import com.rigado.bmd200eval.demodevice.DemoDevice;
 import com.rigado.bmd200eval.presenters.MainPresenter;
 import com.rigado.bmd200eval.utilities.Utilities;
@@ -34,6 +40,22 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     public MainPresenter mainPresenter;
 
+    private Toolbar toolbar;
+
+    private static final String ACTION_INTENT_PROVIDERS_CHANGED =
+            "android.location.PROVIDERS_CHANGED";
+
+    private BroadcastReceiver gpsStateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().matches(ACTION_INTENT_PROVIDERS_CHANGED)) {
+                checkLocationPermissions();
+                mainPresenter.onResume();
+
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mDiscoveryDialog.setCancelable(false);
 
         // Set up the toolbar.
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three
@@ -68,9 +90,31 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     }
 
+    /**
+     * Uncomment to continue work on allowing scanning after a firmware update
+     */
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.scan:
+//                mainPresenter.maybeStartScanning();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
     @Override
     public void onResume() {
         super.onResume();
+        registerReceiver(gpsStateReceiver, new IntentFilter(ACTION_INTENT_PROVIDERS_CHANGED));
         checkLocationPermissions();
         mainPresenter.onResume();
     }
@@ -78,7 +122,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void onPause() {
         super.onPause();
+        unregisterReceiver(gpsStateReceiver);
         mainPresenter.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            super.onDestroy();
+        } catch (NullPointerException e) {
+            Log.d(TAG, "ViewPager NPE bug workaround");
+        }
     }
 
     private void checkLocationPermissions() {
@@ -106,7 +160,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         if (enabled) {
             RigCoreBluetooth.initialize(getApplicationContext());
             mainPresenter.maybeStartScanning();
+            toolbar.setSubtitle("");
         } else {
+            toolbar.setSubtitle("Bluetooth Disabled");
+            toolbar.setSubtitleTextColor(ContextCompat.getColor(this, android.R.color.white));
             dismissDiscoveryDialog();
         }
     }
@@ -114,6 +171,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void onInterrogationCompleted(final DemoDevice deviceType) {
         Log.d(TAG, "onInterrogationCompleted");
+        if (isDestroyed()) {
+            return;
+        }
             dismissDiscoveryDialog();
             mSectionsPagerAdapter.notifyDataSetChanged();
             if (deviceType.getFirmwareType() != DemoDevice.FirmwareType.EvalDemo) {
@@ -159,6 +219,13 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void deviceDisconnected(final String reason) {
+        if (isDestroyed()) {
+            return;
+        }
+
+        if (DeviceRepository.getInstance().isDeviceConnected()) {
+            return;
+        }
         // Only allow reconnect attempts if a firmware update is not in progress or
         // has not been successfully completed.
         mSectionsPagerAdapter.notifyDataSetChanged();
@@ -220,9 +287,18 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                 .show();
     }
 
+    @Override
+    public void dismissDialogs() {
+        dismissDiscoveryDialog();
+    }
+
     private void dismissDiscoveryDialog() {
         if (mDiscoveryDialog != null && mDiscoveryDialog.isShowing()) {
             mDiscoveryDialog.dismiss();
+        }
+
+        if (mDeviceLockedDialog != null && mDeviceLockedDialog.isShowing()) {
+            mDeviceLockedDialog.dismiss();
         }
     }
 

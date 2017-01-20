@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.rigado.bmd200eval"
+        minSdkVersion 18
+        targetSdkVersion 25
+        versionCode 9
+        versionName "2.1.1"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    ext.APP_NAME_DEBUG = "BMD Eval DEBUG"
+    ext.APP_NAME_RELEASE = "BMD Eval Demo"
+    ext.VERSION_NAME_DEBUG =  APP_NAME_DEBUG + " " + defaultConfig.versionName
+    ext.VERSION_NAME_RELEASE = APP_NAME_RELEASE + " " + defaultConfig.versionName
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        demo {
+            applicationId "com.rigado.bmd200eval.demo"
+            resValue "string", "app_name", APP_NAME_DEBUG
+            resValue "string", "version", VERSION_NAME_DEBUG
+        }
+
+        production {
+            applicationId "com.rigado.bmd200eval"
+            resValue "string", "app_name", APP_NAME_RELEASE
+            resValue "string", "version", VERSION_NAME_RELEASE
+        }
+    }
+
+    lintOptions {
+        disable 'NamespaceTypo'
+    }
+}
+
+dependencies {
+//    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile 'com.android.support:transition:25.0.0'
+
+    compile project(':rigablue')
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.jjoe64:graphview:4.0.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
+}

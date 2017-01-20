@@ -152,10 +152,11 @@ public class MainPresenter extends BasePresenter implements
     }
 
     public void maybeStartScanning() {
-        demoDevice.setUpdatingStatus(false);
-        discoveryManager.setObserver(this);
-        discoveryManager.startDiscoverDevices(getDeviceRequest());
-        mainView.updateDialog("Searching for devices...");
+        if (!DeviceRepository.getInstance().isDeviceConnected() && !demoDevice.isUpdating()) {
+            discoveryManager.setObserver(this);
+            discoveryManager.startDiscoverDevices(getDeviceRequest());
+            mainView.updateDialog("Searching for devices...");
+        }
     }
 
     public void stopScanning() {

@@ -81,6 +81,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainPresenter.onPause();
     }
 
+    @Override
+    public void onDestroy() {
+        try {
+            super.onDestroy();
+        } catch (NullPointerException e) {
+            Log.d(TAG, "ViewPager NPE bug workaround");
+        }
+    }
+
     private void checkLocationPermissions() {
         boolean locationEnabled = false;
         if (Utilities.hasLocationPermission(this)
@@ -159,6 +168,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void deviceDisconnected(final String reason) {
+        if (isDestroyed()) {
+            return;
+        }
         // Only allow reconnect attempts if a firmware update is not in progress or
         // has not been successfully completed.
         mSectionsPagerAdapter.notifyDataSetChanged();

@@ -1,0 +1,11 @@
+*.xcuserstate
+*.xcbkptlist
+*.xcexplist
+docset-installed.txt
+.DS_Store
+xcshareddata/
+xcuserdata/
+project.xcworkspace/
+bin/
+gen/
+build

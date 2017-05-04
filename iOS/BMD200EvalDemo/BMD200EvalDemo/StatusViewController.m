@@ -10,8 +10,8 @@
 //  If not, contact info@rigado.com for for a copy.
 
 #import "StatusViewController.h"
-#import "BMD200EvalDemoTabBarController.h"
-#import "BMD200EvalDemoDevice.h"
+#import "BMDEvalDemoTabBarController.h"
+#import "BMDEvalDemoDevice.h"
 #import "Rigablue.h"
 #import "AccelPlotManager.h"
 #import "CorePlot-CocoaTouch.h"
@@ -20,9 +20,9 @@
 #define USER_BUTTON_2_MASK      (1 << 0)
 #define USER_BUTTON_1_MASK      (1 << 4)
 
-@interface StatusViewController () <BMD200EvalDemoTabBarDelegate, BMD200EvalDemoDeviceDelegate>
+@interface StatusViewController () <BMDEvalDemoTabBarDelegate, BMDEvalDemoDeviceDelegate>
 {
-    BMD200EvalDemoDevice *baseDevice;
+    BMDEvalDemoDevice *baseDevice;
     
     AccelPlotManager *plotManager;
     
@@ -48,7 +48,7 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self deconfigureDevice];
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
 }
 
@@ -57,7 +57,7 @@
     [super viewDidAppear:animated];
     plotManager = [[AccelPlotManager alloc] initWithFrame:_accelGraphView.bounds];
     [_accelGraphView addSubview:plotManager.hostView];
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc registerListener:self];
     if ([tbc isConnected]) {
         [self configureDevice];
@@ -75,7 +75,7 @@
 
 - (void)configureDevice
 {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     baseDevice = [tbc getDevice];
     baseDevice.delegate = self;
     [baseDevice determineDeviceHardwareVersion];
@@ -110,7 +110,7 @@
 
 #pragma mark -
 #pragma mark BMD200EvalDemoTabBarDelegate methods
-- (void)didConnectToDevice:(BMD200EvalDemoDevice *)device
+- (void)didConnectToDevice:(BMDEvalDemoDevice *)device
 {
     //Update view using device
     void (^update)(void) = ^void(void) {
@@ -123,7 +123,7 @@
 
 - (void)didDisconnectFromDevice
 {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc searchForDevice];
     void (^update)(void) = ^void(void) {
             [SVProgressHUD showWithStatus:@"Searching..." maskType:SVProgressHUDMaskTypeGradient];

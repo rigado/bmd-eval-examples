@@ -9,7 +9,7 @@
 //  You should have received a copy with purchase of BMD-200 product.
 //  If not, contact info@rigado.com for for a copy.
 
-#import "BMD200EvalDemoDevice.h"
+#import "BMDEvalDemoDevice.h"
 #import "CBUUID+UUIDHelperMethods.h"
 #import "Rigablue.h"
 
@@ -32,7 +32,7 @@
 #define DIS_SERIAL_NUMBER_UUID          @"2A25"
 #define DIS_FIRMWARE_REVISION_UUID      @"2A26"
 
-@interface BMD200EvalDemoDevice() <RigLeBaseDeviceDelegate>
+@interface BMDEvalDemoDevice() <RigLeBaseDeviceDelegate>
 {
     CBUUID *demoServiceUuid;
     CBUUID *demoButtonCharUuid;
@@ -76,7 +76,7 @@
 }
 @end
 
-@implementation BMD200EvalDemoDevice
+@implementation BMDEvalDemoDevice
 
 - (id)initWithDevice:(RigLeBaseDevice*)device
 {

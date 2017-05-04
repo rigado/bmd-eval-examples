@@ -16,23 +16,23 @@
 
 #import <UIKit/UIKit.h>
 #import "Rigablue.h"
-#import "BMD200EvalDemoDevice.h"
+#import "BMDEvalDemoDevice.h"
 
-@protocol BMD200EvalDemoTabBarDelegate <NSObject>
+@protocol BMDEvalDemoTabBarDelegate <NSObject>
 
 @required
-- (void)didConnectToDevice:(BMD200EvalDemoDevice*)device;
+- (void)didConnectToDevice:(BMDEvalDemoDevice*)device;
 - (void)didDisconnectFromDevice;
 @end
 
-@interface BMD200EvalDemoTabBarController : UITabBarController
+@interface BMDEvalDemoTabBarController : UITabBarController
 
 /**
  *  Retrieves the currently connected demo device object.
  *
  *  @return The connected demo device, nil if not connected
  */
-- (BMD200EvalDemoDevice*)getDevice;
+- (BMDEvalDemoDevice*)getDevice;
 
 /**
  *  Returns the connected Blinky demo device if appropriate.
@@ -88,14 +88,14 @@
 
 /**
  *  Function to register a deletage object which wishes to receive protocol messages using the
- *  BMD200EvalDemoTabBarDelegate protocol.
+ *  BMDEvalDemoTabBarDelegate protocol.
  */
-- (BOOL)registerListener:(id<BMD200EvalDemoTabBarDelegate>)delegate;
+- (BOOL)registerListener:(id<BMDEvalDemoTabBarDelegate>)delegate;
 
 /**
  *  Function to unregister a deletage object from receiving protocol messages from the
- *  BMD200EvalDemoTabBarDelegate protocol.
+ *  BMDEvalDemoTabBarDelegate protocol.
  */
-- (BOOL)unregiserListener:(id<BMD200EvalDemoTabBarDelegate>)delegate;
+- (BOOL)unregiserListener:(id<BMDEvalDemoTabBarDelegate>)delegate;
 
 @end

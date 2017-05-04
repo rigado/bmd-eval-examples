@@ -13,7 +13,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CorePlot-CocoaTouch.h"
-#import "BMD200EvalDemoDevice.h"
+#import "BMDEvalDemoDevice.h"
 
 @interface AccelPlotManager : NSObject
 - (id)initWithFrame:(CGRect)frame;

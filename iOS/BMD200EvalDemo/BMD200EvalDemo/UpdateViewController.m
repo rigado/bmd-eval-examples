@@ -11,8 +11,8 @@
 
 #import "UpdateViewController.h"
 #import "Rigablue.h"
-#import "BMD200EvalDemoTabBarController.h"
-#import "BMD200EvalDemoDevice.h"
+#import "BMDEvalDemoTabBarController.h"
+#import "BMDEvalDemoDevice.h"
 #import "SVProgressHUD.h"
 #import "RigFirmwareUpdateManager.h"
 
@@ -34,11 +34,11 @@ static uint8_t bootloader_command[] = { 0xa1, 0xfc, 0xd6, 0xe7 };
 static uint8_t blinky_boot_command[] = { 0x98, 0xb6, 0x2f, 0x51 };
 static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
-@interface UpdateViewController () <UIPickerViewDataSource, UIPickerViewDelegate, RigFirmwareUpdateManagerDelegate, BMD200EvalDemoTabBarDelegate, BMD200EvalDemoDeviceDelegate>
+@interface UpdateViewController () <UIPickerViewDataSource, UIPickerViewDelegate, RigFirmwareUpdateManagerDelegate, BMDEvalDemoTabBarDelegate, BMDEvalDemoDeviceDelegate>
 {
     RigFirmwareUpdateManager *updateManager;
     RigLeBaseDevice *updateDevice;
-    BMD200EvalDemoDevice *demoDevice;
+    BMDEvalDemoDevice *demoDevice;
     
     NSArray *firmwareList;
     NSArray *firmwareBinaryList;
@@ -80,7 +80,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     _updateStatusLabel.text = @"Idle";
     _updateProgressView.progress = 0.0f;
     
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc registerListener:self];
     if ([tbc isConnected]) {
         [self configureDevice];
@@ -91,7 +91,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 {
     [super viewWillDisappear:animated];
     
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
 }
 
@@ -99,7 +99,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 {
     [super viewDidAppear:animated];
     
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     if (![tbc isSearching] && ![tbc isConnected]) {
         [tbc searchForDevice];
         [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
@@ -125,7 +125,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (void)configureDevice
 {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     demoDevice = [tbc getDevice];
     updateDevice = [demoDevice getBaseDevice];
     demoDevice.delegate = self;
@@ -167,7 +167,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 }
 
 - (void)configureDeploymentPicker {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     firmwareButton.enabled = YES;
     if ([tbc isConnectedTo200]) {
         firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMDWare 200", nil];
@@ -267,7 +267,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 #pragma mark -
 #pragma mark - BMD200EvalDemoTabBarDelegate methods
-- (void)didConnectToDevice:(BMD200EvalDemoDevice *)device
+- (void)didConnectToDevice:(BMDEvalDemoDevice *)device
 {
     void (^update)(void) = ^void(void) {
         [self configureDevice];

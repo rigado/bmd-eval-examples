@@ -41,7 +41,7 @@ typedef struct AccelData_struct
     uint8_t z;
 } AccelData_t;
 
-@protocol BMD200EvalDemoDeviceDelegate <NSObject>
+@protocol BMDEvalDemoDeviceDelegate <NSObject>
 
 @optional
 /**
@@ -85,7 +85,7 @@ typedef struct AccelData_struct
 
 @end
 
-@interface BMD200EvalDemoDevice : NSObject
+@interface BMDEvalDemoDevice : NSObject
 
 - (id)initWithDevice:(RigLeBaseDevice*)device;
 - (RigLeBaseDevice*)getBaseDevice;
@@ -126,7 +126,7 @@ typedef struct AccelData_struct
  */
 @property (nonatomic, readonly) BOOL isAccelAvailable;
 
-@property (nonatomic, weak) id<BMD200EvalDemoDeviceDelegate> delegate;
+@property (nonatomic, weak) id<BMDEvalDemoDeviceDelegate> delegate;
 
 /**
  *  This method sets the LED color.  If the LED is not available, this method will do nothing.

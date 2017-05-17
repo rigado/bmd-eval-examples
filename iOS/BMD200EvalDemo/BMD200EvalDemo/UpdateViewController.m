@@ -39,6 +39,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     RigFirmwareUpdateManager *updateManager;
     RigLeBaseDevice *updateDevice;
     BMDEvalDemoDevice *demoDevice;
+    BMDEvalDemoTabBarController *tbc;
     
     NSArray *firmwareList;
     NSArray *firmwareBinaryList;
@@ -60,6 +61,8 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 @implementation UpdateViewController
 
 - (void)viewDidLoad {
+    tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
+
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor colorWithPatternImage: [UIImage imageNamed:@"row-background-blue-grid.png"]];
@@ -80,7 +83,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     _updateStatusLabel.text = @"Idle";
     _updateProgressView.progress = 0.0f;
     
-    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc registerListener:self];
     if ([tbc isConnected]) {
         [self configureDevice];
@@ -91,7 +93,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 {
     [super viewWillDisappear:animated];
     
-    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
+//    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
 }
 
@@ -99,7 +101,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 {
     [super viewDidAppear:animated];
     
-    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
+//    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     if (![tbc isSearching] && ![tbc isConnected]) {
         [tbc searchForDevice];
         [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
@@ -125,12 +127,15 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (void)configureDevice
 {
-    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
+//    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     demoDevice = [tbc getDevice];
     updateDevice = [demoDevice getBaseDevice];
     demoDevice.delegate = self;
     [demoDevice determineDeviceHardwareVersion];
-    
+}
+
+- (void)displayAppropriateMessage
+{
     if ([tbc isConnectedToBlinkyDemo] && !demoDevice.isIndeterminatableState) {
         isBlinkyDemo = YES;
         UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Blinky Connected" message:@"The Blinky demo is currently programmed.  Would you like to revert to the main demo firmware?" preferredStyle:UIAlertControllerStyleAlert];
@@ -144,7 +149,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         [ac addAction:aaYes];
         [ac addAction:aaNo];
         [self presentViewController:ac animated:NO completion:nil];
-    } else if([tbc isConnectedToBmdWare] && !demoDevice.isIndeterminatableState) {
+    } else if([tbc isConnectedToBmdWare] && !demoDevice.isIndeterminatableState && !demoDevice.isVS132_3_0) {
         isBmdWare = YES;
         UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"BMDWare Installed" message:@"BMDWare is installed to this evaluation board.  If you would like to use its features, download the Rigado Toolbox app from the app store.  Would you like to program the Evaluation demo firmware?" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *aaYes = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -162,12 +167,16 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
         UIAlertAction *OK = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [ac addAction:OK];
         [self presentViewController:ac animated:NO completion:nil];
+    } else if (demoDevice.isVS132_3_0) {
+        UIAlertController *ac = [UIAlertController alertControllerWithTitle:@"Unsupported Bluetooth Version" message:@"The Bluetooth version on the connected device is not compatible with the BMD Eval Demo software" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [ac addAction:ok];
+        [self presentViewController:ac animated:YES completion:nil];
     }
     [self configureDeploymentPicker];
 }
 
 - (void)configureDeploymentPicker {
-    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     firmwareButton.enabled = YES;
     if ([tbc isConnectedTo200]) {
         firmwareList = [NSArray arrayWithObjects:@"BMD200 Eval Demo", @"BMD200 Eval Blinky Demo", @"BMDWare 200", nil];
@@ -175,6 +184,10 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     } else if ([tbc isConnectedTo300]) {
         firmwareList = [NSArray arrayWithObjects:@"BMD300 Eval Demo", @"BMD300 Eval Blinky Demo", @"BMDWare 300", nil];
         firmwareBinaryList = [NSArray arrayWithObjects:@"bmd-300-demo-shield-rel_1_0_4_ota", @"bmd_blinky_demo_nrf52_s132_1_0_1_ota",  @"bmdware_rel_nrf52_s132_3_1_1_ota", nil];
+    } else if ([tbc isConnectedToVS132_3_0]) {
+        firmwareList = nil;
+        firmwareBinaryList = nil;
+        firmwareButton.enabled = NO;        
     } else {
         firmwareList = nil;
         firmwareBinaryList = nil;
@@ -378,12 +391,14 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (void)didDiscoverHardwareVersion {
     dispatch_sync(dispatch_get_main_queue(), ^{
+        [self displayAppropriateMessage];
         [self configureDeploymentPicker];
     });
 }
 
 - (void)unableToDiscoverHardwareVersion {
     dispatch_sync(dispatch_get_main_queue(), ^{
+        [self displayAppropriateMessage];
         [self configureDeploymentPicker];
     });
 }

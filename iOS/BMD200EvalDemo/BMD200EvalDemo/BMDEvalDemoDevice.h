@@ -102,6 +102,11 @@ typedef struct AccelData_struct
 @property (assign, readonly) BOOL is300;
 
 /**
+ *  This property reports if the device has softdevice vS132_3_0.
+ */
+@property (assign, readonly) BOOL isVS132_3_0;
+
+/**
  *  This property reports if the device type can not be determined.
  */
 @property (assign, readonly) BOOL isIndeterminatableState;

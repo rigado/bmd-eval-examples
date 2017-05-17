@@ -344,19 +344,28 @@
             _is300 = YES;
             _is200 = NO;
             _isIndeterminatableState = NO;
+            _isVS132_3_0 = NO;
         } else if (data[10] == 01) {
             _is300 = NO;
             _is200 = YES;
             _isIndeterminatableState = NO;
+            _isVS132_3_0 = NO;
         } else {
             NSLog(@"Issue determining device. Must Reset Bluetooth");
             _is300 = NO;
             _is200 = NO;
+            _isVS132_3_0 = NO;
             _isIndeterminatableState = YES;
             //unableToDiscoverHardwareVersion
             if ([_delegate respondsToSelector:@selector(unableToDiscoverHardwareVersion)]) {
                 [_delegate unableToDiscoverHardwareVersion];
             }
+        }
+        if (data[9] == 06) {
+            _isVS132_3_0 = YES;
+            _is300 = NO;
+            _is200 = NO;
+            _isIndeterminatableState = NO;
         }
         if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)] && !self.isIndeterminatableState) {
             [_delegate didDiscoverHardwareVersion];

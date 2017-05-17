@@ -69,6 +69,11 @@
 - (BOOL)isConnectedTo300;
 
 /**
+ *  @return YES if connected to VS132_3_0zSoftDevice, NO otherwise
+ */
+- (BOOL)isConnectedToVS132_3_0;
+
+/**
  *  Instructs ths object to begin searching for an inrage evauluation board running any of the following:
  *  Eval Demo Firmware
  *  Blinky Demo Firmware

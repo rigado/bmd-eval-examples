@@ -534,7 +534,7 @@
 				TargetAttributes = {
 					5E3598621B4AEAE400416112 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = G4HW4JEJP2;
+						DevelopmentTeam = 5PJX36PFW7;
 					};
 					5E35987E1B4AEAE500416112 = {
 						CreatedOnToolsVersion = 6.4;
@@ -790,7 +790,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = G4HW4JEJP2;
+				DEVELOPMENT_TEAM = 5PJX36PFW7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -824,7 +824,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				DEVELOPMENT_TEAM = G4HW4JEJP2;
+				DEVELOPMENT_TEAM = 5PJX36PFW7;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

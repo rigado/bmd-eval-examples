@@ -24,6 +24,7 @@
     BOOL isBmdWare;
     BOOL is200;
     BOOL is300;
+    BOOL isV132_3_0;
 }
 @end
 
@@ -32,7 +33,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     //[self startDiscovery];
     [RigLeConnectionManager sharedInstance].delegate = self;
     delegateList = [[NSMutableArray alloc] init];
@@ -79,6 +79,11 @@
 - (BOOL)isConnectedTo300
 {
     return demoDevice.is300;
+}
+
+- (BOOL)isConnectedToVS132_3_0
+{
+    return demoDevice.isVS132_3_0;
 }
 
 - (BMDEvalDemoDevice*)getDevice
@@ -203,6 +208,7 @@
     isBmdWare = NO;
     is200 = NO;
     is300 = NO;
+    isV132_3_0 = NO;
     for (id<BMDEvalDemoTabBarDelegate> delegate in delegateList) {
         [delegate didDisconnectFromDevice];
     }

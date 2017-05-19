@@ -1,19 +1,25 @@
 //
-//  BMD200EvalDemoTests.m
-//  BMD200EvalDemoTests
+//  BMDEvalDemoTests.m
 //
-//  Created by Eric P. Stutzenberger on 7/6/15.
-//  Copyright (c) 2015 Rigado,LLC. All rights reserved.
+//  BMDEvalDemoTests
+//
+//  Created by Eric P. Stutzenberger on 7/13/15.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
+//
+//  Source code licensed under Rigado Software License Agreement.
+//  You should have received a copy with purchase of a Rigado product.
+//  If not, contact info@rigado.com for a copy.
+
 //
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-@interface BMD200EvalDemoTests : XCTestCase
+@interface BMDEvalDemoTests : XCTestCase
 
 @end
 
-@implementation BMD200EvalDemoTests
+@implementation BMDEvalDemoTests
 
 - (void)setUp {
     [super setUp];

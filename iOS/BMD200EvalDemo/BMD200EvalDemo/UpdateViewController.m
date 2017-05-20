@@ -92,16 +92,12 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
-//    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-//    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     if (![tbc isSearching] && ![tbc isConnected]) {
         [tbc searchForDevice];
         [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
@@ -127,7 +123,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (void)configureDevice
 {
-//    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     demoDevice = [tbc getDevice];
     updateDevice = [demoDevice getBaseDevice];
     demoDevice.delegate = self;
@@ -301,11 +296,7 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
     NSAttributedString *attString;
     NSString *title;
     
-    //if (updateDevice == nil) {
-    //    title = @"";
-    //} else {
-        title = [firmwareList objectAtIndex:row];
-    //}
+    title = [firmwareList objectAtIndex:row];
     
     attString = [[NSAttributedString alloc] initWithString:title attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
@@ -320,10 +311,6 @@ static uint8_t bmdware_boot_command[] = { 0x03, 0x56, 0x30, 0x57 };
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    //if (updateDevice == nil) {
-    //    return 0;
-    //}
-    
     return firmwareList.count;
 }
 

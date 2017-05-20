@@ -3,11 +3,11 @@
 //  Rigablue Library
 //
 //  Created by Eric Stutzenberger on 11/8/13.
-//  @copyright (c) 2013-2014 Rigado, LLC. All rights reserved.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
 //  Source code licensed under BMD-200 Software License Agreement.
 //  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  If not, contact info@rigado.com for a copy.
 
 #import "RigFirmwareUpdateService.h"
 #import "RigLeDiscoveryManager.h"
@@ -38,6 +38,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 @implementation RigFirmwareUpdateService
 {
+    // TODO: - Remove central manager, it is not used as far as I can tell.
     CBCentralManager    *centralManager;
     RigLeBaseDevice     *updateDevice;
     RigAvailableDeviceData *availDevice;
@@ -383,6 +384,8 @@ NSString *kDisModelNumberUuidString = @"2a24";
     }
 }
 
+// TODO: This method should be renamed in a future release
+// resetConnectionManagerDelegateToOldDelegate would accurately describe its behaviour
 - (void)completeUpdate
 {
     [RigLeConnectionManager sharedInstance].delegate = oldDelegate;

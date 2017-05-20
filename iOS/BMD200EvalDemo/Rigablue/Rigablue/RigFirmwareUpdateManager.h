@@ -3,11 +3,11 @@
 //  Rigablue Library
 //
 //  Created by Eric Stutzenberger on 11/8/13.
-//  @copyright (c) 2013-2014 Rigado, LLC. All rights reserved.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
 //  Source code licensed under BMD-200 Software License Agreement.
 //  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  If not, contact info@rigado.com for a copy.
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
@@ -49,6 +49,18 @@
  */
 - (void)updateFailed:(NSString*)status errorCode:(RigDfuError_t)error;
 
+/**
+ *  This method is called when the firmware update is canceled.
+ *
+ */
+- (void)updateCanceled;
+
+/**
+ *  This method is called when there is an error with the cancel firmware update.
+ *
+ */
+- (void)cancelFailedWithErrorCode:(RigDfuError_t)error;
+
 @end
 
 @interface RigFirmwareUpdateManager : NSObject
@@ -83,4 +95,11 @@
                 activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
 - (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request;
+
+/**
+ *  This method cancels a firmware update.
+ *
+ */
+- (void)cancelFirmwareUpdate;
+
 @end

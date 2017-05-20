@@ -1,0 +1,4 @@
+Documentation set was installed to Xcode!
+
+Path: /Users/momokosaunders/Library/Developer/Shared/Documentation/DocSets/com.rigado.Rigablue.docset
+Time: 2017-03-09 20:54:31 +0000

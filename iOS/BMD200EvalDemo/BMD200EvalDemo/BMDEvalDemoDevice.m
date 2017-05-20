@@ -319,10 +319,9 @@
         }
     } else if (characteristic == demoCtrlChar || characteristic == blinkyCtrlChar) {
         uint8_t * data = (uint8_t*)characteristic.value.bytes;
-        // check the 9th value of the data,
-        // this is the hardware version number, if it equals 2, then it's a 300
-        // is this check enough? would there be a time where the 9th number is 2 just by chance?
-        // 1 in 16
+        // Check the value of Index 9,
+        // This is the hardware version number, if it equals 2, then it's a 300
+        NSLog(@"%@", characteristic.value);
         if (data[9] == 02) {
             _is300 = YES;
             _is200 = NO;
@@ -333,35 +332,29 @@
         if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)]) {
             [_delegate didDiscoverHardwareVersion];
         }
-        NSLog(@"%@ %@ is 300? %d is 200? %d", characteristic.description, characteristic.value, self.is300, self.is200);
         [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
     } else if (characteristic == bmdwareCtrlChar) {
         uint8_t * data = (uint8_t*)characteristic.value.bytes;
-        // check the 9th value of the data,
-        // this is the hardware version number, if it equals 2, then it's a 300
-        // is this check enough? would there be a time where the 9th number is 2 just by chance?
-        // 1 in 16
+        // Check the value of Index 10, BMDWare Firmware shifts the index by one
+        // This is the hardware version number, if it equals 2, then it's a 300
+        // If it is neither, it is an indeterminable device
+        _is300 = NO;
+        _is200 = NO;
+        _isIndeterminatableState = NO;
+        _isVS132_3_0 = NO;
         if (data[10] == 02) {
             _is300 = YES;
-            _is200 = NO;
-            _isIndeterminatableState = NO;
-            _isVS132_3_0 = NO;
         } else if (data[10] == 01) {
-            _is300 = NO;
             _is200 = YES;
-            _isIndeterminatableState = NO;
-            _isVS132_3_0 = NO;
         } else {
             NSLog(@"Issue determining device. Must Reset Bluetooth");
-            _is300 = NO;
-            _is200 = NO;
-            _isVS132_3_0 = NO;
             _isIndeterminatableState = YES;
-            //unableToDiscoverHardwareVersion
             if ([_delegate respondsToSelector:@selector(unableToDiscoverHardwareVersion)]) {
                 [_delegate unableToDiscoverHardwareVersion];
             }
         }
+        // Next Check the soft device, If the value at index 9 equals 6,
+        // Then the soft device is vS132_3_0 and it is not supported by this app
         if (data[9] == 06) {
             _isVS132_3_0 = YES;
             _is300 = NO;
@@ -371,7 +364,6 @@
         if ([_delegate respondsToSelector:@selector(didDiscoverHardwareVersion)] && !self.isIndeterminatableState) {
             [_delegate didDiscoverHardwareVersion];
         }
-        NSLog(@"%@ %@ is 300? %d is 200? %d", characteristic.description, characteristic.value, self.is300, self.is200);
         [baseDevice.peripheral setNotifyValue:NO forCharacteristic:characteristic];
     }
 }

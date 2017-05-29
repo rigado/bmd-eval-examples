@@ -1,22 +1,22 @@
 //
 //  SecondViewController.m
-//  BMD200EvalDemo
+//  BMDEvalDemo
 //
-//  Created by Eric P. Stutzenberger on 7/6/15.
-//  Copyright (c) 2015 Rigado,LLC. All rights reserved.
+//  Created by Eric P. Stutzenberger on 7/13/15.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
-//  Source code licensed under BMD-200 Software License Agreement.
-//  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  Source code licensed under Rigado Software License Agreement.
+//  You should have received a copy with purchase of a Rigado product.
+//  If not, contact info@rigado.com for a copy.
 
 #import "ColorWheelViewController.h"
-#import "BMD200EvalDemoDevice.h"
-#import "BMD200EvalDemoTabBarController.h"
+#import "BMDEvalDemoDevice.h"
+#import "BMDEvalDemoTabBarController.h"
 #import "SVProgressHUD.h"
 
-@interface ColorWheelViewController () <ISColorWheelDelegate, BMD200EvalDemoDeviceDelegate, BMD200EvalDemoTabBarDelegate>
+@interface ColorWheelViewController () <ISColorWheelDelegate, BMDEvalDemoDeviceDelegate, BMDEvalDemoTabBarDelegate>
 {
-    BMD200EvalDemoDevice *baseDevice;
+    BMDEvalDemoDevice *baseDevice;
 }
 @end
 
@@ -32,7 +32,7 @@
     
     [_wheelView initWheelWithFrame:frame];
     
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc registerListener:self];
     
     _wheelView.delegate = self;
@@ -44,7 +44,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     if ([tbc isConnected]) {
         [self configureDevice];
     } else {
@@ -58,7 +58,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc unregiserListener:self];
 }
 
@@ -79,7 +79,7 @@
 
 - (void)configureDevice
 {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     baseDevice = [tbc getDevice];
     baseDevice.delegate = self;
     [baseDevice determineDeviceHardwareVersion];
@@ -93,7 +93,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)didConnectToDevice:(BMD200EvalDemoDevice *)device
+- (void)didConnectToDevice:(BMDEvalDemoDevice *)device
 {
     //Update view using device
     void (^update)(void) = ^void(void) {
@@ -106,7 +106,7 @@
 
 - (void)didDisconnectFromDevice
 {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     [tbc searchForDevice];
     void (^update)(void) = ^void(void) {
         [SVProgressHUD showWithStatus:NSLocalizedString(@"Searching for BMD Device", nil) maskType:SVProgressHUDMaskTypeGradient];
@@ -125,7 +125,7 @@
 
 - (IBAction)didChangeLedOnOffSwitch:(id)sender
 {
-    BMD200EvalDemoTabBarController *tbc = (BMD200EvalDemoTabBarController*)self.tabBarController;
+    BMDEvalDemoTabBarController *tbc = (BMDEvalDemoTabBarController*)self.tabBarController;
     if (![tbc isConnected]) {
         return;
     }
@@ -139,7 +139,7 @@
 }
 
 #pragma mark -
-#pragma mark - BMD200EvalDemoDeviceDelegate methods
+#pragma mark - BMDEvalDemoDeviceDelegate methods
 
 - (void)didUpdateLedColor:(RgbColor_t)color {}
 

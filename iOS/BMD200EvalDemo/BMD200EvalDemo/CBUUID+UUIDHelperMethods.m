@@ -1,13 +1,14 @@
 //
 //  CBUUID+UUIDHelperMethods.m
-//  RigadoToolbox
+//  BMDEvalDemo
 //
-//  Created by Eric P. Stutzenberger on 12/9/14.
-//  Copyright (c) 2014 Rigado,LLC. All rights reserved.
+//  Created by Eric P. Stutzenberger on 7/13/15.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
-//  Source code licensed under BMD-200 Software License Agreement.
-//  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  Source code licensed under Rigado Software License Agreement.
+//  You should have received a copy with purchase of a Rigado product.
+//  If not, contact info@rigado.com for a copy.
+
 
 #import "CBUUID+UUIDHelperMethods.h"
 

@@ -1,38 +1,38 @@
 //
 //  TabBarController.m
-//  BMD200EvalDemo
+//  BMDEvalDemo
 //
-//  Created by Eric P. Stutzenberger on 7/6/15.
-//  Copyright (c) 2015 Rigado,LLC. All rights reserved.
+//  Created by Eric P. Stutzenberger on 7/13/15.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
-//  Source code licensed under BMD-200 Software License Agreement.
-//  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  Source code licensed under Rigado Software License Agreement.
+//  You should have received a copy with purchase of a Rigado product.
+//  If not, contact info@rigado.com for a copy.
 
-#import "BMD200EvalDemoTabBarController.h"
+#import "BMDEvalDemoTabBarController.h"
 #import "Rigablue.h"
 #import "CBUUID+UUIDHelperMethods.h"
 #import "SVProgressHUD.h"
 
-@interface BMD200EvalDemoTabBarController () <RigLeDiscoveryManagerDelegate, RigLeConnectionManagerDelegate, RigLeBaseDeviceDelegate>
+@interface BMDEvalDemoTabBarController () <RigLeDiscoveryManagerDelegate, RigLeConnectionManagerDelegate, RigLeBaseDeviceDelegate>
 {
     BOOL isConnected;
     RigLeBaseDevice *baseDevice;
-    BMD200EvalDemoDevice *demoDevice;
+    BMDEvalDemoDevice *demoDevice;
     NSMutableArray *delegateList;
     BOOL isBlinkyDemo;
     BOOL isBmdWare;
     BOOL is200;
     BOOL is300;
+    BOOL isV132_3_0;
 }
 @end
 
-@implementation BMD200EvalDemoTabBarController
+@implementation BMDEvalDemoTabBarController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
     //[self startDiscovery];
     [RigLeConnectionManager sharedInstance].delegate = self;
     delegateList = [[NSMutableArray alloc] init];
@@ -81,7 +81,12 @@
     return demoDevice.is300;
 }
 
-- (BMD200EvalDemoDevice*)getDevice
+- (BOOL)isConnectedToVS132_3_0
+{
+    return demoDevice.isVS132_3_0;
+}
+
+- (BMDEvalDemoDevice*)getDevice
 {
     return demoDevice;
 }
@@ -111,7 +116,7 @@
     return [[RigLeDiscoveryManager sharedInstance] isDiscoveryRunning];
 }
 
-- (BOOL)registerListener:(id<BMD200EvalDemoTabBarDelegate>)delegate
+- (BOOL)registerListener:(id<BMDEvalDemoTabBarDelegate>)delegate
 {
     if ([delegateList indexOfObject:delegate] == NSNotFound) {
         [delegateList addObject:delegate];
@@ -121,7 +126,7 @@
     return NO;
 }
 
-- (BOOL)unregiserListener:(id<BMD200EvalDemoTabBarDelegate>)delegate
+- (BOOL)unregiserListener:(id<BMDEvalDemoTabBarDelegate>)delegate
 {
     if ([delegateList indexOfObject:delegate] == NSNotFound) {
         return NO;
@@ -203,7 +208,8 @@
     isBmdWare = NO;
     is200 = NO;
     is300 = NO;
-    for (id<BMD200EvalDemoTabBarDelegate> delegate in delegateList) {
+    isV132_3_0 = NO;
+    for (id<BMDEvalDemoTabBarDelegate> delegate in delegateList) {
         [delegate didDisconnectFromDevice];
     }
 }
@@ -223,8 +229,8 @@
 - (void)discoveryDidCompleteForDevice:(RigLeBaseDevice *)device
 {
     NSLog(@"Discovery complete");
-    demoDevice = [[BMD200EvalDemoDevice alloc] initWithDevice:device];
-    for (id<BMD200EvalDemoTabBarDelegate> delegate in delegateList) {
+    demoDevice = [[BMDEvalDemoDevice alloc] initWithDevice:device];
+    for (id<BMDEvalDemoTabBarDelegate> delegate in delegateList) {
         [delegate didConnectToDevice:demoDevice];
     }
     dispatch_sync(dispatch_get_main_queue(), ^{

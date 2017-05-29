@@ -3,11 +3,11 @@
 //  @library Rigablue
 //
 //  Created by Eric Stutzenberger on 4/28/14.
-//  @copyright (c) 2014 Rigado, LLC. All rights reserved.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
 //  Source code licensed under BMD-200 Software License Agreement.
 //  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  If not, contact info@rigado.com for a copy.
 
 #import "RigLeBaseDevice.h"
 
@@ -181,31 +181,27 @@ static int discoveredServicesCount = 0;
         if (_delegate) {
             [_delegate discoveryDidCompleteForDevice:self];
         }
-        
-        
-//        CBService *service = (CBService*)_serviceList[serviceIndex];
-//        CBCharacteristic *nextChar;
-//        characteristicIndex++;
-//        if (characteristicIndex == service.characteristics.count) {
-//            serviceIndex++;
-//            if (serviceIndex == _serviceList.count) {
-//                _isDiscoveryComplete = YES;
-//                if (_delegate) {
-//                    [_delegate discoveryDidCompleteForDevice:self];
-//                }
-//                return;
-//            }
-//
-//            service = _serviceList[serviceIndex];
-//            characteristicIndex = 0;
-//            nextChar = (CBCharacteristic*)service.characteristics[characteristicIndex];
-//        } else {
-//            nextChar = (CBCharacteristic*)service.characteristics[characteristicIndex];
-//        }
-//        
-//        //if ((characteristic.properties & CBCharacteristicPropertyRead) == CBCharacteristicPropertyRead) {
-//            [peripheral readValueForCharacteristic:nextChar];
-//        //}
     }
 }
+
+#pragma mark Descriptors
+
+-(void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(didDiscoverDescriptorsForCharacteristic:forDevice:)]) {
+        [_delegate didDiscoverDescriptorsForCharacteristic:characteristic forDevice:self];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(didUpdateValueForDescriptor:forDevice:)]) {
+        [_delegate didUpdateValueForDescriptor:descriptor forDevice:self];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(didWriteValueForDescriptor:forDevice:)]) {
+        [_delegate didWriteValueForDescriptor:descriptor forDevice:self];
+    }
+}
+
 @end

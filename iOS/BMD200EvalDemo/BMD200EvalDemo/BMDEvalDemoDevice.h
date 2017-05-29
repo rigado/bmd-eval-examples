@@ -1,13 +1,14 @@
 //
-//  BMD200EvalDemoDevice.h
-//  BMD200EvalDemo
+//  BMDEvalDemoDevice.h
+//  BMDEvalDemo
 //
-//  Created by Eric P. Stutzenberger on 7/6/15.
-//  Copyright (c) 2015 Rigado,LLC. All rights reserved.
+//  Created by Eric P. Stutzenberger on 7/13/15.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
-//  Source code licensed under BMD-200 Software License Agreement.
-//  You should have received a copy with purchase of BMD-200 product.
-//  If not, contact info@rigado.com for for a copy.
+//  Source code licensed under Rigado Software License Agreement.
+//  You should have received a copy with purchase of a Rigado product.
+//  If not, contact info@rigado.com for a copy.
+
 
 //  This class handles all communications with the evaluation board demo firmware.
 
@@ -41,7 +42,7 @@ typedef struct AccelData_struct
     uint8_t z;
 } AccelData_t;
 
-@protocol BMD200EvalDemoDeviceDelegate <NSObject>
+@protocol BMDEvalDemoDeviceDelegate <NSObject>
 
 @optional
 /**
@@ -85,7 +86,7 @@ typedef struct AccelData_struct
 
 @end
 
-@interface BMD200EvalDemoDevice : NSObject
+@interface BMDEvalDemoDevice : NSObject
 
 - (id)initWithDevice:(RigLeBaseDevice*)device;
 - (RigLeBaseDevice*)getBaseDevice;
@@ -100,6 +101,11 @@ typedef struct AccelData_struct
  *  This property reports if the device is a 300.
  */
 @property (assign, readonly) BOOL is300;
+
+/**
+ *  This property reports if the device has softdevice vS132_3_0.
+ */
+@property (assign, readonly) BOOL isVS132_3_0;
 
 /**
  *  This property reports if the device type can not be determined.
@@ -126,7 +132,7 @@ typedef struct AccelData_struct
  */
 @property (nonatomic, readonly) BOOL isAccelAvailable;
 
-@property (nonatomic, weak) id<BMD200EvalDemoDeviceDelegate> delegate;
+@property (nonatomic, weak) id<BMDEvalDemoDeviceDelegate> delegate;
 
 /**
  *  This method sets the LED color.  If the LED is not available, this method will do nothing.

@@ -34,11 +34,11 @@
 		5E3598751B4AEAE500416112 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E3598731B4AEAE500416112 /* Main.storyboard */; };
 		5E3598771B4AEAE500416112 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E3598761B4AEAE500416112 /* Images.xcassets */; };
 		5E35987A1B4AEAE500416112 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5E3598781B4AEAE500416112 /* LaunchScreen.xib */; };
-		5E3598861B4AEAE500416112 /* BMD200EvalDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E3598851B4AEAE500416112 /* BMD200EvalDemoTests.m */; };
-		5E35989E1B4AF84A00416112 /* BMD200EvalDemoDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E35989D1B4AF84A00416112 /* BMD200EvalDemoDevice.m */; };
+		5E3598861B4AEAE500416112 /* BMDEvalDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E3598851B4AEAE500416112 /* BMDEvalDemoTests.m */; };
+		5E35989E1B4AF84A00416112 /* BMDEvalDemoDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E35989D1B4AF84A00416112 /* BMDEvalDemoDevice.m */; };
 		5E3598AA1B4B011500416112 /* libRigablue.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E3598A51B4B008600416112 /* libRigablue.a */; };
 		5E5A33581B4B18220053DFB7 /* CBUUID+UUIDHelperMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E5A33571B4B18220053DFB7 /* CBUUID+UUIDHelperMethods.m */; };
-		5E5A335B1B4B51360053DFB7 /* BMD200EvalDemoTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E5A335A1B4B51360053DFB7 /* BMD200EvalDemoTabBarController.m */; };
+		5E5A335B1B4B51360053DFB7 /* BMDEvalDemoTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E5A335A1B4B51360053DFB7 /* BMDEvalDemoTabBarController.m */; };
 		5E88DC001B542A770091F93B /* SVIndefiniteAnimatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E88DBFB1B542A770091F93B /* SVIndefiniteAnimatedView.m */; };
 		5E88DC011B542A770091F93B /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5E88DBFD1B542A770091F93B /* SVProgressHUD.bundle */; };
 		5E88DC021B542A770091F93B /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E88DBFF1B542A770091F93B /* SVProgressHUD.m */; };
@@ -120,14 +120,14 @@
 		5E3598791B4AEAE500416112 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		5E35987F1B4AEAE500416112 /* BMDEval.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BMDEval.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E3598841B4AEAE500416112 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5E3598851B4AEAE500416112 /* BMD200EvalDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMD200EvalDemoTests.m; sourceTree = "<group>"; };
-		5E35989C1B4AF84A00416112 /* BMD200EvalDemoDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMD200EvalDemoDevice.h; sourceTree = "<group>"; };
-		5E35989D1B4AF84A00416112 /* BMD200EvalDemoDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMD200EvalDemoDevice.m; sourceTree = "<group>"; };
+		5E3598851B4AEAE500416112 /* BMDEvalDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BMDEvalDemoTests.m; sourceTree = "<group>"; };
+		5E35989C1B4AF84A00416112 /* BMDEvalDemoDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMDEvalDemoDevice.h; sourceTree = "<group>"; };
+		5E35989D1B4AF84A00416112 /* BMDEvalDemoDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMDEvalDemoDevice.m; sourceTree = "<group>"; };
 		5E35989F1B4B008600416112 /* Rigablue.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Rigablue.xcodeproj; path = Rigablue/Rigablue.xcodeproj; sourceTree = "<group>"; };
 		5E5A33561B4B18220053DFB7 /* CBUUID+UUIDHelperMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBUUID+UUIDHelperMethods.h"; sourceTree = "<group>"; };
 		5E5A33571B4B18220053DFB7 /* CBUUID+UUIDHelperMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBUUID+UUIDHelperMethods.m"; sourceTree = "<group>"; };
-		5E5A33591B4B51360053DFB7 /* BMD200EvalDemoTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMD200EvalDemoTabBarController.h; sourceTree = "<group>"; };
-		5E5A335A1B4B51360053DFB7 /* BMD200EvalDemoTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMD200EvalDemoTabBarController.m; sourceTree = "<group>"; };
+		5E5A33591B4B51360053DFB7 /* BMDEvalDemoTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMDEvalDemoTabBarController.h; sourceTree = "<group>"; };
+		5E5A335A1B4B51360053DFB7 /* BMDEvalDemoTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMDEvalDemoTabBarController.m; sourceTree = "<group>"; };
 		5E88DBFA1B542A770091F93B /* SVIndefiniteAnimatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVIndefiniteAnimatedView.h; sourceTree = "<group>"; };
 		5E88DBFB1B542A770091F93B /* SVIndefiniteAnimatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVIndefiniteAnimatedView.m; sourceTree = "<group>"; };
 		5E88DBFC1B542A770091F93B /* SVProgressHUD-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
@@ -258,8 +258,8 @@
 				5EFE6AC71B4F2B47006CAB93 /* CoreGraphics.framework */,
 				5EFE6ABE1B4EDF70006CAB93 /* QuartzCore.framework */,
 				5E35989F1B4B008600416112 /* Rigablue.xcodeproj */,
-				5E3598651B4AEAE500416112 /* BMD200EvalDemo */,
-				5E3598821B4AEAE500416112 /* BMD200EvalDemoTests */,
+				5E3598651B4AEAE500416112 /* BMDEvalDemo */,
+				5E3598821B4AEAE500416112 /* BMDEvalDemoTests */,
 				5E3598641B4AEAE500416112 /* Products */,
 				4C5624A41DAC0D2B00A13727 /* Fabric.framework */,
 				4C5624A51DAC0D2B00A13727 /* Crashlytics.framework */,
@@ -275,7 +275,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5E3598651B4AEAE500416112 /* BMD200EvalDemo */ = {
+		5E3598651B4AEAE500416112 /* BMDEvalDemo */ = {
 			isa = PBXGroup;
 			children = (
 				5EFE6ABD1B4EDB34006CAB93 /* CorePlot */,
@@ -295,10 +295,10 @@
 				5E35986E1B4AEAE500416112 /* StatusViewController.m */,
 				5E3598701B4AEAE500416112 /* ColorWheelViewController.h */,
 				5E3598711B4AEAE500416112 /* ColorWheelViewController.m */,
-				5E35989C1B4AF84A00416112 /* BMD200EvalDemoDevice.h */,
-				5E35989D1B4AF84A00416112 /* BMD200EvalDemoDevice.m */,
-				5E5A33591B4B51360053DFB7 /* BMD200EvalDemoTabBarController.h */,
-				5E5A335A1B4B51360053DFB7 /* BMD200EvalDemoTabBarController.m */,
+				5E35989C1B4AF84A00416112 /* BMDEvalDemoDevice.h */,
+				5E35989D1B4AF84A00416112 /* BMDEvalDemoDevice.m */,
+				5E5A33591B4B51360053DFB7 /* BMDEvalDemoTabBarController.h */,
+				5E5A335A1B4B51360053DFB7 /* BMDEvalDemoTabBarController.m */,
 				5EFE6B1F1B501E14006CAB93 /* AccelPlotManager.h */,
 				5EFE6B201B501E14006CAB93 /* AccelPlotManager.m */,
 				5E028C821B581958001F9778 /* AboutViewController.h */,
@@ -311,6 +311,7 @@
 				4C83E6761DB19CE3003D2704 /* Localizable.strings */,
 				5E3598661B4AEAE500416112 /* Supporting Files */,
 			);
+			name = BMDEvalDemo;
 			path = BMD200EvalDemo;
 			sourceTree = "<group>";
 		};
@@ -334,12 +335,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		5E3598821B4AEAE500416112 /* BMD200EvalDemoTests */ = {
+		5E3598821B4AEAE500416112 /* BMDEvalDemoTests */ = {
 			isa = PBXGroup;
 			children = (
-				5E3598851B4AEAE500416112 /* BMD200EvalDemoTests.m */,
+				5E3598851B4AEAE500416112 /* BMDEvalDemoTests.m */,
 				5E3598831B4AEAE500416112 /* Supporting Files */,
 			);
+			name = BMDEvalDemoTests;
 			path = BMD200EvalDemoTests;
 			sourceTree = "<group>";
 		};
@@ -642,9 +644,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E5A335B1B4B51360053DFB7 /* BMD200EvalDemoTabBarController.m in Sources */,
+				5E5A335B1B4B51360053DFB7 /* BMDEvalDemoTabBarController.m in Sources */,
 				5E3598721B4AEAE500416112 /* ColorWheelViewController.m in Sources */,
-				5E35989E1B4AF84A00416112 /* BMD200EvalDemoDevice.m in Sources */,
+				5E35989E1B4AF84A00416112 /* BMDEvalDemoDevice.m in Sources */,
 				5E88DC091B5483C80091F93B /* UpdateViewController.m in Sources */,
 				5EFE6B1D1B4F39D0006CAB93 /* ISColorWheel.m in Sources */,
 				5E35986C1B4AEAE500416112 /* AppDelegate.m in Sources */,
@@ -664,7 +666,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E3598861B4AEAE500416112 /* BMD200EvalDemoTests.m in Sources */,
+				5E3598861B4AEAE500416112 /* BMDEvalDemoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

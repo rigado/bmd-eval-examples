@@ -1,0 +1,160 @@
+This text contains three licenses (License #1, License #2, License #3). 
+License #1 applies to the whole SDK, except i) files including Dynastream copyright notices and ii) source files including BSD 3-clause license texts.
+License #2 applies only to files including Dynastream copyright notices. 
+License #3 applies to the whole BMD-300 demo shield project.
+All must be read and accepted before proceeding.
+
+
+License #1
+
+License Agreement
+Nordic Semiconductor ASA (“Nordic”) 
+Software Development Kit 
+
+
+You (“You” or “Licensee”) must carefully and thoroughly read this License Agreement (“Agreement”), and accept to adhere to this Agreement before downloading, installing and/or using any software or content in the Software Development Kit (“SDK”) provided herewith. 
+
+YOU ACCEPT THIS LICENSE AGREEMENT BY (A) CLICKING ACCEPT OR AGREE TO THIS LICENSE AGREEMENT, WHERE THIS OPTION IS MADE AVAILABLE TO YOU; OR (B) BY ACTUALLY USING THE SDK, IN THIS CASE YOU AGREE THAT THE USE OF THE SDK CONSTITUTES ACCEPTANCE OF THE LICENSING AGREEMENT FROM THAT POINT ONWARDS.
+
+IF YOU DO NOT AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT, THEN DO NOT DOWNLOAD, INSTALL/COMPLETE INSTALLATION OF, OR IN ANY OTHER WAY MAKE USE OF THE SDK OR RELATED CONTENT.
+
+
+1.	Grant of License 
+Subject to the terms in this Agreement Nordic grants Licensee a limited, non-exclusive, non-transferable, non-sub licensable, revocable license (“License”): (a) to use the SDK as a development platform solely in connection with a Nordic Integrated Circuit (“nRF IC”), (b) to modify any source code contained in the SDK solely as necessary to implement products developed by Licensee that incorporate an nRF IC (“Licensee Product”), and (c) to distribute the SDK solely as implemented in Licensee Product. Licensee shall not use the SDK for any purpose other than specifically authorized herein.
+
+2.	Title 
+As between the parties, Nordic retains full rights, title, and ownership of the SDK and any and all patents, copyrights, trade secrets, trade names, trademarks, and other intellectual property rights in and to the SDK. 
+
+3.	No Modifications or Reverse Engineering
+Licensee shall not, modify, reverse engineer, disassemble, decompile or otherwise attempt to discover the source code of any non-source code parts of the SDK including, but not limited to pre-compiled binaries and object code.
+
+4.	Distribution Restrictions
+Except as set forward in Section 1 above, the Licensee may not disclose or distribute any or all parts of the SDK to any third party. Licensee agrees to provide reasonable security precautions to prevent unauthorized access to or use of the SDK as proscribed herein. Licensee also agrees that use of and access to the SDK will be strictly limited to the employees and subcontractors of the Licensee necessary for the performance of development, verification and production tasks under this Agreement. The Licensee is responsible for making such employees and subcontractors agree on complying with the obligations concerning use and non-disclosure of the SDK.
+
+5.	No Other Rights 
+Licensee shall use the SDK only in compliance with this Agreement and shall refrain from using the SDK in any way that may be contrary to this Agreement.
+
+
+6.	Fees 
+Nordic grants the License to the Licensee free of charge provided that the Licensee undertakes the obligations in the Agreement and warrants to comply with the Agreement. 
+
+
+7.	DISCLAIMER OF WARRANTY 
+THE SDK IS PROVIDED “AS IS" WITHOUT WARRANTY OF ANY KIND EXPRESS OR IMPLIED AND NEITHER NORDIC, ITS LICENSORS OR AFFILIATES NOR THE COPYRIGHT HOLDERS MAKE ANY REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE OR THAT THE SDK WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS. THERE IS NO WARRANTY BY NORDIC OR BY ANY OTHER PARTY THAT THE FUNCTIONS CONTAINED IN THE SDK WILL MEET THE REQUIREMENTS OF LICENSEE OR THAT THE OPERATION OF THE SDK WILL BE UNINTERRUPTED OR ERROR-FREE. LICENSEE ASSUMES ALL RESPONSIBILITY AND RISK FOR THE SELECTION OF THE SDK TO ACHIEVE LICENSEE’S INTENDED RESULTS AND FOR THE INSTALLATION, USE AND RESULTS OBTAINED FROM IT. 
+
+8.	No Support
+Nordic is not obligated to furnish or make available to Licensee any further information, software, technical information, know-how, show-how, bug-fixes or support. Nordic reserves the right to make changes to the SDK without further notice.
+
+9.	Limitation of Liability
+In no event shall Nordic, its employees or suppliers or affiliates be liable for any lost profits, revenue, sales, data or costs of procurement of substitute goods or services, property damage, personal injury, interruption of business, loss of business information or for any special, direct, indirect, incidental, economic,  punitive, special or consequential damages, however caused and whether arising under contract, tort, negligence, or other theory of liability arising out of the use of or inability to use the SDK, even if Nordic or its employees or suppliers or affiliates are advised of the possibility of such damages. Because some countries/states/ jurisdictions do not allow the exclusion or limitation of liability, but may allow liability to be limited, in such cases, Nordic, its employees or licensors or affiliates’ liability shall be limited to USD 50. 
+
+10.	Breach of Contract
+Upon a breach of contract by the Licensee, Nordic is entitled to damages in respect of any direct loss which can be reasonably attributed to the breach by the Licensee. If the Licensee has acted with gross negligence or willful misconduct, the Licensee shall cover both direct and indirect costs for Nordic.
+
+11.	Indemnity
+
+Licensee undertakes to indemnify, hold harmless and defend Nordic and its directors, officers, affiliates, shareholders, employees and agents from and against any claims or lawsuits, including attorney's fees, that arise or result of the Licensee’s execution of the License and which is not due to causes for which Nordic is responsible.
+
+12.	Governing Law
+This Agreement shall be construed according to the laws of Norway, and hereby submits to the exclusive jurisdiction of the Oslo tingrett.
+
+13.	Assignment
+Licensee shall not assign this Agreement or any rights or obligations hereunder without the prior written consent of Nordic.
+
+14.	Termination
+Without prejudice to any other rights, Nordic may cancel this Agreement if Licensee does not abide by the terms and conditions of this Agreement. Upon termination Licensee must promptly cease the use of the License and destroy all copies of the Licensed Technology and any other material provided by Nordic or its affiliate, or produced by the Licensee in connection with the Agreement or the Licensed Technology.
+
+
+License #2
+
+This software is subject to the ANT+ Shared Source License
+www.thisisant.com/swlicenses
+Copyright (c) Dynastream Innovations, Inc. 2015
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or
+without modification, are permitted provided that the following
+conditions are met:
+
+   1) Redistributions of source code must retain the above
+      copyright notice,this list of conditions and the following
+      disclaimer.
+
+   2) Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+
+   3) Neither the name of Dynastream nor the names of its
+      contributors may be used to endorse or promote products
+      derived from this software without specific prior
+      written permission.
+
+The following actions are prohibited:
+
+   1) Redistribution of source code containing the ANT+ Network
+      Key. The ANT+ Network Key is available to ANT+ Adopters.
+      Please refer to http://thisisant.com to become an ANT+
+      Adopter and access the key. 
+
+   2) Reverse engineering, decompilation, and/or disassembly of
+      software provided in binary form under this license.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE HEREBY
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES(INCLUDING, 
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+SERVICES; DAMAGE TO ANY DEVICE, LOSS OF USE, DATA, OR 
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED 
+OF THE POSSIBILITY OF SUCH DAMAGE. SOME STATES DO NOT ALLOW 
+THE EXCLUSION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THE
+ABOVE LIMITATIONS MAY NOT APPLY TO YOU.
+
+License #3
+SOFTWARE LICENSE AGREEMENT
+
+1. DEFINITIONS.
+1.1. "Rigado Product" means any of the Bluetooth Low Energy module product(s) sold by Rigado with which the Software was designed to be used, or their successors.
+1.2. "Licensee" means the party listed above and its affiliates exercising rights under, and complying with all of the terms of this Agreement.
+1.3. "Software" shall mean that software made available by Rigado to Licensee with this Agreement.
+
+2. LICENSE GRANT; OWNERSHIP
+2.1. License Grants. Subject to the terms and conditions of this Agreement, Rigado hereby grants to Licensee a non-exclusive, non-transferable, perpetual, royalty-free license (i) to use and integrate the Software in conjunction with any other software; and (ii) to reproduce and distribute the Software complete, unmodified and only for use with a Rigado Product.
+2.2. Restriction on Modification. If and to the extent that the Software is designed to be compliant with any published communications standard (including, without limitation, Bluetooth SIG, IEEE, and ITU standards), Licensee may not make any modifications to the Software that would cause the Software or the accompanying Rigado Products to be incompatible with such standard.
+2.3. Restriction on Distribution. Licensee shall only distribute the Software (a) under the terms of this Agreement and a copy of this Agreement accompanies such distribution, and (b) agrees to defend and indemnify Rigado and its licensors from and against any damages, costs, liabilities, settlement amounts and/or expenses (including attorneys' fees) incurred in connection with any claim, lawsuit or action by any third party that arises or results from the use or distribution of any and all Software by the Licensee except as contemplated herein.
+2.4. Proprietary Notices. Licensee shall not remove, efface or obscure any copyright or trademark notices from the Software. Licensee shall include reproductions of the Rigado copyright notice with each copy of the Software, except where such Software is embedded in a manner not readily accessible to the end user. Licensee acknowledges that any symbols, trademarks, tradenames, and service marks adopted by Rigado to identify the Software belong to Rigado and that Licensee shall have no rights therein.
+2.5. Ownership. Rigado shall retain all right, title and interest, including all intellectual property rights, in and to the Software. Licensee hereby covenants that it will not assert any claim that the Software created by or for Rigado infringe any intellectual property right owned or controlled by Licensee.
+2.6. No Other Rights Granted; Restrictions. Apart from the license rights expressly set forth in this Agreement, Rigado does not grant and Licensee does not receive any ownership right, title or interest nor any security interest or other interest in any intellectual property rights relating to the Software, nor in any copy of any part of the foregoing. Licensee shall not (i) use, license, sell or otherwise distribute the Software except as provided in this Agreement, (ii) attempt to reverse engineer, decompile or disassemble any portion of the Software; or (iii) use the Software or other material in violation of any applicable law or regulation, including but not limited to any regulatory agency, such as FCC, rules.
+
+3. NO WARRANTY OR SUPPORT
+3.1. No Warranty. THE SOFTWARE IS OFFERED "AS IS," AND RIGADO GRANTS AND LICENSEE RECEIVES NO WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, BY STATUTE, COMMUNICATION OR CONDUCT WITH LICENSEE, OR OTHERWISE. RIGADO SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A SPECIFIC PURPOSE OR NONINFRINGEMENT CONCERNING THE SOFTWARE OR ANY UPGRADES TO OR DOCUMENTATION FOR THE SOFTWARE. WITHOUT LIMITATION OF THE ABOVE, RIGADO GRANTS NO WARRANTY THAT THE SOFTWARE IS ERROR-FREE OR WILL OPERATE WITHOUT INTERRUPTION, AND GRANTS NO WARRANTY REGARDING ITS USE OR THE RESULTS THEREFROM INCLUDING, WITHOUT LIMITATION, ITS CORRECTNESS, ACCURACY OR RELIABILITY.
+3.2. No Support. Nothing in this agreement shall obligate Rigado to provide any support for the Software. Rigado may, but shall be under no obligation to, correct any defects in the Software and/or provide updates to licensees of the Software. Licensee shall make reasonable efforts to promptly report to Rigado any defects it finds in the Software, as an aid to creating improved revisions of the Software.
+3.3. Dangerous Applications. The Software is not designed, intended, or certified for use in components of systems intended for the operation of weapons, weapons systems, nuclear installations, means of mass transportation, aviation, life-support computers or equipment (including resuscitation equipment and surgical implants), pollution control, hazardous substances management, or for any other dangerous application in which the failure of the Software could create a situation where personal injury or death may occur. Licensee understands that use of the Software in such applications is fully at the risk of Licensee.
+
+4. TERM AND TERMINATION
+4.1. Termination. This Agreement will automatically terminate if Licensee fails to comply with any of the terms and conditions hereof. In such event, Licensee must destroy all copies of the Software and all of its component parts.
+4.2. Effect of Termination. Upon any termination of this Agreement, the rights and licenses granted to Licensee under this Agreement shall immediately terminate.
+4.3. Survival. The rights and obligations under this Agreement which by their nature should survive termination will remain in effect after expiration or termination of this Agreement.
+
+5. CONFIDENTIALITY
+5.1. Obligations. Licensee acknowledges and agrees that any documentation relating to the Software, and any other information (if such other information is identified as confidential or should be recognized as confidential under the circumstances) provided to Licensee by Rigado hereunder (collectively, "Confidential Information") constitute the confidential and proprietary information of Rigado, and that Licensee's protection thereof is an essential condition to Licensee's use and possession of the Software. Licensee shall retain all Confidential Information in strict confidence and not disclose it to any third party or use it in any way except under a written agreement with terms and conditions at least as protective as the terms of this Section. Licensee will exercise at least the same amount of diligence in preserving the secrecy of the Confidential Information as it uses in preserving the secrecy of its own most valuable confidential information, but in no event less than reasonable diligence. Information shall not be considered Confidential Information if and to the extent that it: (i) was in the public domain at the time it was disclosed or has entered the public domain through no fault of Licensee; (ii) was known to Licensee, without restriction, at the time of disclosure as proven by the files of Licensee in existence at the time of disclosure; or (iii) becomes known to Licensee, without restriction, from a source other than Rigado without breach of this Agreement by Licensee and otherwise not in violation of Rigado's rights.
+5.2. Return of Confidential Information. Notwithstanding the foregoing, all documents and other tangible objects containing or representing Rigado Confidential Information and all copies thereof which are in the possession of Licensee shall be and remain the property of Rigado, and shall be promptly returned to Rigado upon written request by Rigado or upon termination of this Agreement.
+
+6. LIMITATION OF LIABILITY
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL RIGADO OR ANY OF RIGADO’S LICENSORS HAVE ANY LIABILITY FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES, HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER FOR BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE) OR OTHERWISE, ARISING OUT OF THIS AGREEMENT, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, EVEN IF SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN NO EVENT WILL RIGADO’S LIABILITY WHETHER IN CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, EXCEED THE AMOUNT PAID BY LICENSEE FOR SOFTWARE UNDER THIS AGREEMENT. THESE LIMITATIONS SHALL APPLY NOTWITHSTANDING ANY FAILURE OF ESSENTIAL PURPOSE OF ANY LIMITED REMEDY.
+
+7. MISCELLANEOUS
+7.1. Export Regulations. LICENSEE UNDERSTANDS AND AGREES THAT THE SOFTWARE IS SUBJECT TO UNITED STATES AND OTHER APPLICABLE EXPORT-RELATED LAWS AND REGULATIONS AND THAT LICENSEE MAY NOT EXPORT, RE-EXPORT OR TRANSFER THE SOFTWARE OR ANY DIRECT PRODUCT OF THE SOFTWARE EXCEPT AS PERMITTED UNDER THOSE LAWS. WITHOUT LIMITING THE FOREGOING, EXPORT, RE-EXPORT OR TRANSFER OF THE SOFTWARE TO CUBA, IRAN, NORTH KOREA, SUDAN AND SYRIA IS PROHIBITED.
+7.2 Assignment. This Agreement shall be binding upon and inure to the benefit of the parties and their respective successors and assigns, provided, however that Licensee may not assign this Agreement or any rights or obligation hereunder, directly or indirectly, by operation of law or otherwise, without the prior written consent of Rigado, and any such attempted assignment shall be void. Notwithstanding the foregoing, Licensee may assign this Agreement to a successor to all or substantially all of its business or assets to which this Agreement relates that is not a competitor of Rigado.
+7.3. Governing Law; Venue. This Agreement shall be governed by the laws of Oregon without regard to any conflict-of-laws rules, and the United Nations Convention on Contracts for the international Sale of Goods is hereby excluded. The sole jurisdiction and venue for actions related to the subject matter hereof shall be the state and federal courts located in the county of Marion, Oregon, and both parties hereby consent to such jurisdiction and venue.
+7.4. Severability. All terms and provisions of this Agreement shall, if possible, be construed in a manner which makes them valid, but in the event any term or provision of this Agreement is found by a court of competent jurisdiction to be illegal or unenforceable, the validity or enforceability of the remainder of this Agreement shall not be affected if the illegal or unenforceable provision does not materially affect the intent of this Agreement. If the illegal or unenforceable provision materially affects the intent of the parties to this Agreement, this Agreement shall become terminated.
+7.5. Equitable Relief. Licensee hereby acknowledges that its breach of this Agreement would cause irreparable harm and significant injury to Rigado that may be difficult to ascertain and that a remedy at law would be inadequate. Accordingly, Licensee agrees that Rigado shall have the right to seek and obtain immediate injunctive relief to enforce obligations under the Agreement in addition to any other rights and remedies it may have.
+7.6. Waiver. The waiver of, or failure to enforce, any breach or default hereunder shall not constitute the waiver of any other or subsequent breach or default.
+7.7. Entire Agreement. This Agreement sets forth the entire Agreement between the parties and supersedes any and all prior proposals, agreements and representations between them, whether written or oral concerning the Software. This Agreement may be changed only by mutual agreement of the parties in writing.
